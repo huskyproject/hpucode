@@ -220,6 +220,8 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    currMsgUid = MsgMsgnToUid(hArea, msgNumb);
    textLen = MsgGetTextLen(msg);
    text = (char *) scalloc(1,(textLen+1)*sizeof(char));
+   
+   memset(&xmsg, 0 , sizeof(xmsg));
 
    if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, 0, NULL)<0) {
       rc = 0;
