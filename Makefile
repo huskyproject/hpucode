@@ -16,7 +16,11 @@ else
   LFLAGS = $(OPTLFLAGS)
 endif
 
-LIBS  = -L$(LIBDIR) -lfidoconf -lsmapi -lhusky
+ifeq ($(SHORTNAME), 1)
+  LIBS=-L$(LIBDIR) -lhusky -lfidoconf -lsmapi
+else
+  LIBS=-L$(LIBDIR) -lhusky -lfidoconfig -lsmapi
+endif
 
 CDEFS = -D$(OSTYPE) $(ADDCDEFS)
 
@@ -28,7 +32,7 @@ SRC_DIR = .$(DIRSEP)src$(DIRSEP)
 
 
 hpucode: $(OBJS)
-		gcc $(OBJS) $(LFLAGS) $(LIBS) -o hpucode$(EXE)
+		gcc $(OBJS) $(LFLAGS) $(LIBS) -o hpucode$(_EXE)
 
 %.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $(CDEFS) -c $<
@@ -37,11 +41,11 @@ hpucode.1.gz: man/hpucode.1
 	gzip -9c man/hpucode.1 > hpucode.1.gz
 
 clean:
-	-$(RM) $(RMOPT) *$(OBJ)
+	-$(RM) $(RMOPT) *$(_OBJ)
 	-$(RM) $(RMOPT) *~
 
 distclean: clean
-	-$(RM) $(RMOPT) hpucode$(EXE)
+	-$(RM) $(RMOPT) hpucode$(_EXE)
 	-$(RM) $(RMOPT) hpucode.info
 	-$(RM) $(RMOPT) hpucode.html
 	-$(RM) $(RMOPT) hpucode.1.gz
@@ -55,13 +59,20 @@ html:
 docs: info html
 
 ifdef INFODIR
-all: hpucode hpucode.1.gz
+  all: hpucode info hpucode.1.gz
+ifdef HTMLDIR
+  all: hpucode docs hpucode.1.gz
+endif
 else
-all: hpucode docs hpucode.1.gz
+ifdef HTMLDIR
+  all: hpucode html hpucode.1.gz
+else
+  all: hpucode hpucode.1.gz
+endif
 endif
         
 install: all
-	$(INSTALL) $(IBOPT) hpucode$(EXE) $(BINDIR)
+	$(INSTALL) $(IBOPT) hpucode$(_EXE) $(BINDIR)
 ifdef INFODIR
 	-$(MKDIR) $(MKDIROPT) $(INFODIR)
 	$(INSTALL) $(IMOPT) hpucode.info $(INFODIR)
@@ -77,7 +88,7 @@ ifdef MANDIR
 endif
 
 uninstall:
-	$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hpucode$(EXE)
+	$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hpucode$(_EXE)
 ifdef INFODIR
 	$(RM) $(RMOPT) $(INFODIR)$(DIRSEP)hpucode.info
 endif
