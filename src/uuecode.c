@@ -161,31 +161,9 @@ int main(int argc, char **argv) {
     xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
     setvar("version", buff);
     
-#ifdef __linux__
-    xstrcat(&buff, "/lnx");
-#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
-    xstrcat(&buff, "/bsd");
-#elif defined(__OS2__) || defined(OS2)
-    xstrcat(&buff, "/os2");
-#elif defined(__NT__) || defined(__MINGW32__) || defined(_WINNT)
-    xstrcat(&buff, "/w32");
-#elif defined(WINDOWS)
-    xstrcat(&buff, "/win");
-#elif defined(__CYGWIN__)
-    xstrcat(&buff, "/cyg");
-#elif defined(__sun__)
-    xstrcat(&buff, "/sun");
-#elif defined(__DJGPP__)
-    xstrcat(&buff, "/dpmi");
-#elif defined(MSDOS) || defined(DOS) || defined(__DOS__)
-    xstrcat(&buff, "/dos");
-#elif defined(__BEOS__)
-    xstrcat(&buff, "/beos");
-#endif
+    versionStr = GenVersionStr( "hpuCode", VER_MAJOR, VER_MINOR, VER_PATCH,
+                               VER_BRANCH, cvs_date );
 
-    if( strcmp(VER_BRANCH,"-stable") ) xscatprintf(&buff, " %s", cvs_date);
-    xscatprintf(&versionStr,"hpuCode %s", buff);
-    nfree(buff);
     
     printf(  "\n::  %s by Max Chernogor\n",versionStr);
     

@@ -27,18 +27,16 @@
 #ifndef VERSION_H
 #define VERSION_H
 
+#include <fidoconf/version.h>
 
 /* basic version number */
-#define   VER_MAJOR    1
+#define VER_MAJOR 1
+#define VER_MINOR 3
+#define VER_PATCH 0
+#define VER_BRANCH BRANCH_CURRENT
 
-/* sub-version number */
-#define   VER_MINOR    3
+extern char      *versionStr;
 
-/* patch number, use only for post-release versions (updated release) */
-#define   VER_PATCH    0
-
-/* branch is "" for CVS current, "-stable" for the release & release candiate branch */
-#define VER_BRANCH  ""
 
 
 #endif
