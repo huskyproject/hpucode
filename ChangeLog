@@ -1,3 +1,8 @@
+2003-04-07 Monday 15:38  mche
+
+	* hpucode.vcproj (1.2), src/scanmsg.c (1.21): fix scaning messages
+	with SPLIT kluge
+
 2003-04-04 Friday 06:49  mche
 
 	* hpucode.vcproj (1.1): vcproj Project File added for building
