@@ -1,3 +1,7 @@
+2002-10-14 Monday 06:34  sfpavel
+
+	* src/uuefile.c (1.8): Fix OS/2 EMX build
+
 2002-10-10 Thursday 13:11  sfpavel
 
 	* debian/changelog (1.2): New debian package: 1.2-stable
