@@ -267,9 +267,6 @@ void MakeFile(UUEFile* uuc)
                 xstrcat(&uuc->m_fname,"_");
         }
         xstrscat(&fname,config->protInbound,uuc->m_fname,NULL);
-#ifdef WINNT
-        OemToChar(fname, fname);
-#endif    
         if(!fexist(fname)) {
             out = fopen(fname, "wb");
             if(out) {
@@ -318,10 +315,10 @@ void MakeTicFile(UUEFile* uuc)
 {
    unsigned int i=0;
    struct stat stbuf;
-   FILE *tichandle;
-   char *newticfile=NULL;
-   char fname[256] = "";
-   char *areagroup = NULL;
+   FILE *tichandle  = NULL;
+   char *newticfile = NULL;
+   char *fname      = NULL;
+   char *areagroup  = NULL;
    char origstr[36] = "";
    s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
    
@@ -336,8 +333,7 @@ void MakeTicFile(UUEFile* uuc)
       return ;
    }
 
-   strcpy(fname,config->protInbound);
-   strcat(fname,uuc->m_fname);          
+   xstrscat(&fname,config->protInbound,uuc->m_fname,NULL);
 
    stat(fname,&stbuf);
    if(stbuf.st_size == 0)
