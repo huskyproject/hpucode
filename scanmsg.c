@@ -18,7 +18,11 @@ void addPart(char *text, int section, int amount, char* name)
         end++;
 
     if(end)
+    {
         partlen = end-begin;
+        if(partlen < 12)
+            return;
+    }
     else
         return;
 
@@ -76,7 +80,8 @@ int scan4UUE(char* text, dword textLen)
         while(szBegin)
         {
             if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
-                nRet = 0;
+                description = sstrdup((char*)xmsg.subj);
+                addPart(szBegin, 1, 1, name);
             }
             szBegin = strstr(szBegin+1, "begin ");
         }

@@ -13,7 +13,7 @@ void FreeUUEFile(UUEFile* uuc);
 
 typedef unsigned char BYTE;
 
-void DecodePart(char *text, FILE *outfile)
+int DecodePart(char *text, FILE *outfile)
 {
     char *linep	= NULL;
     size_t   linelen	= 0;
@@ -22,6 +22,7 @@ void DecodePart(char *text, FILE *outfile)
     char* endl =NULL;  
     char* linebuf = text;
     int lastlen = 0;
+    int nRet = 0;
     do
     {
         endl = strchr(linebuf,'\r');  
@@ -88,12 +89,15 @@ void DecodePart(char *text, FILE *outfile)
             }
             
         }
+        nRet = 1;
         do
         {    endl++;   }
         while(endl[0] == '\r');
         linebuf = endl;
         linelen = strlen(linebuf);
     } while (linelen > 1);
+    
+    return nRet;
 }
 
 int  isReady(UUEFile* uuc)
@@ -188,7 +192,7 @@ void MakeFile(UUEFile* uuc)
     FILE *out;
     UUEFile* prevUUEF;
     char fname[256] = "";
-    int i;
+    int i, nodel=0;
     
     s_textDupeEntry *msg = scalloc(sizeof(s_textDupeEntry),1);
     
@@ -205,18 +209,31 @@ void MakeFile(UUEFile* uuc)
 #ifdef WINNT
         OemToChar(fname, fname);
 #endif    
-        out = fopen(fname, "wb");
-        for(i = 0; i < uuc->m_nSections; i++)
+        if(!fexist(fname))
         {
-            DecodePart(uuc->UUEparts[i], out);
+            out = fopen(fname, "wb");
+            for(i = 0; i < uuc->m_nSections; i++)
+            {
+                if( DecodePart(uuc->UUEparts[i], out) == 0)
+                    break;
+            }
+            fclose(out);
+            if(i == uuc->m_nSections)
+            {
+                MakeTicFile(uuc);
+                nodel = 0;
+            }
+            else
+            {
+                remove(fname);
+                nodel = 1;
+            }
         }
-        fclose(out);
-        MakeTicFile(uuc);
     }
     else
     {
     }
-    if(nDelMsg)
+    if(nDelMsg && !nodel)
     {
         for( i = 0; i < uuc->m_nSections; i++ )
             toBeDeleted[nMaxDeleted+i] = uuc->toBeDeleted[i];
