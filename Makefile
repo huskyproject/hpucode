@@ -54,7 +54,11 @@ html:
 
 docs: info html
 
+ifdef INFODIR
+all: hpucode hpucode.1.gz
+else
 all: hpucode docs hpucode.1.gz
+endif
         
 install: all
 	$(INSTALL) $(IBOPT) hpucode$(EXE) $(BINDIR)
