@@ -160,12 +160,12 @@ UUEFile* FindUUEFile(char *name)
 
 void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 {
-    if(section > uuc->m_nSections)
+    if(section > uuc->m_nSections || uuc->m_nAdded == uuc->m_nSections)
         return;
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
     if(nDelMsg)
-        uuc->toBeDeleted[section-1] = currMsgNumb;
+        uuc->toBeDeleted[uuc->m_nAdded] = currMsgNumb;
     uuc->m_nAdded++;
     if((uuc->m_nAdded == uuc->m_nSections) && isReady(uuc))
     {
