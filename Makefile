@@ -18,6 +18,8 @@ endif
 
 CDEFS = -D$(OSTYPE) $(ADDCDEFS)
 
+CFLAGS += -Wall -pedantic -Wno-char-subscripts
+
 OBJS = uuecode.o uuefile.o scanmsg.o dupe.o
 
 SRC_DIR = .$(DIRSEP)src$(DIRSEP)
