@@ -139,7 +139,7 @@ void doArea(s_area *area, char *cmp)
         if ((area -> msgbType & MSGTYPE_SQUISH) == MSGTYPE_SQUISH ||
             (area -> msgbType & MSGTYPE_JAM) == MSGTYPE_JAM ||
             (area -> msgbType & MSGTYPE_SDM) == MSGTYPE_SDM) {
-            w_log(LL_INFO, "Scan area: %s", area -> areaName);
+            w_log(LL_SCANNING, "Scan area: %s", area -> areaName);
             ScanArea(area);
             area->scn = 1;
         }
@@ -235,10 +235,10 @@ int main(int argc, char **argv) {
         impLog = fopen(config->importlog, "r");
 
         if(impLog)
-            w_log(LL_INFO, 
+            w_log(LL_SCANNING,
             "Using importlogfile -> scanning only listed areas that match the mask");
         else
-            w_log(LL_INFO, 
+            w_log(LL_SCANNING,
             "Scanning all areas that match the mask");
 
         while(k < argc)           
