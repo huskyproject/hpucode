@@ -1,3 +1,10 @@
+2003-04-08 Tuesday 08:03  andr_lukyanov
+
+	* make/: makefile.bsd (1.5), makefile.cyg (1.7), makefile.djg
+	(1.4), makefile.emx (1.3), makefile.mgw (1.5), makefile.mvc (1.3),
+	makefile.mvcdll (1.4), makefile.sun (1.4), makefile.wco (1.4),
+	makefile.wcw (1.4): Fixed compilation with new library structure
+
 2003-04-07 Monday 15:38  mche
 
 	* hpucode.vcproj (1.2), src/scanmsg.c (1.21): fix scaning messages
