@@ -105,7 +105,7 @@ void doReading(FILE *f, s_dupeMemory *mem) {
    while( (line = readLine(f)) != NULL ) 
    {
       if(sscanf(line, "%s %s %s %ld",
-         fname, echoname, fromname, &timecr
+         fname, echoname, fromname, (signed long*)(&timecr)
          ) != 4)
          continue;
       
