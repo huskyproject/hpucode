@@ -330,7 +330,9 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEnd
 
           memmove(szBeg,szEnd,strlen(szEnd)+1);
           textLen = strlen(text)+1;
-          MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, 0, NULL);
+          MsgCloseMsg(msg);
+          msg = MsgOpenMsg(hArea, MOPEN_CREATE, msgNumb);
+          MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, ctlen, ctl);
       }
       else {
           p = NULL; /*  Kill Msg */ 
