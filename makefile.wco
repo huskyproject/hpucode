@@ -1,0 +1,23 @@
+CC      = wcc386
+LINK    = WLINK
+
+CFLAGS  = -zq -wx -bt=os2v2 -j -ih;.. -oneatx -5 -DOS2
+LFLAGS  = system os2v2
+
+OBJS    = uuecode.obj uuefile.obj scanmsg.obj dupe.obj
+
+all: $(OBJS) hptucode.exe
+
+$(OBJS): *.c
+  @echo compiling $*.c
+  $(CC) $(CFLAGS) $*.c
+
+hptucode.exe: $(OBJS)
+  @echo linking hptucode
+  $(LINK) $(LFLAGS) FILE uuecode.obj, uuefile.obj, scanmsg.obj, dupe.obj Library ..\smapi\smapiwco.lib, ..\fidoconf\fconfwco.lib NAME hptucode.exe
+
+clean:
+	-DEL *.OBJ
+	-DEL *.err
+	-DEL hptucode.exe
+
