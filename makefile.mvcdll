@@ -1,0 +1,26 @@
+# Microsoft Visual C++ Makefile
+
+CC=     cl
+CFLAGS= -nologo -MD -Zp1 -I. -I.. 
+CDEFS=  -D__NT__ -DNT -DWINNT -D_CONSOLE -D_MAKE_DLL
+COPT=   -O2
+TLIB=   lib -nologo
+
+SMAPIL=	..\smapi\smapimvc.lib msvcrt.lib Kernel32.lib user32.lib 
+FCONFL=	..\fidoconf\fconfmvc.lib
+
+all: uuecode.exe
+
+uuecode.exe:
+        $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ uuecode.c \
+                                                uuefile.c \
+                                                scanmsg.c \
+												tree.c    \
+                                                dupe.c    \
+                   $(FCONFL) $(SMAPIL) /link /opt:nowin98   
+
+clean:
+	-del *.obj
+
+distclean: clean
+	-del *.exe
