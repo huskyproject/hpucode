@@ -44,7 +44,6 @@
 
 */
 
-#include <smapi/unused.h>
 #include <errno.h>
 #include "uuecode.h"
 #include "dupe.h"
