@@ -1,0 +1,56 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH HPUCODE 1 "hpucode" "08 October 2002" "Husky - Portable Fidonet Software"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+hpucode \- program to scan for UUE at fido message bases
+.SH SYNOPSIS
+.B hpucode
+.RI \-[del|cut]
+[[<areamask1>]
+.SH DESCRIPTION
+.B hpucode
+is an uue code scanner and decoder. It can decode multisection messages
+with uue, which is being posted by popular encoders such as UUEWizard,
+AutoUUE, hpt post -u :]
+.br
+.B hpucode
+scans all echoareas passed via command line for uuecode. If uue code
+found, it extracts it and decodes to protected inbound. There is an
+opportunity to create tic file for each decoded file. To use this ability
+you should defile yourself as link in fidoconfig. Tics is being created
+from your address, but origin will be set to the address of original
+message poster. If ImportLog is defined in fidoconfig and exists, only
+areas from this file will be scanned for uue code.
+.SH OPTIONS
+.TP
+.B \-del
+remove successfully decoded messages from msgbases
+.TP
+.B \-cut
+cut uue code from message body. If uue is multisectional, only
+1st message will be cut, messages with all other sections will be
+deleted
+.SH EXAMPLE
+.B hpucode
+-cut ru.* su.* pvt.* netmail
+.SH NOTES
+All Husky-Software is written by various developers. For detailed information
+about the Husky-Team take a look at 
+http://husky.sourceforge.net/team.html.
+.SH AUTHOR
+This manual page was written by Pavel Andreew <pavel@collage.etel.ru>,
+for the Debian GNU/Linux system (but may be used by others).
