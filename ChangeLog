@@ -1,3 +1,7 @@
+2003-07-16 Wednesday 16:08  mche
+
+	* src/uuecode.c (1.24): alternative exception handling for win32
+
 2003-07-09 Wednesday 15:28  mche
 
 	* src/scanmsg.c (1.25): more accurate detection end of uue part
