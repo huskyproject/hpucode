@@ -240,44 +240,54 @@ int scan4UUE(char* text,const char* ctl)
 
 char* cutUUEformMsg(char *text)
 {
-   int rr = 0;
-   char *end = NULL;
-   char *szBegin;
+    int rr = 0;
+    char *end = NULL;
+    char *p   = NULL;
+    char *szBegin;
 
-   if(!text) return NULL;
+    if(!text) return NULL;
 
-   szBegin = strstr(text, "begin ");
-   if(!szBegin) return NULL;
-    
-   szBegin = strchr(szBegin, '\r');
-    if(!szBegin) return  NULL;
-    
-    while(szBegin[0] == '\r')
-        szBegin++;
+    p = text;
 
-    end = szBegin;
-    while( end && end[0] < '\x0061' && rr < 3)
+    while(p)
     {
-        rr = (end[0] == '\r') ?  rr+1 : 0;
-        end++;
-    }
 
-    if(end)
-    {
-       if( rr > 1 ) end--; 
-       memmove(szBegin,end,strlen(end)+1);
-    }
+        szBegin = strstr(p, "begin ");
+        //if(!szBegin) return NULL;
+        if( szBegin ) 
+        {
+            szBegin = strchr(szBegin, '\r');
+            if(!szBegin) return  NULL;
 
-   return text;
+            while(szBegin[0] == '\r')
+                szBegin++;
+        }
+        end = szBegin;
+        while( end && end[0] < '\x0061' && rr < 3)
+        {
+            rr = (end[0] == '\r') ?  rr+1 : 0;
+            end++;
+        }
+
+        if(end)
+        {
+            if( rr > 1 ) end--; 
+            memmove(szBegin,end,strlen(end)+1);
+        }
+        p = end;
+    }
+    return text;
 }
 
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
 {
    HMSG msg;
    char *text = NULL;
-   char *ctl = NULL;
+   char *ctl  = NULL;
+   char *p    = NULL;
    dword  textLen = 0;
    dword  ctlen = 0;
+
 
    int rc = 0;
 
@@ -303,17 +313,17 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
       }
       else
       {
-         text = cutUUEformMsg(text);
-         if(text)
+         p = cutUUEformMsg(text);
+         if(p)
          {
-            textLen = strlen(text)+1;
-            MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, 0, NULL);
+            textLen = strlen(p)+1;
+            MsgWriteMsg(msg, 0, &xmsg, (byte*)p, textLen, textLen, 0, NULL);
          }
       }
       rc = 1;
    }
    MsgCloseMsg(msg);
-   if(!text)
+   if(!p)
    MsgKillMsg(hArea, msgNumb);
    nfree(text);
    nfree(ctl);
