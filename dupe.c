@@ -71,7 +71,7 @@ int writeEntry(char *p_entry) {
    entxt = entry;
    if ( (tCR - entxt->timeCreated) < maxTimeLifeDupesInArea) 
    {
-      fprintf(fDupe,"%s %s %s %lu\n",
+       fprintf(fDupe,"%s %s %s %lu\n",
          entxt->filename,entxt->areaname,entxt->from,
          (unsigned long)entxt->timeCreated);
    }
@@ -209,9 +209,8 @@ int dupeDetection(s_textDupeEntry *msg) {
          msg->from[pos] = '_';
       pos++;
    }
-   
+   msg->timeCreated = tCR;   
    if (tree_add(&(CommonDupes->avlTree), compareEntries, (char *) msg, deleteEntry)) {
-      msg->timeCreated = tCR; 
       nRet = 1;
    }
    else {

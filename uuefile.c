@@ -3,6 +3,11 @@
 #include <sys/stat.h>
 #include <fidoconf/crc.h>
 
+
+static char *invalidExt[] = {"*.mo?", "*.tu?", "*.we?", "*.th?", "*.fr?", 
+                                   "*.sa?", "*.su?", "*.pkt", "*.tic"};
+
+
 int  isReady(UUEFile* uuc);
 void MakeFile(UUEFile* uuc);
 void MakeTicFile(UUEFile* uuc);
@@ -252,12 +257,19 @@ void MakeFile(UUEFile* uuc)
 
     if(dupeDetection(msg) == 1)
     {
-       w_log(LL_INFO, "file: %15s has %d complete sections is saved",
-          uuc->m_fname,uuc->m_nSections);
-       xstrscat(&fname,config->protInbound,uuc->m_fname,NULL);
+        for(i = 0; i < 9; i++)
+        {
+            if(patimat(uuc->m_fname,invalidExt[i]))
+                xstrcat(&uuc->m_fname,"_");
+        }
+
+        w_log(LL_INFO, "file: %15s has %d complete sections is saved",
+            uuc->m_fname,uuc->m_nSections);
+        xstrscat(&fname,config->protInbound,uuc->m_fname,NULL);
 #ifdef WINNT
         OemToChar(fname, fname);
 #endif    
+
         if(!fexist(fname))
         {
             out = fopen(fname, "wb");
@@ -279,10 +291,14 @@ void MakeFile(UUEFile* uuc)
                 nodel = 1;
             }
         }
+        else
+        {
+            w_log(LL_CREAT,"file: %15s detected in inbound", uuc->m_fname);
+        }
     }
     else
     {
-        w_log(LL_FUNC,"%s::MakeFile(), dupe file %s detected", __FILE__,uuc->m_fname);
+        w_log(LL_FUNC,"%s::MakeFile(), dupe file %15s detected", __FILE__,uuc->m_fname);
     }
     if( (!nodel) && (nDelMsg || nCutMsg) )
     {
