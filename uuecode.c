@@ -66,7 +66,7 @@ void ScanArea(s_area *area)
        toBeDeleted = (nDelMsg || nCutMsg) ? (dword*)smalloc(highMsg * sizeof(dword)) : NULL;
        
        for (nMN = 1; nMN <= highMsg; nMN++) {
-           processMsg(oldArea,nMN);
+           processMsg(oldArea,nMN,0);
        };
       
        if(nDelMsg && nMaxDeleted)
@@ -85,7 +85,7 @@ void ScanArea(s_area *area)
            w_log(LL_INFO, "Cuting UUE code from  messages...");
            numMsg = 0;
            for (nMN = 0; nMN < nMaxDeleted; nMN++) {
-               cutUUEformMsg(oldArea,MsgUidToMsgn(oldArea,toBeDeleted[nMN], UID_EXACT));
+               processMsg(oldArea,MsgUidToMsgn(oldArea,toBeDeleted[nMN], UID_EXACT),1);
            }
            nMaxDeleted=0;
        }
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
    
    printf(  "\n::  hpucode v0.3\n");
    if( argc < 2 ) {
-       printf ("::  usage: hpucode [ -del ] [areamask1 areamask2 ...] \n");
+       printf ("::  usage: hpucode [ -del|-cut ] [areamask1 areamask2 ...] \n");
    } else {
        nDelMsg = nCutMsg = 0;
        if(argc > 2)

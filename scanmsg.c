@@ -2,7 +2,7 @@
 
 // type == 0 - fixed amount
 // type == 1 - undefined amount
-void addPart(char *text, int section, int amount, char* name, int type)
+void _addPart(char *text, int section, int amount, char* name, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
@@ -116,12 +116,12 @@ int scan4UUE(const char* text)
             if(szBegin)
             {
                 w_log(LL_FUNC,"%s::scan4UUE(), first section detected", __FILE__);
-                addPart(szBegin, section, amount, name, atype);
+                _addPart(szBegin, section, amount, name, atype);
             }
         }
         else
         {
-            addPart(szSection, section, amount, name, atype);
+            _addPart(szSection, section, amount, name, atype);
         }
         szSection = strstr(szSection+1, "section ");
     }
@@ -132,7 +132,7 @@ int scan4UUE(const char* text)
         {
             if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
                 w_log(LL_FUNC,"%s::scan4UUE(), single message uue detcted", __FILE__);
-                addPart(szBegin, 1, 1, name, 0);
+                _addPart(szBegin, 1, 1, name, 0);
             }
             szBegin = strstr(szBegin+1, "begin ");
         }
@@ -140,12 +140,42 @@ int scan4UUE(const char* text)
     return nRet;
 }
 
-int processMsg(HAREA hArea, dword msgNumb)
+char* cutUUEformMsg(char *text)
+{
+   int rr = 0;
+   char *end = NULL;
+   char *szBegin = strstr(text, "begin ");
+   if(!szBegin) return NULL;
+    
+   szBegin = strchr(szBegin, '\r');
+    if(!szBegin) return  NULL;
+    
+    while(szBegin[0] == '\r')
+        szBegin++;
+
+    end = szBegin;
+    while( end && end[0] < '\x0061' && rr < 3)
+    {
+        rr = (end[0] == '\r') ?  rr+1 : 0;
+        end++;
+    }
+
+    if(end)
+    {
+       if( rr > 1 ) end--; 
+       memmove(szBegin,end,strlen(end)+1);
+    }
+
+   return text;
+}
+
+int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
 {
    HMSG msg;
    char *text;
    dword  textLen;
    int rc = 0;
+   int delmsg = 0;
 
    msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
    if (msg == NULL) return rc;
@@ -157,41 +187,25 @@ int processMsg(HAREA hArea, dword msgNumb)
    if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, 0, NULL)<0) {
       rc = 0;
    } else {
-      scan4UUE(text);
+      if(scan_cut == 0)
+      {
+         scan4UUE(text);
+      }
+      else
+      {
+         text = cutUUEformMsg(text);
+         if(text)
+         {
+            textLen = strlen(text)+1;
+            MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, 0, NULL);
+         }
+      }
       rc = 1;
    }
    MsgCloseMsg(msg);
+   if(!text)
+   MsgKillMsg(hArea, msgNumb);
    nfree(text);
-   
    return rc;
 }
 
-int cutUUEformMsg(HAREA hArea, dword msgNumb)
-{
-   HMSG msg;
-   UCHAR  *text;
-   dword  textLen;
-   int rc = 0;
-
-   msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
-   if (msg == NULL) return rc;
-
-   if (MsgReadMsg(msg, &xmsg, 0, 0, NULL, 0, NULL)<0) {
-      MsgCloseMsg(msg);
-      return rc;
-   }
-
-   textLen = MsgGetTextLen(msg);
-   text = (UCHAR *) smalloc(textLen+1);
-   text[textLen] = '\0';
-   
-   MsgReadMsg(msg, NULL, 0, textLen, (byte*)text, 0, NULL);
-   text[0] = 's'; text[1] = 'e';text[2] = 'c';
-   MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, 0, NULL);
-   MsgCloseMsg(msg);
-
-   nfree(text);
-   rc = 1;
- 
-   return rc;
-}

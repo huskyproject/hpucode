@@ -27,9 +27,7 @@ typedef struct _UUEFile
 } UUEFile ;
 
 
-int processMsg(HAREA hArea, dword msgNumb);
-int cutUUEformMsg(HAREA hArea, dword msgNumb);
-
+int processMsg(HAREA hArea, dword msgNumb, int scan_cut);
 
 UUEFile* MakeUUEFile(int nsec, char *name);
 UUEFile* FindUUEFile(char *name);
