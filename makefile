@@ -1,6 +1,6 @@
 # Generic Makefile for hpucode
 
-include ../../huskymak.cfg
+include ../huskymak.cfg
 
 ifeq ($(DEBUG), 1)
   CFLAGS = -I$(INCDIR) $(DEBCFLAGS) $(WARNFLAGS)
@@ -16,9 +16,7 @@ else
   LIBS  = -L$(LIBDIR) -lfidoconfig -lsmapi
 endif
 
-CDEFS= $(ADDCDEFS)
-
-SRC_DIR=.
+CDEFS= -D$(OSTYPE) $(ADDCDEFS)
 
 OBJS= uuecode.o uuefile.o scanmsg.o tree.o dupe.o
 
