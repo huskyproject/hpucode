@@ -1,3 +1,7 @@
+2002-05-14 Tuesday 17:11  mche
+
+	* scanmsg.c (1.20): detection of uue-code improved one more :)
+
 2002-05-12 Sunday 17:29  mche
 
 	* scanmsg.c (1.19): detection of uue-code improved
