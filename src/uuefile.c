@@ -395,8 +395,8 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle, "Origin %s\r\n", aka2str(uuc->origin));
    fprintf(tichandle, "Size %lu\r\n", (unsigned long)stbuf.st_size);
    fprintf(tichandle, "Crc %08lX\r\n", (unsigned long) filecrc32(fname));
-   if(link->fileFixPwd)
-     fprintf(tichandle, "Pw %s\r\n", link->fileFixPwd);
+   if(link->filefix.pwd)
+     fprintf(tichandle, "Pw %s\r\n", link->filefix.pwd);
 
    fclose(tichandle);
    w_log(LL_CREAT, "tic file:%s created for file:%s",newticfile, uuc->m_fname);   
