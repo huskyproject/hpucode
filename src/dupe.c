@@ -85,15 +85,17 @@ int writeEntry(char *p_entry) {
 }
 
 int deleteEntry(char *entry) {
-   s_textDupeEntry  *entxt;
-
-   entxt = (s_textDupeEntry *)entry;
-   nfree(entxt->from);
-   nfree(entxt->filename);
-   nfree(entxt->areaname);
-   nfree(entxt);
-
-   return 1;
+    
+    if(entry)
+    {
+        s_textDupeEntry  *entxt;
+        entxt = (s_textDupeEntry *)entry;
+        nfree(entxt->from);
+        nfree(entxt->filename);
+        nfree(entxt->areaname);
+        nfree(entxt);
+    }
+    return 1;
 }
 
 void doReading(FILE *f, s_dupeMemory *mem) {
@@ -153,7 +155,7 @@ s_dupeMemory *readDupeFile() {
 void freeDupeMemory() {
    
    if (CommonDupes != NULL) {
-      tree_mung(&(CommonDupes -> avlTree), deleteEntry);
+      tree_deinit(&(CommonDupes -> avlTree), deleteEntry);
       nfree(CommonDupes);
    };
 }

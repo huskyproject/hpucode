@@ -85,6 +85,7 @@ void ScanArea(s_area *area)
    
    if (oldArea != NULL) {
        
+       tree_init(&UUEFileTree,1);
        
        highMsg = MsgGetHighMsg(oldArea);
 
@@ -120,7 +121,7 @@ void ScanArea(s_area *area)
 
        nfree(toBeDeleted);
        MsgCloseArea(oldArea);
-       FreeUUEChain();
+       tree_deinit(&UUEFileTree, FreeUUEFile);
    }
    else {
        if (oldArea) MsgCloseArea(oldArea);
@@ -221,8 +222,6 @@ int main(int argc, char **argv) {
         currArea = NULL;
         toBeDeleted = NULL;
         nMaxDeleted = 0;
-        UFilesHead = scalloc(1,sizeof(UUEFile));
-        UFilesHead->prev = UFilesHead;
         m.req_version = 2;
         m.def_zone = config->addr[0].zone;
         if (MsgOpenApi(&m)!= 0) {
@@ -264,13 +263,17 @@ int main(int argc, char **argv) {
                 for (i=0; i < config->echoAreaCount; i++)
                     // scan echomail areas
                     doArea(&(config->echoAreas[i]), argv[k]);
+
+                for (i=0; i < config->localAreaCount; i++)
+                    // scan local areas
+                    doArea(&(config->localAreas[i]), argv[k]);
+
             }
             k++;
         }
         if(impLog) fclose(impLog);
         writeToDupeFile();
         MsgCloseApi();
-        FreeUUEChain();
         w_log(LL_STOP, "End");
         closeLog();
         doneCharsets();
@@ -278,7 +281,6 @@ int main(int argc, char **argv) {
             FreelockFile(config->lockfile ,lock_fd);
         }
         disposeConfig(config);
-        nfree(UFilesHead);
         return 0;
     } else {
         printf("Could not read fido config\n");

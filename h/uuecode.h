@@ -36,37 +36,39 @@
 #include <fidoconf/common.h>
 #include <fidoconf/xstr.h>
 #include <fidoconf/log.h>
+#include <fidoconf/tree.h>
 
 #define MAX              64
 #define MAX_SECTIONS     10000
 
 typedef struct _UUEFile
 {
-    char            *m_fname;
+    char*           ID;
+    char*           m_fname;
     int             m_nSections;
     int             m_nAdded;
     int             m_nPerm;
-   char**           UUEparts;
-   dword*           toBeDeleted;
-    char            *description;
-  hs_addr           origin;
-  struct _UUEFile*  next;
-  struct _UUEFile*  prev;
+    char**          UUEparts;
+    dword*          toBeDeleted;
+    char*           description;
+    hs_addr         origin;
 } UUEFile ;
 
+tree *UUEFileTree;
 
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut);
 
-UUEFile* MakeUUEFile(int nsec, char *name);
-UUEFile* FindUUEFile(char *name);
-void FreeUUEChain();
+UUEFile* MakeUUEFile(int nsec, char *name, char* ID);
+
+int      FreeUUEFile(char*);
+int      CompareUUEFile(char*, char*);
+
 void AddPart(UUEFile* uuc, char* uuepart, int section, int slen);
 
 int      nDelMsg;
 int      nCutMsg;
 dword*   toBeDeleted;
 dword    nMaxDeleted;
-UUEFile  *UFilesHead;
 s_area   *currArea;
 s_fidoconfig *config;
 XMSG     xmsg;

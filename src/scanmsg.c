@@ -28,7 +28,7 @@
 
 // type == 0 - fixed amount
 // type == 1 - undefined amount
-void _addPart(char *text, int section, int amount, char* name, int type)
+void _addPart(char *text, int section, int amount, char* name, char* ID, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
@@ -36,6 +36,7 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     int partlen = 0;
     int rr = 0;
     UUEFile* node = NULL;
+    UUEFile  nfnd;
     w_log(LL_FUNC,"%s::addPart()", __FILE__);
     begin = strchr(text, '\r');
     if(!begin) return;
@@ -70,18 +71,16 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     if(type == 0 && !endstr && amount == 1)
         return;
 
-
-    node = FindUUEFile(name);
+    nfnd.ID = ID ? ID : name;
+    node = (UUEFile*)tree_srch(&UUEFileTree, CompareUUEFile, (char*)&nfnd);
     if(!node)
     {
         if( type && !endstr )
         {
             amount++;
         }
-        node = MakeUUEFile(amount,name);
-        node->prev = UFilesHead->prev;
-        UFilesHead->prev->next = node; // add to end
-        UFilesHead->prev       = node; // save end pos
+        node = MakeUUEFile(amount,name,ID);
+        tree_add(&UUEFileTree, CompareUUEFile, (char*)node, FreeUUEFile);
     }
     else
     {
@@ -104,7 +103,7 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     AddPart(node, begin, section, partlen);
 }
 
-int scan4UUE(const char* text)
+int scan4UUE(const char* text,const char* ctl)
 {
     int nRet = 0;
     char name[MAX];
@@ -113,7 +112,6 @@ int scan4UUE(const char* text)
     int amount = 0;
     int atype = 0; 
     float ff = 0.0;
-    int multi = 0;
     char *szSection = NULL;
     char *szBegin   = NULL;
     
@@ -123,22 +121,15 @@ int scan4UUE(const char* text)
         if(sscanf(szSection,"section %d of %d of file %s",&section, &amount, name) == 3)
         {
             w_log(LL_FUNC,"%s::scan4UUE(), section %d of %d detected", __FILE__,section,amount);
-            multi = 1;
             atype = 0;
         }
-        else
+        else if(sscanf(szSection,"section %d of uuencode %f of file %s",&section,&ff,name) == 3)
         {
-            if(sscanf(szSection,"section %d of uuencode %f of file %s",&section,&ff,name) == 3)
-            {
-                w_log(LL_FUNC,"%s::scan4UUE(), section %d detected", __FILE__, section);
-                amount = section;
-                multi = 1;
-                atype = 1;
-            }
-            else
-            {
-                amount = 0;
-            }
+            w_log(LL_FUNC,"%s::scan4UUE(), section %d detected", __FILE__, section);
+            amount = section;
+            atype = 1;
+        } else {
+            amount = 0;
         }
         if(amount == 0) 
         {
@@ -157,29 +148,74 @@ int scan4UUE(const char* text)
             if(szBegin)
             {
                 w_log(LL_FUNC,"%s::scan4UUE(), first section detected", __FILE__);
-                _addPart(szBegin, section, amount, OS_independed_basename(name), atype);
+                _addPart(szBegin, section, amount, OS_independed_basename(name), NULL, atype);
             }
         }
         else
         {
-            _addPart(szSection, section, amount, OS_independed_basename(name), atype);
+            _addPart(szSection, section, amount, OS_independed_basename(name), NULL,atype);
         }
+        nRet = 1;
         szSection = strstr(szSection+1, "section ");
     }
 
-    if(!multi)
+    if(nRet)
+        return nRet;
+
+    szBegin = strstr(text, "begin ");
+    while(szBegin)
     {
-        szBegin = strstr(text, "begin ");
-        while(szBegin)
+        if(strchr(szBegin,'\r') - szBegin > 10)
         {
-            if(strchr(szBegin,'\r') - szBegin > 10)
+            if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) 
             {
-                if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
-                    w_log(LL_FUNC,"%s::scan4UUE(), single message uue detcted", __FILE__);
-                    _addPart(szBegin, 1, 1, OS_independed_basename(name), 0);
+                char *SPLIT = MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
+                if( SPLIT )
+                {
+                    w_log(LL_FUNC,"%s::scan4UUE(), SPLITed message uue detcted", __FILE__);
+                    section = 10*(SPLIT[45]-'0') + SPLIT[46] - '0';
+                    amount  = 10*(SPLIT[48]-'0') + SPLIT[49] - '0';
+                    if(amount > MAX_SECTIONS) 
+                    {
+                        w_log(LL_WARN,"Number of sections:%d too much for decoding",amount);
+                        szBegin = strstr(szBegin+1, "begin ");
+                        continue;
+                    }
+                    SPLIT[44] ='\0';
+                    stripRoundingChars(SPLIT+5, " \t");
+                    _addPart(szBegin, section, amount, OS_independed_basename(name), SPLIT+5, 0);
+                    nfree(SPLIT);
                 }
+                else
+                {
+                    w_log(LL_FUNC,"%s::scan4UUE(), single message uue detcted", __FILE__);
+                    _addPart(szBegin, 1, 1, OS_independed_basename(name), NULL, 0);
+                }
+                nRet = 1;
             }
-            szBegin = strstr(szBegin+1, "begin ");
+        }
+        szBegin = strstr(szBegin+1, "begin ");
+    }
+
+    if(nRet)
+        return nRet;
+    else
+    {
+        char *SPLIT = MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
+        if( SPLIT )
+        {
+            w_log(LL_FUNC,"%s::scan4UUE(), SPLITed message uue detcted", __FILE__);
+            section = 10*(SPLIT[45]-'0') + SPLIT[46] - '0';
+            amount  = 10*(SPLIT[48]-'0') + SPLIT[49] - '0';
+            if(amount > MAX_SECTIONS) 
+            {
+                w_log(LL_WARN,"Number of sections:%d too much for decoding",amount);
+                return nRet;            
+            }
+            SPLIT[44] ='\0';
+            stripRoundingChars(SPLIT+5, " \t");
+            _addPart(text, section, amount, NULL, SPLIT+5, 0);
+            nfree(SPLIT);
         }
     }
 
@@ -219,7 +255,10 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
 {
    HMSG msg;
    char *text = NULL;
+   char *ctl = NULL;
    dword  textLen = 0;
+   dword  ctlen = 0;
+
    int rc = 0;
 
    msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
@@ -227,16 +266,20 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
 
    currMsgUid = MsgMsgnToUid(hArea, msgNumb);
    textLen = MsgGetTextLen(msg);
+   ctlen = MsgGetCtrlLen(msg);
+
    text = (char *) scalloc(1,(textLen+1)*sizeof(char));
+   ctl = (char *) scalloc(1,(ctlen+1)*sizeof(char));
    
    memset(&xmsg, 0 , sizeof(xmsg));
 
-   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, 0, NULL)<0) {
+   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, ctl)<0) {
       rc = 0;
    } else {
       if(scan_cut == 0)
       {
-         scan4UUE(text);
+          ctl[ctlen] = '\0';
+          scan4UUE(text,ctl);
       }
       else
       {
@@ -253,6 +296,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    if(!text)
    MsgKillMsg(hArea, msgNumb);
    nfree(text);
+   nfree(ctl);
    return rc;
 }
 

@@ -39,7 +39,6 @@ static char *invalidExt[] = {"*.mo?", "*.tu?", "*.we?", "*.th?", "*.fr?",
 int  isReady(UUEFile* uuc);
 void MakeFile(UUEFile* uuc);
 void MakeTicFile(UUEFile* uuc);
-void FreeUUEFile(UUEFile* uuc);
 
 typedef struct  {
     char* areamask;
@@ -186,7 +185,7 @@ int  isReady(UUEFile* uuc)
     return i == uuc->m_nSections;
 }
 
-UUEFile* MakeUUEFile(int nsec, char *name)
+UUEFile* MakeUUEFile(int nsec, char *name, char* ID)
 {
     UUEFile* uuc = scalloc(1,sizeof(UUEFile));
     uuc->m_nSections = nsec;
@@ -197,45 +196,36 @@ UUEFile* MakeUUEFile(int nsec, char *name)
     }
     if(name)
     uuc->m_fname = sstrdup(name);
+    uuc->ID = ID ? sstrdup(ID) : uuc->m_fname; 
     return uuc;
 }
 
-void FreeUUEFile(UUEFile* uuc)
+
+int  CompareUUEFile(char *p_e1, char *p_e2)
 {
-    int i;
-    for(i = 0; i < uuc->m_nSections; i++)
-    nfree(uuc->UUEparts[i]);
-    nfree(uuc->toBeDeleted);
-    nfree(uuc->description);
-    nfree(uuc->m_fname);
+   UUEFile  *a, *b;
+   a = (UUEFile*)p_e1; 
+   b = (UUEFile*)p_e2;
+   return strcmp(a->ID,b->ID);
 }
 
-void FreeUUEChain()
+int  FreeUUEFile(char *entry)
 {
-    UUEFile* node = UFilesHead->next;
-    w_log(LL_FUNC,"%s::FreeUUEChain()", __FILE__);
-    while(UFilesHead->next)
+    if(entry)
     {
-        node = UFilesHead->next->next;
-        FreeUUEFile(UFilesHead->next);
-        //nfree(UFilesHead->next);
-        UFilesHead->next = node;
+        UUEFile  *uuc;
+        int i;
+        uuc = (UUEFile *)entry;
+        for(i = 0; i < uuc->m_nSections; i++)
+            nfree(uuc->UUEparts[i]);
+        nfree(uuc->toBeDeleted);
+        nfree(uuc->description);
+        if(uuc->m_fname != uuc->ID)
+            nfree(uuc->ID);
+        nfree(uuc->m_fname);
     }
-    UFilesHead->prev = UFilesHead;
+    return 1;
 }
-
-UUEFile* FindUUEFile(char *name)
-{
-    UUEFile* node = UFilesHead->next;
-    while(node)
-    {
-        if( node->m_fname && (stricmp(name, node->m_fname) == 0) )
-            break;
-        node = node->next;
-    }
-    return node;
-}
-
 
 void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 {
@@ -324,8 +314,7 @@ void MakeFile(UUEFile* uuc)
             toBeDeleted[nMaxDeleted+i] = uuc->toBeDeleted[i];
         nMaxDeleted += uuc->m_nSections;
     }
-    FreeUUEFile(uuc);
-    //nfree(uuc);
+    tree_delete(&UUEFileTree, CompareUUEFile,(char*)uuc, FreeUUEFile);
     nfree(fname);
     w_log(LL_FUNC,"%s::MakeFile(), exit", __FILE__);
 }
