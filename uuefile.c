@@ -51,7 +51,7 @@ char* findFileGroup(char* areaMask)
     if(!uueFileGroups)
         return xstrscat(&areagroup,"uue.",areaMask,NULL);
     for(i = 0; i < fileGroupscount; i++) {
-        if (patimat(uueFileGroups[i].areamask,areaMask))
+        if (patimat(areaMask,uueFileGroups[i].areamask))
             return sstrdup(uueFileGroups[i].fileEcho);
     }
     return xstrscat(&areagroup,"uue.",areaMask,NULL);
