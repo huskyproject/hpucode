@@ -1,3 +1,7 @@
+2002-11-06 Wednesday 08:31  sfpavel
+
+	* debian/changelog (hpucode-1_2-stable.2): New debian package
+
 2002-10-24 Thursday 12:36  stas_degteff
 
 	* src/dupe.c, src/uuefile.c, make/makefile.djg
