@@ -37,3 +37,8 @@ distclean: clean
 	rm hpucode
 
         
+install: hpucode$(EXE)
+	$(INSTALL) $(IBOPT) hpucode$(EXE) $(BINDIR)
+
+uninstall:
+	$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hpucode$(EXE)
