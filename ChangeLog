@@ -1,3 +1,12 @@
+2004-03-06 Saturday 20:17  mche
+
+	* h/uuecode.h (1.13), src/scanmsg.c (1.28), src/uuecode.c (1.27),
+	src/uuefile.c (1.29): cuting UUE code algorithm rewriten
+
+2004-03-06 Saturday 17:12  mche
+
+	* make/hpucode.vcproj (1.3): fix project file
+
 2004-02-07 Saturday 08:57  mche
 
 	* src/uuefile.c (1.28): some speed optimization
