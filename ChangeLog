@@ -1,3 +1,7 @@
+2002-07-22 Monday 13:56  mche
+
+	* makefile.mvcdll (1.5): corrected file cleaning
+
 2002-07-18 Thursday 13:56  mche
 
 	* uuecode.c (1.13): OEM filenames support
