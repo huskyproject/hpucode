@@ -1,0 +1,10 @@
+Document: hpucode
+Title: Debian hpucode Manual
+Author: The Husky-Team
+Abstract: This manual describes what hpucode is
+ and all of its keywords.
+Section: mail
+
+Format: HTML
+Index: /usr/share/doc/hpucode/hpucode.html
+Files: /usr/share/doc/hpucode/*.html
