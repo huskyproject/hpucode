@@ -41,6 +41,8 @@
 #define MAX              64
 #define MAX_SECTIONS     10000
 
+#define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
+
 typedef struct _UUEFile
 {
     char*           ID;

@@ -33,42 +33,52 @@ void _addPart(const char *text, int section, int amount, char* name, char* ID, i
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
     void *tmp = NULL;
-    int partlen = 0;
+    int partlen =  0;
+    int partlen1 = 0;
     int rr = 0;
     UUEFile* node = NULL;
     UUEFile  nfnd;
     w_log(LL_FUNC,"%s::addPart()", __FILE__);
-    begin = strchr(text, '\r');
-    if(!begin) return;
-    
-    while(begin[0] == '\r')
-        begin++;
-    
-    end = begin;
-    while( *end  && 
-                   (unsigned char)(*end) < '\x0061' && 
-                  ((unsigned char)(*end) > '\x0020' || (unsigned char)(*end) == '\r') && 
-          rr < 3)
-    {
-        rr = (end[0] == '\r') ?  rr+1 : 0;
-        end++;
-        if((rr == 2) && (strncmp(end,"---",3) == 0))
-            break;
-    }
 
-    if(end)
+    begin = text;
+
+    while( *begin )
     {
-        if( rr > 1 ) end--; 
-        partlen = end-begin;
-        if(partlen < 2)
+        endstr = strchr(begin, '\r');
+        if(!endstr)
             return;
-
-        endstr = strstr(end-1, "\rend\r");
+        partlen = 3*(endstr-begin-1)/4;
+        if(DECODE_BYTE (begin[0]) != partlen)
+        {
+            if(!((*(endstr-1) == '`') && (DECODE_BYTE(begin[0]) == partlen-1)))
+            {
+                break;
+            }
+        }
+        while(*endstr++ == '\r') { };
+        begin = endstr-1;
     }
-    else
-        return;
 
-    if(type == 0 && !endstr && amount == 1)
+    end = begin;
+    while( *end )
+    {
+        endstr = strchr(end, '\r');
+        if(!endstr)
+            break;
+        partlen = 3*(endstr-end-1)/4;
+        if(DECODE_BYTE (end[0]) != partlen)
+        {
+            if(!((*(endstr-1) == '`') && (DECODE_BYTE(end[0]) == partlen-1)))
+            {
+                break;
+            }
+        }
+        while(*endstr++ == '\r') { };
+        end = endstr-1;
+    }
+
+    partlen = end-begin;
+    if(partlen < 2)
         return;
 
     nfnd.ID = ID ? ID : name;
@@ -84,6 +94,9 @@ void _addPart(const char *text, int section, int amount, char* name, char* ID, i
     }
     else
     {
+        if(!node->m_fname && name)
+            node->m_fname = sstrdup(name);
+
         if(type && section == node->m_nSections && !endstr)
         {
             node->m_nSections = section+1;

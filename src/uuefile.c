@@ -84,8 +84,6 @@ char* findFileGroup(char* areaMask)
     return xstrscat(&areagroup,"uue.",areaMask,NULL);
 }
 
-#define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
-
 int DecodePart(char *text, FILE *outfile)
 {
     char *linep	= NULL;
@@ -182,7 +180,7 @@ int  isReady(UUEFile* uuc)
         if(uuc->UUEparts[i] == NULL)
             return 0;
     }
-    return i == uuc->m_nSections;
+    return (i == uuc->m_nSections) && uuc->m_fname ;
 }
 
 UUEFile* MakeUUEFile(int nsec, char *name, char* ID)
