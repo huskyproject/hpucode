@@ -193,10 +193,10 @@ int main(int argc, char **argv) {
 
         if(impLog)
             w_log(LL_INFO, 
-            "Using importlogfile -> scaning only listed areas that match the mask");
+            "Using importlogfile -> scanning only listed areas that match the mask");
         else
             w_log(LL_INFO, 
-            "Scaning all areas that match the mask");
+            "Scanning all areas that match the mask");
 
         while(k < argc)           
         {
