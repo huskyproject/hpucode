@@ -1,3 +1,7 @@
+2002-04-20 Saturday 14:46  mche
+
+	* dupe.c (1.8): dupe search improvement
+
 2002-04-12 Friday 15:02  mche
 
 	* uuefile.c (1.17): EchoAreaGroups
