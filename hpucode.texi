@@ -23,6 +23,10 @@ Copyright @copyright{} 2002 Husky Development Team
 
 @end titlepage
 
+@dircategory Fidonet Software
+@direntry
+* hpucode: (hpucode).		UUE Scanner and decoder.
+@end direntry
 
 @node Top, , , (dir)
 @top hpucode
