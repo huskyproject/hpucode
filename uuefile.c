@@ -229,7 +229,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
         MakeFile(uuc);
     }
 }
-#ifdef WINNT
+#if defined(WINNT)
 #   ifdef __MINGW32__
     typedef int   BOOL;
     typedef char *LPWSTR;
@@ -237,10 +237,8 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
     BOOL    __stdcall OemToCharA(LPCWSTR,LPWSTR);
     #define OemToChar OemToCharA
 #   endif    
-#else
-#   ifndef UNIX
-#       include <windows.h>
-#   endif
+#elif !defined(UNIX) && !defined(OS2)
+#   include <windows.h>
 #endif
 
 void MakeFile(UUEFile* uuc)
