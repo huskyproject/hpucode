@@ -1,6 +1,29 @@
-/*
-    $Id$
-*/
+/* $Id$ */
+
+/*****************************************************************************
+ * HPUCODE --- Uuencoded files from FTN messagebase extractor
+ *****************************************************************************
+ * Copyright (C) 2002  Max Chernogor & Husky Team
+ *
+ * http://husky.sf.net
+ *
+ * This file is part of HUSKY fidonet package.
+ *
+ * HUSKY is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2, or (at your option) any
+ * later version.
+ *
+ * HUSKY is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with HPT; see the file COPYING.  If not, write to the Free
+ * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+ *****************************************************************************/
+
 
 #include <errno.h>
 #include <time.h>
@@ -9,6 +32,7 @@
 #include "uuecode.h"
 #include "dupe.h"
 #include "cvsdate.h"
+#include "version.h"
 
 #ifdef UNIX
 #include <unistd.h>
@@ -48,11 +72,6 @@
 int __stdcall SetFileApisToOEM(void);
 #endif
 
-const int VER_MAJOR   = 1;
-const int VER_MINOR   = 3;
-const int VER_PATCH   = 0;
-/* branch is "" for CVS current, "-stable" for the release candiate branch  */
-const char *VER_BRANCH  = "";
 
 char* versionStr      = NULL;
 
@@ -141,25 +160,35 @@ int main(int argc, char **argv) {
     struct _minf m;
     char* buff=NULL;
     
-    xscatprintf(&buff, "%u.%u.%u%s", VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH);
+
+    setvar("module", "hpucode");
+
+    xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
+    setvar("version", buff);
     
 #ifdef __linux__
     xstrcat(&buff, "/lnx");
-#elif defined(__FreeBSD__) || defined(__NetBSD__)
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
     xstrcat(&buff, "/bsd");
 #elif defined(__OS2__) || defined(OS2)
     xstrcat(&buff, "/os2");
-#elif defined(__NT__)
+#elif defined(__NT__) || defined(__MINGW32__) || defined(_WINNT)
     xstrcat(&buff, "/w32");
+#elif defined(WINDOWS)
+    xstrcat(&buff, "/win");
+#elif defined(__CYGWIN__)
+    xstrcat(&buff, "/cyg");
 #elif defined(__sun__)
     xstrcat(&buff, "/sun");
-#elif defined(MSDOS)
+#elif defined(__DJGPP__)
+    xstrcat(&buff, "/dpmi");
+#elif defined(MSDOS) || defined(DOS) || defined(__DOS__)
     xstrcat(&buff, "/dos");
 #elif defined(__BEOS__)
     xstrcat(&buff, "/beos");
 #endif
 
-    if (strcmp(VER_BRANCH,"-stable")!=0) xscatprintf(&buff, " %s", cvs_date);
+    if( strcmp(VER_BRANCH,"-stable") ) xscatprintf(&buff, " %s", cvs_date);
     xscatprintf(&versionStr,"hpuCode %s", buff);
     nfree(buff);
     
