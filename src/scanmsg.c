@@ -145,6 +145,12 @@ int scan4UUE(const char* text)
             szSection = strstr(szSection+1, "section ");
             continue;
         }
+        if(amount > MAX_SECTIONS) 
+        {
+            w_log(LL_WARN,"Number of sections:%d too much for decoding",amount);
+            szSection = strstr(szSection+1, "section ");
+            continue;
+        }
         if(section == 1)
         {
             szBegin = strstr(szSection, "begin ");
@@ -160,6 +166,7 @@ int scan4UUE(const char* text)
         }
         szSection = strstr(szSection+1, "section ");
     }
+
     if(!multi)
     {
         szBegin = strstr(text, "begin ");
@@ -175,6 +182,7 @@ int scan4UUE(const char* text)
             szBegin = strstr(szBegin+1, "begin ");
         }
     }
+
     return nRet;
 }
 

@@ -38,6 +38,7 @@
 #include <fidoconf/log.h>
 
 #define MAX              64
+#define MAX_SECTIONS     10000
 
 typedef struct _UUEFile
 {

@@ -373,6 +373,7 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle, "Created by %s, written by Max Chernogor\r\n",versionStr);
    fprintf(tichandle, "File %s\r\n", uuc->m_fname);
    fprintf(tichandle, "Area %s\r\n", areagroup);
+   fprintf(tichandle, "Areadesc %UUE decoded from %s\r\n", currArea->areaName);
    fprintf(tichandle, "Desc %s\r\n", uuc->description);
    fprintf(tichandle, "From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle, "To %s\r\n",   aka2str(link->hisAka));
