@@ -218,7 +218,8 @@ int scan4UUE(char* text,const char* ctl)
     else
     {
         char *SPLIT = (char*)MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
-        if( SPLIT )
+        /* FSC-0047 */
+        if( SPLIT && SPLIT[47] == '/')
         {
             w_log(LL_FUNC,"%s::scan4UUE(), SPLITed message uue detcted", __FILE__);
             section = 10*(SPLIT[45]-'0') + SPLIT[46] - '0';
