@@ -18,7 +18,7 @@ void _addPart(char *text, int section, int amount, char* name, int type)
         begin++;
 
     end = begin;
-    while( end && end[0] < '\x0061' && rr < 3)
+    while( *end && end[0] < '\x0061' && rr < 3)
     {
         rr = (end[0] == '\r') ?  rr+1 : 0;
         end++;
