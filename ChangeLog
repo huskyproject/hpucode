@@ -1,3 +1,24 @@
+2003-02-19 Wednesday 16:37  mche
+
+	* src/scanmsg.c (1.17): fix detection end of section
+
+2003-02-19 Wednesday 16:27  mche
+
+	* src/scanmsg.c (1.16): fix detection end of section
+
+2003-02-19 Wednesday 16:24  mche
+
+	* src/scanmsg.c (1.15): fix detection end of section
+
+2003-02-19 Wednesday 14:26  stas_degteff
+
+	* src/uuefile.c (1.21): Fix compiler warning (signedless)
+
+2003-02-19 Wednesday 14:02  stas_degteff
+
+	* src/uuecode.c (1.13): Set loglevel to '4' for messages "Scan
+	area", "Using importlogfile..." and "Scanning all areas..."
+
 2003-02-11 Tuesday 10:24  sfpavel
 
 	* debian/: doc-base (1.1), docs (1.1): Update debian documentation
