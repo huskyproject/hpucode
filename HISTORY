@@ -5,6 +5,7 @@ This file describe changes in hpucode.
 Changes after 1.0-release.
 
 1. MAJOR feature improvements:
+  - new functionality for decoding splited messages.
 
 2. CONFIG changes:
 
