@@ -1,3 +1,12 @@
+2003-09-18 Thursday 10:40  sfpavel
+
+	* Makefile (hpucode-1_4-stable.1): Fix static building
+
+2003-09-18 Thursday 06:29  sfpavel
+
+	* debian/changelog (hpucode-1_4-stable.6): New stable version:
+	1.4-RC2
+
 2003-05-21 Wednesday 08:57  sfpavel
 
 	* debian/control (hpucode-1_4-stable.3): Change debian maintainer's
