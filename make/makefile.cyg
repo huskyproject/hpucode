@@ -22,7 +22,6 @@ clean:
 	-rm -f *.o
 	-rm *~
 	-rm 
-	-rm hpucode.exe
 
 distclean: clean
 	-rm hpucode.exe

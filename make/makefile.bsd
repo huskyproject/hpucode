@@ -29,7 +29,6 @@ clean:
 	-rm -f *.o
 	-rm *~
 	-rm
-	-rm hpucode
 
 distclean: clean
 	-rm hpucode

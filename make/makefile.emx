@@ -22,8 +22,6 @@ hpucode.exe: $(OBJS)
 clean:
 	-del -f *.o
 	-del *~
-	-del 
-	-del hpucode.exe
 
 distclean: clean
 	-del hpucode.exe
