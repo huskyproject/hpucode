@@ -1,3 +1,7 @@
+2002-07-04 Thursday 08:32  mche
+
+	* uuecode.c (1.11): MsgCloseApi call added
+
 2002-07-01 Monday 16:39  mche
 
 	* scanmsg.c (1.21): fix coredump when wrong uue header treated as
