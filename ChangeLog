@@ -1,19 +1,23 @@
 2002-11-10 Sunday 09:12  sfpavel
 
-	* src/uuecode.c (hpucode-1_2-stable.2): hpucode 1.2 release
+	* src/uuecode.c (tags: hpucode-1_2-release) (hpucode-1_2-stable.2):
+	hpucode 1.2 release
 
 2002-11-06 Wednesday 08:31  sfpavel
 
-	* debian/changelog (hpucode-1_2-stable.2): New debian package
+	* debian/changelog (tags: hpucode-1_2-release)
+	(hpucode-1_2-stable.2): New debian package
 
 2002-10-24 Thursday 12:36  stas_degteff
 
 	* src/dupe.c, src/uuefile.c, make/makefile.djg
-	(hpucode-1_2-stable.[1,2,1]): Tune DJGPP compilation
+	(hpucode-1_2-stable.[1,2,1]) (utags: hpucode-1_2-release): Tune
+	DJGPP compilation
 
 2002-10-24 Thursday 12:16  stas_degteff
 
-	* src/scanmsg.c (hpucode-1_2-stable.1): cosmetic fix (typo error)
+	* src/scanmsg.c (tags: hpucode-1_2-release) (hpucode-1_2-stable.1):
+	cosmetic fix (typo error)
 
 2002-10-14 Monday 06:30  sfpavel
 
@@ -21,8 +25,9 @@
 
 2002-10-11 Friday 03:27  sfpavel
 
-	* debian/: changelog, control, rules (hpucode-1_2-stable.[1,1,1]):
-	New debian package
+	* debian/: changelog, control (tags: hpucode-1_2-release), rules
+	(tags: hpucode-1_2-release) (hpucode-1_2-stable.[1,1,1]): New
+	debian package
 
 2002-10-10 Thursday 13:15  sfpavel
 
@@ -40,18 +45,20 @@
 
 2002-10-08 Tuesday 07:35  sfpavel
 
-	* debian/: changelog (1.1), control (1.1), copyright (1.1), dirs
-	(1.1), huskymak.cfg (1.1), info (1.1), rules (1.1): Create debian
-	package
+	* debian/: changelog (1.1), control (1.1), copyright (1.1,
+	hpucode-1_2-release), dirs (1.1, hpucode-1_2-release), huskymak.cfg
+	(1.1, hpucode-1_2-release), info (1.1, hpucode-1_2-release), rules
+	(1.1): Create debian package
 
 2002-10-08 Tuesday 07:33  sfpavel
 
-	* Makefile (1.5), man/hpucode.1 (1.1): Write man page
+	* Makefile (1.5), man/hpucode.1 (1.1) (utags: hpucode-1_2-release):
+	Write man page
 
 2002-10-04 Friday 06:14  sfpavel
 
-	* make/: makefile.djg (1.1), makefile.emx (1.1): Add makefiles for
-	DJGPP and OS2/EMX
+	* make/: makefile.djg (1.1), makefile.emx (1.1,
+	hpucode-1_2-release): Add makefiles for DJGPP and OS2/EMX
 
 2002-09-25 Wednesday 08:18  mche
 
@@ -59,7 +66,8 @@
 
 2002-08-30 Friday 12:14  mche
 
-	* make/makefile.mgw (1.3): minGW makefiles corrected
+	* make/makefile.mgw (1.3, hpucode-1_2-release): minGW makefiles
+	corrected
 
 2002-08-30 Friday 07:17  mche
 
@@ -72,7 +80,7 @@
 
 2002-08-26 Monday 15:18  d_sergienko
 
-	* hpucode.texi (1.2): added dir entry
+	* hpucode.texi (1.2, hpucode-1_2-release): added dir entry
 
 2002-08-26 Monday 14:29  d_sergienko
 
@@ -103,32 +111,35 @@
 
 2002-08-24 Saturday 12:59  d_sergienko
 
-	* h/uuecode.h (1.2), src/scanmsg.c (1.2), src/uuecode.c (1.2),
-	src/uuefile.c (1.2), h/dupe.h (1.2), src/dupe.c (1.2): added RCS Id
+	* h/uuecode.h (1.2, hpucode-1_2-release), src/scanmsg.c (1.2),
+	src/uuecode.c (1.2), src/uuefile.c (1.2), h/dupe.h (1.2,
+	hpucode-1_2-release), src/dupe.c (1.2): added RCS Id
 
 2002-08-24 Saturday 12:56  d_sergienko
 
-	* make/: makefile.mgw (1.2), makefile.sun (1.2), makefile.wco
-	(1.2), makefile.wcw (1.2): cosmetics in makefiles
+	* make/: makefile.mgw (1.2), makefile.sun (1.2,
+	hpucode-1_2-release), makefile.wco (1.2, hpucode-1_2-release),
+	makefile.wcw (1.2, hpucode-1_2-release): cosmetics in makefiles
 
 2002-08-24 Saturday 12:54  mche
 
-	* make/makefile.mvcdll (1.2): corrected
+	* make/makefile.mvcdll (1.2, hpucode-1_2-release): corrected
 
 2002-08-24 Saturday 12:27  d_sergienko
 
-	* h/dupe.h (1.1), h/uuecode.h (1.1), make/makefile.bsd (1.1),
-	make/makefile.cyg (1.1), make/makefile.mgw (1.1), make/makefile.mvc
-	(1.1), make/makefile.mvcdll (1.1), make/makefile.sun (1.1),
-	make/makefile.wco (1.1), make/makefile.wcw (1.1), src/dupe.c (1.1),
-	src/scanmsg.c (1.1), src/uuecode.c (1.1), src/uuefile.c (1.1):
-	moved sources, headers and makefiles to separate directories
+	* h/dupe.h (1.1), h/uuecode.h (1.1), make/makefile.bsd (1.1,
+	hpucode-1_2-release), make/makefile.cyg (1.1, hpucode-1_2-release),
+	make/makefile.mgw (1.1), make/makefile.mvc (1.1,
+	hpucode-1_2-release), make/makefile.mvcdll (1.1), make/makefile.sun
+	(1.1), make/makefile.wco (1.1), make/makefile.wcw (1.1), src/dupe.c
+	(1.1), src/scanmsg.c (1.1), src/uuecode.c (1.1), src/uuefile.c
+	(1.1): moved sources, headers and makefiles to separate directories
 
 2002-03-15 Friday 11:53  mche
 
-	* .cvs2cl (1.1): no message
+	* .cvs2cl (1.1, hpucode-1_2-release): no message
 
 2002-03-13 Wednesday 07:27  mche
 
-	* .cvsignore (1.1): no message
+	* .cvsignore (1.1, hpucode-1_2-release): no message
 
