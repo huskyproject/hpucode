@@ -98,7 +98,7 @@ void ScanArea(s_area *area)
    }
    else {
        if (oldArea) MsgCloseArea(oldArea);
-       printf("Could not open %s ", areaName);
+       w_log(LL_ERROR, "Could not open %s ", areaName);
    }
 }
    
