@@ -1,3 +1,13 @@
+2003-02-03 Monday 18:13  mche
+
+	* src/dupe.c (1.5), src/scanmsg.c (1.8), src/uuecode.c (1.10),
+	src/uuefile.c (1.17), h/uuecode.h (1.8): new functionality for
+	decding splited messages
+
+2003-02-03 Monday 09:34  mche
+
+	* src/dupe.c (1.4): fix compilation
+
 2003-02-01 Saturday 20:13  stas_degteff
 
 	* Makefile (1.6): Set permitions for documentation at install
