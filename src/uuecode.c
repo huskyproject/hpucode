@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
             nfree(buff);
             xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
             initLog(config->logFileDir, config->logEchoToScreen, config->loglevels, config->screenloglevels);
-            openLog(buff, "hpucode", config);
+            openLog(buff, "hpucode");
             nfree(buff);
         } 
         if(config->protInbound)
