@@ -86,7 +86,7 @@ int processCommandLine(int argc, char **argv)
     if (argc == 1)
     {
         start_help();
-        return 1;
+        return 0;
     }
 
     Filters = scalloc(sizeof(sFilters),argc);
