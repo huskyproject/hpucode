@@ -64,12 +64,12 @@ install: all
 	$(INSTALL) $(IBOPT) hpucode$(EXE) $(BINDIR)
 ifdef INFODIR
 	-$(MKDIR) $(MKDIROPT) $(INFODIR)
-	$(INSTALL) hpucode.info $(INFODIR)
+	$(INSTALL) $(IMOPT) hpucode.info $(INFODIR)
 	-install-info --info-dir=$(INFODIR)  $(INFODIR)$(DIRSEP)hpucode.info
 endif
 ifdef HTMLDIR
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)
-	$(INSTALL) hpucode.html $(HTMLDIR)
+	$(INSTALL) $(IMOPT) hpucode.html $(HTMLDIR)
 endif
 ifdef MANDIR
 	-$(MKDIR) $(MKDIROPT) $(MANDIR)$(DIRSEP)man1
