@@ -1,3 +1,21 @@
+2003-02-04 Tuesday 14:32  mche
+
+	* src/scanmsg.c (1.11): uue detection algorithm changed
+
+2003-02-04 Tuesday 13:57  mche
+
+	* src/scanmsg.c (1.10), src/uuefile.c (1.18), h/uuecode.h (1.9):
+	uue detection algorithm changed
+
+2003-02-04 Tuesday 10:35  mche
+
+	* src/: scanmsg.c (1.9), uuecode.c (1.11): fix tree initialization
+
+2003-02-04 Tuesday 08:19  d_sergienko
+
+	* src/dupe.c (1.6): 
+	return to tree_mung()
+
 2003-02-03 Monday 18:13  mche
 
 	* src/dupe.c (1.5), src/scanmsg.c (1.8), src/uuecode.c (1.10),
