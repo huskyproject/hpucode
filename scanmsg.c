@@ -18,7 +18,7 @@ void _addPart(char *text, int section, int amount, char* name, int type)
         begin++;
 
     end = begin;
-    while( *end && end[0] < '\x0061' && rr < 3)
+    while( *end  && (unsigned char)(*end) < '\x0061' && rr < 3)
     {
         rr = (end[0] == '\r') ?  rr+1 : 0;
         end++;
@@ -178,7 +178,6 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    char *text;
    dword  textLen;
    int rc = 0;
-   int delmsg = 0;
 
    msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
    if (msg == NULL) return rc;
