@@ -271,6 +271,11 @@ int main(int argc, char **argv) {
     struct _minf m;
     char* buff=NULL;
 
+#if defined ( __NT__ )
+    SetUnhandledExceptionFilter(&UExceptionFilter);
+#endif
+
+
     xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
     setvar("version", buff);
     
