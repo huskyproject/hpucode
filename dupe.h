@@ -50,6 +50,7 @@
 
 struct textDupeEntry {
   char *filename, *from, *areaname;
+  time_t timeCreated;
 };
 
 typedef struct textDupeEntry s_textDupeEntry;

@@ -48,6 +48,8 @@
 FILE *fDupe;
 
 s_dupeMemory *CommonDupes=NULL;
+static time_t  tCR=0;
+static time_t  maxTimeLifeDupesInArea=0;
 
 int compareEntriesBlank(char *e1, char *e2) {
    int rc=1;
@@ -74,8 +76,12 @@ int writeEntry(char *p_entry) {
    const void *entry = (const void *)p_entry;
    
    entxt = entry;
-
-   fprintf(fDupe,"%s %s %s\n",entxt->filename,entxt->areaname,entxt->from);
+   if ( (tCR - entxt->timeCreated) < maxTimeLifeDupesInArea) 
+   {
+      fprintf(fDupe,"%s %s %s %lu\n",
+         entxt->filename,entxt->areaname,entxt->from,
+         (unsigned long)entxt->timeCreated);
+   }
 
    return 1;
 }
@@ -95,75 +101,24 @@ int deleteEntry(char *entry) {
 
 void doReading(FILE *f, s_dupeMemory *mem) {
    s_textDupeEntry  *entxt;
-   char *line, *token;
-   char white[]=" \t";
+   char *line;
+   char fname[MAX],echoname[MAX],fromname[MAX];
+   time_t timecr=0;
+
    while( (line = readLine(f)) != NULL ) 
    {
+      if(sscanf(line, "%s %s %s %ld",
+         fname, echoname, fromname, &timecr
+         ) != 4)
+         continue;
+      
       entxt = (s_textDupeEntry*) smalloc(sizeof(s_textDupeEntry));
 
-      token = strtok( line, white );
-      if(!token)
-      { nfree(entxt); continue; }
-      
-      entxt->filename = sstrdup(token);
-
-      token = strtok( NULL, white );
-      if(!token)
-      { nfree(entxt); continue; }
-
-      entxt->areaname = sstrdup(token);
-
-      token = strtok( NULL, white );
-      if(!token)
-      { nfree(entxt); continue; }
-
-      entxt->from = sstrdup(token);
-      
-      /*
-      linelen = fnlen = 0;
-      // try to find begin of filename
-      while(line[fnlen] !='\0' && isspace(line[fnlen])) fnlen++;
-      if(line[fnlen] =='\0')
-      { nfree(entxt); continue; }
-
-      strspn(line,white);
-
-      prevpos = fnlen;
-//      prevpos = strspn(line,white);
-
-      // try to find end of filename
-      while(line[fnlen] !='\0' && !isspace(line[fnlen])) fnlen++;
-      if(line[fnlen] =='\0')
-      { nfree(entxt); continue; }
-      
-      linelen = fnlen - prevpos;
-      entxt->filename = scalloc(linelen+1,sizeof(char));
-      // try to find begin of areaname
-      while(line[fnlen] !='\0' && isspace(line[fnlen])) fnlen++;
-      if(line[fnlen] =='\0')
-      { nfree(entxt); continue; }
-      
-      prevpos = fnlen;
-      // try to find end of areaname
-      while(line[fnlen] !='\0' && !isspace(line[fnlen])) fnlen++;
-      if(line[fnlen] =='\0')
-      { nfree(entxt); continue; }
-
-      linelen = fnlen - prevpos;
-      entxt->areaname = scalloc(linelen+1,sizeof(char));
-      
-      // try to find begin of from
-      while(line[fnlen] !='\0' && isspace(line[fnlen])) fnlen++;
-      if(line[fnlen] =='\0')
-      { nfree(entxt); continue; }
-      
-      prevpos = fnlen;
-      // try to find end of from
-      while(line[fnlen] !='\0' && !isspace(line[fnlen])) fnlen++;
-
-      linelen = fnlen - prevpos;
-      entxt->from = scalloc(linelen+1,sizeof(char));
-*/      
+      entxt->filename = sstrdup(fname);
+      entxt->areaname = sstrdup(echoname);
+      entxt->from     = sstrdup(fromname);
+      entxt->timeCreated = timecr;
+        
       tree_add(&(mem->avlTree), compareEntriesBlank, (char *) entxt, deleteEntry);
       
    }
@@ -247,8 +202,13 @@ int dupeDetection(s_textDupeEntry *msg) {
    int pos=0;
    
    if (CommonDupes == NULL)
+   {
       CommonDupes = readDupeFile(); //read Dupes
-   
+      time( &tCR );
+      maxTimeLifeDupesInArea = config->areasMaxDupeAge > 30 ?
+                               config->areasMaxDupeAge*86400:
+                               30*86400;
+   }
    while ( msg->from[pos] != '\0' )
    {
       if( (msg->from[pos] == ' ') || (msg->from[pos] == '\t'))
@@ -257,6 +217,7 @@ int dupeDetection(s_textDupeEntry *msg) {
    }
    
    if (tree_srchall(&(CommonDupes->avlTree), compareEntries, (char *) msg)) {
+      msg->timeCreated = tCR; 
       tree_add(&(CommonDupes->avlTree), compareEntriesBlank, (char *) msg, deleteEntry);
       return 1;
    }
