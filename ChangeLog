@@ -1,3 +1,7 @@
+2005-01-07 Friday 13:05  mche
+
+	* src/uuefile.c (1.31): make hpucode compilable
+
 2004-11-05 Friday 14:18  mche
 
 	* make/hpucode.vcproj (1.4): make files changed for building with
