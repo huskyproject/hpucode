@@ -49,21 +49,6 @@ FILE *fDupe;
 
 s_dupeMemory *CommonDupes=NULL;
 
-
-char *strtolower(char *string) {
-  register int cont;
-  int l;
-  char *tmp;
-    
-  l=strlen(string);
-  tmp=(char *) smalloc (l+1);
-  for (cont=0;cont<=l;cont++)
-    tmp[cont]=(char)tolower(string[cont]);
-  
-  return tmp;
-}
-
-
 int compareEntriesBlank(char *e1, char *e2) {
    int rc=1;
    unused(e1); unused(e2);

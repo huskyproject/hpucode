@@ -13,7 +13,7 @@ void FreeUUEFile(UUEFile* uuc);
 
 typedef unsigned char BYTE;
 
-DecodePart(char *text, FILE *outfile)
+void DecodePart(char *text, FILE *outfile)
 {
     char *linep	= NULL;
     size_t   linelen	= 0;
@@ -94,7 +94,6 @@ DecodePart(char *text, FILE *outfile)
         linebuf = endl;
         linelen = strlen(linebuf);
     } while (linelen > 1);
-    
 }
 
 int  isReady(UUEFile* uuc)
@@ -239,7 +238,7 @@ void MakeTicFile(UUEFile* uuc)
    if(!link)
    {
       w_log(LL_INFO, "tic file not created for file %s", uuc->m_fname);
-      return;
+      return ;
    }
 
    strcpy(fname,config->protInbound);

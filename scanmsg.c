@@ -4,7 +4,7 @@
 
 void addPart(char *text, int section, int amount, char* name)
 {
-    char *begin = NULL, *end= NULL, *end2 =NULL;
+    char *begin = NULL, *end= NULL;
     int partlen = 0;
     UUEFile* node = NULL;
     begin = strchr(text, '\r');
@@ -36,7 +36,6 @@ void addPart(char *text, int section, int amount, char* name)
 int scan4UUE(char* text, dword textLen)
 {
     int nRet = 0;
-    int linelen=80;
     char name[MAX];
     int perms;
     int section;
