@@ -1,3 +1,11 @@
+2002-10-26 Saturday 12:16  mche
+
+	* src/uuefile.c (1.13): fix cygwing warnings
+
+2002-10-26 Saturday 12:12  mche
+
+	* src/uuefile.c (1.12): fix cygwing warnings
+
 2002-10-24 Thursday 12:42  stas_degteff
 
 	* make/makefile.djg (1.3), src/dupe.c (1.3), src/uuefile.c (1.11):
