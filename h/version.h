@@ -32,7 +32,7 @@
 #define   VER_MAJOR    1
 
 /* sub-version number */
-#define   VER_MINOR    1
+#define   VER_MINOR    3
 
 /* patch number, use only for post-release versions (updated release) */
 #define   VER_PATCH    0
