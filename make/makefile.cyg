@@ -1,15 +1,15 @@
 CC      = gcc
-CFLAGS=	-DNT -D__NT__ -DWINNT -D__CYG__ -I. -I.. -Wall -pedantic -c -Wno-char-subscripts -mno-cygwin
+CFLAGS=	-DNT -D__NT__ -DWINNT -D__CYG__ -I../h -I../.. -Wall -pedantic -c -Wno-char-subscripts -mno-cygwin
 COPT=	-O2
-LFLAGS=-mno-cygwin -L../smapi/ -L../fidoconf
+LFLAGS=-mno-cygwin -L../../smapi/ -L../../fidoconf
 
-
+SRC_DIR = ../src/
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
 
 all: $(OBJS) hpucode.exe
 
-%.o: %.c
-	$(CC) $(CFLAGS) $*.c
+%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) $<
 
 hpucode.exe: $(OBJS)
 	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfidoconfigcyg -lsmapicyg -luser32

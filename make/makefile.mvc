@@ -1,0 +1,24 @@
+# Microsoft Visual C++ Makefile
+
+CC=     cl
+CFLAGS= -nologo -Zp1 -I..\.. -I..\h
+CDEFS=  -D__NT__ -DNT -DWINNT -D_CONSOLE
+COPT=   -O2
+
+SMAPIL=	..\..\smapi\smapimvc.lib user32.lib
+FCONFL=	..\..\fidoconf\fconfmvc.lib
+
+all: hpucode.exe
+
+hpucode.exe:
+        $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ ..\src\uuecode.c \
+                                                ..\src\uuefile.c \
+                                                ..\src\scanmsg.c \
+                                                ..\src\dupe.c    \
+                   $(FCONFL) $(SMAPIL)  
+
+clean:
+	-del *.obj
+
+distclean: clean
+	-del *.exe

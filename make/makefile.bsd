@@ -7,21 +7,22 @@
 #STATIC= -static
 
 CC      = gcc
-CFLAGS= -DUNIX -I. -I.. -Wall -pedantic -c
+CFLAGS= -DUNIX -I../h/ -I../../ -Wall -pedantic -c
 COPT=   -O2
 LFLAGS= $(STATIC)
 
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
 LINKSMAPI=../smapi/libsmapibsd.a
 LINKFIDOC=../fidoconf/libfidoconfigbsd.a
+SRC_DIR = ../src/
 
 all: $(OBJS) hpucode
 
-%.o: %.c
-	$(CC) $(CFLAGS) $*.c
+%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) $<
 
 hpucode: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode $(OBJS) ../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
+	$(CC) $(LFLAGS) -o hpucode $(OBJS) ../../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
 
 clean:
 	-rm -f *.o
