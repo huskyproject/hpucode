@@ -130,7 +130,7 @@ int scan4UUE(char* text,const char* ctl)
     char *szSection = NULL;
     char *szBegin   = NULL;
 
-    if(!text) return;
+    if(!text) return 0;
     szSection = strstr(text, "section ");
     while(szSection)
     {
@@ -185,7 +185,7 @@ int scan4UUE(char* text,const char* ctl)
         {
             if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) 
             {
-                char *SPLIT = MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
+                char *SPLIT = (char*)MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
                 if( SPLIT )
                 {
                     w_log(LL_FUNC,"%s::scan4UUE(), SPLITed message uue detcted", __FILE__);
@@ -217,7 +217,7 @@ int scan4UUE(char* text,const char* ctl)
         return nRet;
     else
     {
-        char *SPLIT = MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
+        char *SPLIT = (char*)MsgGetCtrlToken((byte*)ctl,(byte*)"SPLIT");  
         if( SPLIT )
         {
             w_log(LL_FUNC,"%s::scan4UUE(), SPLITed message uue detcted", __FILE__);
@@ -244,7 +244,7 @@ char* cutUUEformMsg(char *text)
    char *end = NULL;
    char *szBegin;
 
-   if(!text) return;
+   if(!text) return NULL;
 
    szBegin = strstr(text, "begin ");
    if(!szBegin) return NULL;
@@ -293,7 +293,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    
    memset(&xmsg, 0 , sizeof(xmsg));
 
-   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, ctl)<0) {
+   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, (unsigned char*)ctl)<0) {
       rc = 0;
    } else {
       if(scan_cut == 0)
