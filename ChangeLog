@@ -1,3 +1,12 @@
+2003-05-09 Friday 10:10  mche
+
+	* src/uuecode.c (1.20): fix version string in logfile
+
+2003-05-09 Friday 10:00  mche
+
+	* Makefile (1.10): hpucode Makefile fix [patch by Alexander
+	Gerasimov]
+
 2003-05-05 Monday 13:07  mche
 
 	* make/hpucode.vcproj (1.1), hpucode.vcproj (1.4): change location
