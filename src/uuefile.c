@@ -138,7 +138,7 @@ int DecodePart(char *text, FILE *outfile)
                     outbyte [1] |= (outbyte [2] >> 2) & 0x0F;
                     outbyte [2] <<= 6;
                 }
-                //outbyte [2] |= DECODE_BYTE (linep [3]) & 0x3F;
+                /* outbyte [2] |= DECODE_BYTE (linep [3]) & 0x3F; */
             }
             /* Write the decoded bytes to the output file */
             

@@ -137,7 +137,7 @@ s_dupeMemory *readDupeFile() {
 
    f = fopen(fileName, "rb");
    if (f != NULL) { w_log(LL_FILE,"dupe.c:readDupeFile(): opened %s (\"rb\" mode)",fileName);
-       // readFile
+       /*  readFile */
        doReading(f, dupeMemory);
        fclose(f);
        w_log(LL_FILE, "Reading dupes done");
@@ -163,7 +163,7 @@ void freeDupeMemory() {
 int createDupeFile(char *name) {
    FILE *f;
 
-//   w_log(LL_SRCLINE,"dupe.c:%u:createDupeFile() name='%s'", __LINE__, name);
+/*    w_log(LL_SRCLINE,"dupe.c:%u:createDupeFile() name='%s'", __LINE__, name); */
 
    f = fopen(name, "wb");
    if (f!= NULL) {
@@ -204,7 +204,7 @@ int dupeDetection(s_textDupeEntry *msg) {
    int nRet = 1;   
    if (CommonDupes == NULL)
    {
-      CommonDupes = readDupeFile(); //read Dupes
+      CommonDupes = readDupeFile(); /* read Dupes */
       time( &tCR );
       maxTimeLifeDupesInArea = config->areasMaxDupeAge > 30 ?
                                config->areasMaxDupeAge*86400:

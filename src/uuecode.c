@@ -131,7 +131,7 @@ void ScanArea(s_area *area)
    
 void doArea(s_area *area, char *cmp)
 {
-    if(area->scn == 1) // do not scan area twice
+    if(area->scn == 1) /*  do not scan area twice */
         return;
 
     if (patimat(area->areaName,cmp)) 
@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
                 exit(EX_CANTCREAT);
             }
         }
-        // load recoding tables
+        /*  load recoding tables */
         initCharsets();
         if (config->intab != NULL) getctab(intab, (unsigned char*) config->intab);
         if (config->outtab != NULL) getctab(outtab, (unsigned char*) config->outtab);
@@ -257,15 +257,15 @@ int main(int argc, char **argv) {
                 }
             } else {
                 for (i=0; i < config->netMailAreaCount; i++)
-                    // scan netmail areas
+                    /*  scan netmail areas */
                     doArea(&(config->netMailAreas[i]), argv[k]);
                 
                 for (i=0; i < config->echoAreaCount; i++)
-                    // scan echomail areas
+                    /*  scan echomail areas */
                     doArea(&(config->echoAreas[i]), argv[k]);
 
                 for (i=0; i < config->localAreaCount; i++)
-                    // scan local areas
+                    /*  scan local areas */
                     doArea(&(config->localAreas[i]), argv[k]);
 
             }
