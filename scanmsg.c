@@ -1,8 +1,9 @@
 #include "uuecode.h"
 //#include "dupe.h"
 
-
-void addPart(char *text, int section, int amount, char* name)
+// type == 0 - fixed amount
+// type == 1 - undefined amount
+void addPart(char *text, int section, int amount, char* name, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
@@ -37,9 +38,9 @@ void addPart(char *text, int section, int amount, char* name)
     node = FindUUEFile(name);
     if(!node)
     {
-        if(section > amount && !endstr )
+        if( type && !endstr )
         {
-            amount = section;
+            amount++;
         }
         node = MakeUUEFile(amount,name);
         node->prev = UFilesHead->prev;
@@ -48,9 +49,9 @@ void addPart(char *text, int section, int amount, char* name)
     }
     else
     {
-        if(section > node->m_nSections && !endstr)
+        if(type && section == node->m_nSections && !endstr)
         {
-            node->m_nSections = section;
+            node->m_nSections = section+1;
             node->UUEparts = (char**)srealloc( node->UUEparts , node->m_nSections*sizeof(char*) );
             if(nDelMsg)
             {
@@ -68,6 +69,7 @@ int scan4UUE(char* text, dword textLen)
     int perms;
     int section;
     int amount;
+    int atype;
     float ff;
     int multi = 0;
     char *szSection = NULL;
@@ -79,6 +81,7 @@ int scan4UUE(char* text, dword textLen)
         if(sscanf(szSection,"section %d of %d of file %s",&section, &amount, name) == 3)
         {
             multi = 1;
+            atype = 0;
         }
         else
         {
@@ -86,6 +89,7 @@ int scan4UUE(char* text, dword textLen)
             {
                 amount = section;
                 multi = 1;
+                atype = 1;
             }
             else
             {
@@ -102,12 +106,12 @@ int scan4UUE(char* text, dword textLen)
             szBegin = strstr(szSection, "begin ");
             if(szBegin)
             {
-                addPart(szBegin, section, amount, name);
+                addPart(szBegin, section, amount, name, atype);
             }
         }
         else
         {
-            addPart(szSection, section, amount, name);
+            addPart(szSection, section, amount, name, atype);
         }
         szSection = strstr(szSection+1, "section ");
     }
@@ -117,7 +121,7 @@ int scan4UUE(char* text, dword textLen)
         while(szBegin)
         {
             if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
-                addPart(szBegin, 1, 1, name);
+                addPart(szBegin, 1, 1, name, 0);
             }
             szBegin = strstr(szBegin+1, "begin ");
         }
