@@ -1,3 +1,9 @@
+2002-03-21 Thursday 13:05  mche
+
+	* dupe.c (1.4), h-decoder.dsp (1.2), scanmsg.c (1.12), uuecode.c
+	(1.5), uuecode.h (1.7), uuefile.c (1.14): added cuting uue code and
+	some log warnings
+
 2002-03-20 Wednesday 14:39  mche
 
 	* makefile.cyg (1.2): b-tree moved from hpt to fidoconfig
