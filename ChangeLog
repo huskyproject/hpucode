@@ -1,3 +1,8 @@
+2002-12-27 Friday 13:51  mche
+
+	* hpucode.dsp (1.1), h/uuecode.h (1.6), src/uuecode.c (1.9): create
+	bsy-file while working
+
 2002-12-10 Tuesday 16:41  mche
 
 	* src/uuecode.c (1.8): fix loging
