@@ -75,9 +75,12 @@ void ScanArea(s_area *area)
    char* areaName;
    HAREA oldArea;
    dword highMsg, numMsg,nMN;
-   word areaType = area -> msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
-   
-   
+   word areaType;
+
+   if(!area) return;
+
+   areaType = area -> msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
+
    currArea = area;
    areaName = area -> fileName;
    
@@ -131,7 +134,7 @@ void ScanArea(s_area *area)
    
 void doArea(s_area *area, char *cmp)
 {
-    if(area->scn == 1) /*  do not scan area twice */
+    if(!area || !cmp || area->scn == 1) /*  do not scan area twice */
         return;
 
     if (patimat(area->areaName,cmp)) 

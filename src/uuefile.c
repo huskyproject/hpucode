@@ -95,6 +95,8 @@ int DecodePart(char *text, FILE *outfile)
     char* linebuf = text;
     int lastlen = 0;
     int nRet = 0;
+
+    if(!text) return 0;
     do
     {
         endl = strchr(linebuf,'\r');  
@@ -175,6 +177,8 @@ int DecodePart(char *text, FILE *outfile)
 int  isReady(UUEFile* uuc)
 {
     int i;
+    if(!uuc) return 0; /* Check pointers before use */
+
     for(i = 0; i < uuc->m_nSections; i++)
     {
         if(uuc->UUEparts[i] == NULL)
@@ -202,6 +206,8 @@ UUEFile* MakeUUEFile(int nsec, char *name, char* ID)
 int  CompareUUEFile(char *p_e1, char *p_e2)
 {
    UUEFile  *a, *b;
+   if(!p_e1 || !p_e2) return p_e1>p_e2? 1: p_e1==p_e2? 0:-1;
+
    a = (UUEFile*)p_e1; 
    b = (UUEFile*)p_e2;
    return strcmp(a->ID,b->ID);
@@ -227,6 +233,8 @@ int  FreeUUEFile(char *entry)
 
 void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 {
+    if(!uuc || !uuepart) return; /* Check pointers before use */
+
     if(section > uuc->m_nSections || uuc->m_nAdded == uuc->m_nSections || 
        uuc->UUEparts[section-1])
         return;
@@ -259,8 +267,11 @@ void MakeFile(UUEFile* uuc)
     FILE *out;
     char *fname = NULL;
     int i, nodel=0;
+    s_textDupeEntry *msg;
+
+    if(!uuc) return; /* Check pointers before use */
     
-    s_textDupeEntry *msg = scalloc(sizeof(s_textDupeEntry),1);
+    msg = scalloc(sizeof(s_textDupeEntry),1);
     
     msg->filename = sstrdup(uuc->m_fname);
     msg->areaname = sstrdup(currArea->areaName);
@@ -325,8 +336,11 @@ void MakeTicFile(UUEFile* uuc)
    char *newticfile = NULL;
    char *fname      = NULL;
    char *areagroup  = NULL;
-   s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
+   s_link* link;
    
+   if(!uuc) return; /* Check pointers before use */
+
+   link = getLinkFromAddr( config,*(currArea->useAka) );
    while( !link && i < config->addrCount )
    {
       link = getLinkFromAddr( config, config->addr[i] );

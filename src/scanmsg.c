@@ -36,7 +36,10 @@ void _addPart(char *text, int section, int amount, char* name, char* ID, int typ
     int partlen =  0;
     UUEFile* node = NULL;
     UUEFile  nfnd;
-    w_log(LL_FUNC,"%s::addPart()", __FILE__);
+
+    if(!text) return;
+
+    w_log(LL_FUNC,"%s::_addPart()", __FILE__);
 
     begin = text;
 
@@ -126,7 +129,8 @@ int scan4UUE(char* text,const char* ctl)
     float ff = 0.0;
     char *szSection = NULL;
     char *szBegin   = NULL;
-    
+
+    if(!text) return;
     szSection = strstr(text, "section ");
     while(szSection)
     {
@@ -238,7 +242,11 @@ char* cutUUEformMsg(char *text)
 {
    int rr = 0;
    char *end = NULL;
-   char *szBegin = strstr(text, "begin ");
+   char *szBegin;
+
+   if(!text) return;
+
+   szBegin = strstr(text, "begin ");
    if(!szBegin) return NULL;
     
    szBegin = strchr(szBegin, '\r');
@@ -311,4 +319,3 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    nfree(ctl);
    return rc;
 }
-
