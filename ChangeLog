@@ -1,3 +1,7 @@
+2003-10-16 Thursday 16:28  mche
+
+	* src/scanmsg.c (1.27): fix broken '-cut' functionality
+
 2003-09-28 Sunday 07:05  mche
 
 	* src/scanmsg.c (1.26): Added validation on amount of splited
