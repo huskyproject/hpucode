@@ -16,7 +16,7 @@ hpucode.exe:
                                                 uuefile.c \
                                                 scanmsg.c \
                                                 dupe.c    \
-                   $(FCONFL) $(SMAPIL) /link /opt:nowin98   
+                   $(FCONFL) $(SMAPIL)    
 
 clean:
 	-del *.obj
