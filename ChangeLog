@@ -1,3 +1,8 @@
+2003-09-29 Monday 06:50  sfpavel
+
+	* src/scanmsg.c (hpucode-1_4-stable.1): Added validation on amount
+	of splitted messages (patch from current)
+
 2003-09-18 Thursday 10:40  sfpavel
 
 	* Makefile (hpucode-1_4-stable.1): Fix static building
