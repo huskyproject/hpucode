@@ -231,9 +231,11 @@ void MakeTicFile(UUEFile* uuc)
    char *newticfile;
    char fname[256] = "";
    s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
-    
-   for (i = 0; i < config->addrCount, link == NULL; i++) {
+   
+   while( !link && i < config->addrCount )
+   {
       link = getLinkFromAddr( config, config->addr[i] );
+      i++;
    }
    if(!link)
    {
