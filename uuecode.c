@@ -61,9 +61,11 @@ void ScanArea(s_area *area)
        
        
        highMsg = MsgGetHighMsg(oldArea);
-       numMsg = MsgGetNumMsg(oldArea);
 
-       toBeDeleted = (nDelMsg || nCutMsg) ? (dword*)smalloc(highMsg * sizeof(dword)) : NULL;
+       if(highMsg && (nDelMsg || nCutMsg))
+          toBeDeleted = (dword*)smalloc(highMsg * sizeof(dword));
+       else
+          toBeDeleted = NULL;
        
        for (nMN = 1; nMN <= highMsg; nMN++) {
            processMsg(oldArea,nMN,0);
