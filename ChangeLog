@@ -1,3 +1,7 @@
+2002-07-16 Tuesday 22:02  stas
+
+	* makefile.bsd (1.1): Add legacy makefile for FreeBSD
+
 2002-07-08 Monday 16:24  mche
 
 	* uuecode.c (1.12): fix wrong log message
