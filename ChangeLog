@@ -1,3 +1,11 @@
+2002-04-08 Monday 15:48  mche
+
+	* vixie.h (1.2), tree.c (1.2), tree.h (1.2): no message
+
+2002-04-08 Monday 15:41  mche
+
+	* dupe.c (1.7): speedup dupe search (need to check)
+
 2002-04-05 Friday 16:43  mche
 
 	* dupe.c (1.6): making dupes more reliable
