@@ -1,3 +1,9 @@
+2003-05-11 Sunday 13:44  mche
+
+	* HISTORY (1.5), h/dupe.h (1.4), h/uuecode.h (1.12), h/version.h
+	(1.5), src/dupe.c (1.10), src/scanmsg.c (1.22), src/uuecode.c
+	(1.21), src/uuefile.c (1.25): Exlude masks
+
 2003-05-09 Friday 10:10  mche
 
 	* src/uuecode.c (1.20): fix version string in logfile
