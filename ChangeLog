@@ -1,3 +1,7 @@
+2002-04-29 Monday 10:07  mche
+
+	* uuefile.c (1.20): EchoAreaGroups selection fixed
+
 2002-04-26 Friday 11:31  d.sergienko
 
 	* makefile.wco (1.1): forgot to add new makefile :)
