@@ -1,6 +1,9 @@
-# Legacy makefile for FreeBSD by Tema Zelikin 2:5097/31
+# $Id$
 #
-# Use GNU version of make (gmake)
+# Legacy makefile for FreeBSD 
+# Originaly written by Tema Zelikin 2:5097/31
+#
+# Use any of GNU or BSD versions of make
 #
 # For not use shared libraries uncomment 'STATIC' variable
 
@@ -12,25 +15,30 @@ COPT=   -O2
 LFLAGS= $(STATIC)
 
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
-LINKSMAPI=../smapi/libsmapibsd.a
-LINKFIDOC=../fidoconf/libfidoconfigbsd.a
+LINKSMAPI=../../smapi/libsmapibsd.a
+LINKFIDOC=../../fidoconf/libfidoconfigbsd.a
 SRC_DIR = ../src/
 
-all: $(OBJS) hpucode
+TARGET	= hpucode
 
+all: $(OBJS) $(TARGET)
+
+# This is the rule for BSD make
+.PATH.c	:  $(SRC_DIR)
+.c.o:
+	$(CC) $(CFLAGS) $(CDEFS) $<
+
+# And this is the rule if you are using GNU make
 %.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $<
 
-hpucode: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode $(OBJS) ../../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
+$(TARGET): $(OBJS)
+	$(CC) $(LFLAGS) -o $(TARGET) $(OBJS) $(LINKFIDOC) $(LINKSMAPI)
 
 clean:
 	-rm -f *.o
-	-rm *~
-	-rm
-	-rm hpucode
+	-rm *~ *.b
 
 distclean: clean
-	-rm hpucode
+	-rm $(TARGET)
 	-rm *.1.gz
-	-rm *.log
