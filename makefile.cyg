@@ -1,0 +1,28 @@
+CC      = gcc
+CFLAGS=	-DNT -D__NT__ -DWINNT -D__CYG__ -I. -I.. -Wall -pedantic -c -Wno-char-subscripts -mno-cygwin
+COPT=	-O2
+LFLAGS=-mno-cygwin
+
+
+OBJS    = uuecode.o uuefile.o scanmsg.o tree.o dupe.o
+LINKSMAPI=../smapi/libsmapicyg.a /lib/w32api/libuser32.a
+LINKFIDOC=../fidoconf/libfidoconfigcyg.a
+
+all: $(OBJS) hpucode.exe
+
+%.o: %.c
+	$(CC) $(CFLAGS) $*.c
+
+hpucode.exe: $(OBJS)
+	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) ../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
+
+clean:
+	-rm -f *.o
+	-rm *~
+	-rm 
+	-rm hpucode.exe
+
+distclean: clean
+	-rm hpucode.exe
+	-rm *.1.gz
+	-rm *.log

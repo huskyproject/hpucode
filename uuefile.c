@@ -173,9 +173,10 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 }
 #ifdef WINNT
 #   ifdef __MINGW32__
+    typedef int   BOOL;
     typedef char *LPWSTR;
     typedef const char *LPCWSTR;
-    DWORD __stdcall OemToCharA(LPCWSTR,LPWSTR);
+    BOOL    __stdcall OemToCharA(LPCWSTR,LPWSTR);
     #define OemToChar OemToCharA
 #   endif    
 #else
