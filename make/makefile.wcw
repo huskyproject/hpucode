@@ -1,23 +1,26 @@
 CC      = wcc386
 LINK    = WLINK
 
-CFLAGS  = -zq -wx -bt=nt -ih;.. -oneatx -5
+CFLAGS  = -zq -wx -bt=nt -i..\h;..\.. -oneatx -5
 LFLAGS  =
 
 OBJS    = uuecode.obj uuefile.obj scanmsg.obj dupe.obj
+SRC_DIR = ..\src
 
-all: $(OBJS) hptucode.exe
+all: hpucode.exe
 
-$(OBJS): *.c
-  @echo compiling $*.c
-  $(CC) $(CFLAGS) $*.c
+$(OBJS): $(SRC_DIR)\*.c
+  @echo compiling $(SRC_DIR)\$*.c
+  $(CC) $(CFLAGS) $(SRC_DIR)\$*.c
 
 hptucode.exe: $(OBJS)
-  @echo linking hptucode
-  $(LINK) $(LFLAGS) FILE uuecode.obj, uuefile.obj, scanmsg.obj, dupe.obj Library ..\smapi\smapiwcw, ..\fidoconf\fconfwcw.lib NAME hptucode.exe
+  @echo linking hpucode
+  $(LINK) $(LFLAGS) FILE uuecode.obj, uuefile.obj, scanmsg.obj, dupe.obj Library ..\..\smapi\smapiwcw, ..\..\fidoconf\fconfwcw.lib NAME hpucode.exe
 
 clean:
 	-DEL *.OBJ
 	-DEL *.err
-	-DEL hptucode.exe
+
+distclean: clean
+	-DEL hpucode.exe
 

@@ -1,15 +1,16 @@
 CC      = gcc
-CFLAGS=-DNT -D__NT__ -DWINNT -D__CYG__ -I. -I.. -Wall -pedantic -c -Wno-char-subscripts
+CFLAGS=-DNT -D__NT__ -DWINNT -D__CYG__ -I../h -I../.. -Wall -pedantic -c -Wno-char-subscripts
 COPT=	-O2
-LFLAGS=-L../smapi/ -L../fidoconf
+LFLAGS=-L../../smapi/ -L../../fidoconf
 
 
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
+SRC_DIR = ../src/
 
-all: $(OBJS) hpucode.exe
+all: hpucode.exe
 
-%.o: %.c
-	$(CC) $(CFLAGS) $*.c
+%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) $<
 
 hpucode.exe: $(OBJS)
 	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfidoconfigmgw -lsmapimgw -luser32
@@ -18,7 +19,6 @@ clean:
 	-rm -f *.o
 	-rm *~
 	-rm 
-	-rm hpucode.exe
 
 distclean: clean
 	-rm hpucode.exe

@@ -1,20 +1,23 @@
 CC       = gcc
-CFLAGS   = -c -g -O2 -DUNIX -I./h -I..
-LFLAGS   = -s -L../fidoconf -L../smapi
+CFLAGS   = -c -g -O2 -DUNIX -I../h -I../..
+LFLAGS   = -s -L../../fidoconf -L../../smapi
 
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
+SRC_DIR = ../src/
 
 all: $(OBJS) \
-	hptucode
+	hpucode
 
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $*.c
+	$(CC) $(CFLAGS) $<
 
-hptucode: $(OBJS)
-	$(CC) $(LFLAGS) -o hptucode $(OBJS) -lsmapisun -lfidoconfigsun
+hpucode: $(OBJS)
+	$(CC) $(LFLAGS) -o hpucode $(OBJS) -lsmapisun -lfidoconfigsun
 
 clean:
 	-rm -f *.o
 	-rm -f *~
-	-rm -f hptucode
 	-rm -f core
+
+distclean: clean
+	-rm -f hpucode
