@@ -1,3 +1,8 @@
+2004-04-17 Saturday 03:36  sfpavel
+
+	* src/uuefile.c (hpucode-1_4-stable.4): Fix segfault (patch by
+	Vadim Yagodkin)
+
 2004-01-23 Friday 04:42  andr_lukyanov
 
 	* src/uuecode.c (hpucode-1_4-stable.1): Fix stdout version strings
