@@ -1,3 +1,7 @@
+2004-02-07 Saturday 08:57  mche
+
+	* src/uuefile.c (1.28): some speed optimization
+
 2004-01-14 Wednesday 03:54  andr_lukyanov
 
 	* h/version.h (1.6), src/uuecode.c (1.26): Small fix - remove
