@@ -1,7 +1,7 @@
 CC      = gcc
-CFLAGS=	-DNT -D__NT__ -DWINNT -D__CYG__ -I. -I.. -Wall -pedantic -c -Wno-char-subscripts -mno-cygwin
+CFLAGS=-DNT -D__NT__ -DWINNT -D__CYG__ -I. -I.. -Wall -pedantic -c -Wno-char-subscripts
 COPT=	-O2
-LFLAGS=-mno-cygwin -L../smapi/ -L../fidoconf
+LFLAGS=-L../smapi/ -L../fidoconf
 
 
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
@@ -12,7 +12,7 @@ all: $(OBJS) hpucode.exe
 	$(CC) $(CFLAGS) $*.c
 
 hpucode.exe: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfidoconfigcyg -lsmapicyg -luser32
+	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfidoconfigmgw -lsmapimgw -luser32
 
 clean:
 	-rm -f *.o
