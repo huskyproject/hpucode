@@ -1,3 +1,17 @@
+2003-02-26 Wednesday 08:36  stas_degteff
+
+	* make/makefile.cyg (1.6): Remove obsolete library 'user32' from
+	linkage
+
+2003-02-26 Wednesday 08:01  stas_degteff
+
+	* src/scanmsg.c (1.20): Fix warnings (differ in signedness)
+
+2003-02-26 Wednesday 07:08  stas_degteff
+
+	* src/: scanmsg.c (1.19), uuecode.c (1.14), uuefile.c (1.22): Check
+	pointers before use
+
 2003-02-22 Saturday 14:05  mche
 
 	* src/scanmsg.c (1.18): fix detection end of section one more :)
