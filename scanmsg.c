@@ -195,8 +195,8 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    textLen = MsgGetTextLen(msg);
    text = (char *) scalloc(1,(textLen+1)*sizeof(char));
 
-   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, 0, NULL)<0) {
-      rc = 0;
+   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, 0, NULL)==(dword)-1L) {
+      rc = 0;             /* MsgReadMsg() return -1L on error, but type dword */
    } else {
       if(scan_cut == 0)
       {
