@@ -151,12 +151,12 @@ int scan4UUE(const char* text)
             if(szBegin)
             {
                 w_log(LL_FUNC,"%s::scan4UUE(), first section detected", __FILE__);
-                _addPart(szBegin, section, amount, name, atype);
+                _addPart(szBegin, section, amount, OS_independed_basename(name), atype);
             }
         }
         else
         {
-            _addPart(szSection, section, amount, name, atype);
+            _addPart(szSection, section, amount, OS_independed_basename(name), atype);
         }
         szSection = strstr(szSection+1, "section ");
     }
@@ -169,7 +169,7 @@ int scan4UUE(const char* text)
             {
                 if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
                     w_log(LL_FUNC,"%s::scan4UUE(), single message uue detcted", __FILE__);
-                    _addPart(szBegin, 1, 1, name, 0);
+                    _addPart(szBegin, 1, 1, OS_independed_basename(name), 0);
                 }
             }
             szBegin = strstr(szBegin+1, "begin ");
