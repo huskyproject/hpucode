@@ -9,9 +9,9 @@ TLIB=   lib -nologo
 SMAPIL=	..\smapi\smapimvc.lib msvcrt.lib Kernel32.lib user32.lib 
 FCONFL=	..\fidoconf\fconfmvc.lib
 
-all: uuecode.exe
+all: hpucode.exe
 
-uuecode.exe:
+hpucode.exe:
         $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ uuecode.c \
                                                 uuefile.c \
                                                 scanmsg.c \

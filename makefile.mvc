@@ -8,9 +8,9 @@ COPT=   -O2
 SMAPIL=	..\smapi\smapimvc.lib user32.lib
 FCONFL=	..\fidoconf\fconfmvc.lib
 
-all: uuecode.exe
+all: hpucode.exe
 
-uuecode.exe:
+hpucode.exe:
         $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ uuecode.c \
                                                 uuefile.c \
                                                 scanmsg.c \
