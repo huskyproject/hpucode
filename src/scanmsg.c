@@ -146,7 +146,7 @@ int scan4UUE(const char* text)
             if(strchr(szBegin,'\r') - szBegin > 10)
             {
                 if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
-                    w_log(LL_FUNC,"%s::scan4UUE(), single message uue detcted", __FILE__);
+                    w_log(LL_FUNC,"%s::scan4UUE(), single message uue detected", __FILE__);
                     _addPart(szBegin, 1, 1, name, 0);
                 }
             }
