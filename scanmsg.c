@@ -56,8 +56,8 @@ int scan4UUE(char* text, dword textLen)
                 while(szBegin)
                 {
                     if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
-                        addPart(szBegin, section, amount, name);
                         description = sstrdup((char*)xmsg.subj);
+                        addPart(szBegin, section, amount, name);
                     }
                     szBegin = strstr(szBegin+1, "begin ");
                 }

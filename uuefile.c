@@ -274,4 +274,5 @@ void MakeTicFile(UUEFile* uuc)
 
    fclose(tichandle);
    nfree(newticfile);
+   nfree(description);
 }
