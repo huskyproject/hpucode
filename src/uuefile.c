@@ -245,8 +245,10 @@ void AddPart(UUEFile* uuc, char* msgBody, char* uuepart, int section, int slen)
         uuc->origin.net   = xmsg.orig.net;
         uuc->origin.node  = xmsg.orig.node;
         uuc->origin.point = xmsg.orig.point;
-        uuc->toBeDeleted[0].nBegCut = uuepart - msgBody;
-        uuc->toBeDeleted[0].nEndCut = slen;
+        if(nDelMsg || nCutMsg) {
+            uuc->toBeDeleted[0].nBegCut = uuepart - msgBody;
+            uuc->toBeDeleted[0].nEndCut = slen;
+        }
     }
 
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
