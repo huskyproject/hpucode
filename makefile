@@ -25,17 +25,14 @@ all: hpucode
 hpucode: $(OBJS)
 		gcc $(OBJS) $(LFLAGS) $(LIBS) -o hpucode
 
-
 %.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $(CDEFS) -c $<
         
-
 clean:
-		rm -f *.o *~
+	$(RM) $(RMOPT) *.o *~
 
 distclean: clean
-	rm hpucode
-
+	$(RM) $(RMOPT) hpucode
         
 install: hpucode$(EXE)
 	$(INSTALL) $(IBOPT) hpucode$(EXE) $(BINDIR)
