@@ -285,7 +285,7 @@ void MakeTicFile(UUEFile* uuc)
 
    fprintf(tichandle,"Created by uuecode, written by Max Chernogor\r\n");
    fprintf(tichandle,"File %s\r\n", uuc->m_fname);
-   fprintf(tichandle,"Area %s\r\n", currArea->areaName);
+   fprintf(tichandle,"Area uue.%s\r\n", currArea->areaName);
    fprintf(tichandle,"Desc %s\r\n", uuc->description);
    fprintf(tichandle,"From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle,"To %s\r\n",   aka2str(link->hisAka));
