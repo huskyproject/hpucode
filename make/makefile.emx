@@ -1,0 +1,31 @@
+# $Id$
+#
+# Legacy makefile for IBM OS/2 + EMX Runtime library
+# Do not support husky build enviroment
+
+CC      = gcc
+CFLAGS  = -DOS2 -I../h -I../.. -c -O3
+COPT    = -O2
+LFLAGS  = -Zcrtdll -L../../smapi/ -L../../fidoconf
+
+SRC_DIR = ../src/
+OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
+
+all: $(OBJS) hpucode.exe
+
+%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) $<
+
+hpucode.exe: $(OBJS)
+	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfconfemx -lsmapiemx
+
+clean:
+	-del -f *.o
+	-del *~
+	-del 
+	-del hpucode.exe
+
+distclean: clean
+	-del hpucode.exe
+	-del *.1.gz
+	-del *.log
