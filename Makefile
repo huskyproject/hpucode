@@ -24,10 +24,9 @@ OBJS = uuecode.o uuefile.o scanmsg.o dupe.o
 
 SRC_DIR = .$(DIRSEP)src$(DIRSEP)
 
-all: hpucode
 
 hpucode: $(OBJS)
-		gcc $(OBJS) $(LFLAGS) $(LIBS) -o hpucode
+		gcc $(OBJS) $(LFLAGS) $(LIBS) -o hpucode$(EXE)
 
 %.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $(CDEFS) -c $<
@@ -36,10 +35,37 @@ clean:
 	$(RM) $(RMOPT) *.o *~
 
 distclean: clean
-	$(RM) $(RMOPT) hpucode
+	-$(RM) $(RMOPT) hpucode
+	-$(RM) $(RMOPT) hpucode.info
+	-$(RM) $(RMOPT) hpucode.html
+
+info:
+	makeinfo --no-split hpucode.texi
+
+html:
+	makeinfo --html hpucode.texi
+
+docs: info html
+
+all: hpucode docs
         
-install: hpucode$(EXE)
+install: all
 	$(INSTALL) $(IBOPT) hpucode$(EXE) $(BINDIR)
+ifdef INFODIR
+	-$(MKDIR) $(MKDIROPT) $(INFODIR)
+	$(INSTALL) hpucode.info $(INFODIR)
+	-install-info --info-dir=$(INFODIR)  $(INFODIR)$(DIRSEP)hpucode.info
+endif
+ifdef HTMLDIR
+	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)
+	$(INSTALL) hpucode*html $(HTMLDIR)
+endif
 
 uninstall:
 	$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hpucode$(EXE)
+ifdef INFODIR
+	$(RM) $(RMOPT) $(INFODIR)$(DIRSEP)hpucode.info
+endif
+ifdef HTMLDIR
+	$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)hpucode.html
+endif
