@@ -166,7 +166,8 @@ int DecodePart(char *text, FILE *outfile)
         {    endl++;   }
         while(endl[0] == '\r');
         linebuf = endl;
-        linelen = strlen(linebuf);
+        endl = strchr(linebuf, '\r');
+        if (endl) linelen = endl-linebuf; else linelen = strlen(linebuf);
     } while (linelen > 1);
     
     return nRet;
