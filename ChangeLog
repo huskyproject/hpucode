@@ -1,3 +1,7 @@
+2003-02-22 Saturday 14:05  mche
+
+	* src/scanmsg.c (1.18): fix detection end of section one more :)
+
 2003-02-19 Wednesday 16:37  mche
 
 	* src/scanmsg.c (1.17): fix detection end of section
