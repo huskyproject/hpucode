@@ -117,7 +117,7 @@ UUEFile* MakeUUEFile(int nsec, char *name)
     uuc->m_nSections = nsec;
     if(nsec>0){
         uuc->UUEparts = (char**)scalloc( nsec, sizeof(char*) );
-        if(nDelMsg)
+        if(nDelMsg || nCutMsg)
             uuc->toBeDeleted = (dword*)scalloc(nsec,sizeof(dword));
     }
     if(name)
@@ -172,7 +172,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
-    if(nDelMsg)
+    if(nDelMsg || nCutMsg)
         uuc->toBeDeleted[uuc->m_nAdded] = currMsgUid;
     uuc->m_nAdded++;
     if((uuc->m_nAdded == uuc->m_nSections) && isReady(uuc))
@@ -189,7 +189,9 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
     #define OemToChar OemToCharA
 #   endif    
 #else
-#   include <windows.h>
+#   ifndef UNIX
+#       include <windows.h>
+#   endif
 #endif
 
 void MakeFile(UUEFile* uuc)
@@ -225,6 +227,7 @@ void MakeFile(UUEFile* uuc)
             fclose(out);
             if(i == uuc->m_nSections)
             {
+                w_log(LL_CREAT, "Decoded file created: %s", uuc->m_fname);   
                 MakeTicFile(uuc);
                 nodel = 0;
             }
@@ -237,8 +240,9 @@ void MakeFile(UUEFile* uuc)
     }
     else
     {
+        w_log(LL_FUNC,"%s::MakeFile(), dupe file %s detected", __FILE__,uuc->m_fname);
     }
-    if(nDelMsg && !nodel)
+    if( (!nodel) && (nDelMsg || nCutMsg) )
     {
         for( i = 0; i < uuc->m_nSections; i++ )
             toBeDeleted[nMaxDeleted+i] = uuc->toBeDeleted[i];
@@ -295,6 +299,6 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle,"Pw %s\r\n",link->fileFixPwd);
 
    fclose(tichandle);
+   w_log(LL_CREAT, "tic file:%s created for file:%s",newticfile, uuc->m_fname);   
    nfree(newticfile);
-   
 }

@@ -63,13 +63,13 @@ void ScanArea(s_area *area)
        highMsg = MsgGetHighMsg(oldArea);
        numMsg = MsgGetNumMsg(oldArea);
 
-       toBeDeleted = nDelMsg ? (dword*)smalloc(highMsg * sizeof(dword)) : NULL;
+       toBeDeleted = (nDelMsg || nCutMsg) ? (dword*)smalloc(highMsg * sizeof(dword)) : NULL;
        
        for (nMN = 1; nMN <= highMsg; nMN++) {
            processMsg(oldArea,nMN);
        };
       
-       if(toBeDeleted && nMaxDeleted)
+       if(nDelMsg && nMaxDeleted)
        {
            w_log(LL_INFO, "Deleting decoded messages...");
            numMsg = 0;
@@ -80,6 +80,16 @@ void ScanArea(s_area *area)
            w_log(LL_INFO, "Deleted:%u of decoded messages:%u",numMsg,nMaxDeleted);
            nMaxDeleted=0;
        }
+       if(nCutMsg && nMaxDeleted)
+       {
+           w_log(LL_INFO, "Cuting UUE code from  messages...");
+           numMsg = 0;
+           for (nMN = 0; nMN < nMaxDeleted; nMN++) {
+               cutUUEformMsg(oldArea,MsgUidToMsgn(oldArea,toBeDeleted[nMN], UID_EXACT));
+           }
+           nMaxDeleted=0;
+       }
+
        nfree(toBeDeleted);
        MsgCloseArea(oldArea);
        FreeUUEChain();
@@ -114,18 +124,21 @@ int main(int argc, char **argv) {
    struct _minf m;
    char* buff=NULL;
    
-   printf(  "\n::  hpucode v0.1\n");
+   printf(  "\n::  hpucode v0.3\n");
    if( argc < 2 ) {
-  	   printf ("::  usage: hpucode [ -del ] [areamask1 areamask2 ...] \n");
+       printf ("::  usage: hpucode [ -del ] [areamask1 areamask2 ...] \n");
    } else {
-      if((argc > 2) && (strcmp(argv[1], "-del") == 0))
-         nDelMsg = 1;
-      else
-         nDelMsg = 0;
-      
-      setvar("module", "hpucode");
-      config = readConfig(NULL);
-      
+       nDelMsg = nCutMsg = 0;
+       if(argc > 2)
+       { 
+           if(strcmp(argv[1], "-del") == 0)
+               nDelMsg = 1;
+           if(strcmp(argv[1], "-cut") == 0)
+               nCutMsg = 1;
+       }
+       setvar("module", "hpucode");
+       config = readConfig(NULL);
+       
       if (config != NULL ) {
          if (config->logFileDir) {
             xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
@@ -151,7 +164,7 @@ int main(int argc, char **argv) {
             printf("MsgOpenApi Error.\n");
             exit(1);
          }
-         k = nDelMsg == 1 ? 2 : 1;
+         k = (nDelMsg || nCutMsg) ? 2 : 1;
          while(k < argc)           
          {
             for (i=0; i < config->netMailAreaCount; i++)
@@ -161,11 +174,6 @@ int main(int argc, char **argv) {
             for (i=0; i < config->echoAreaCount; i++)
                // scan echomail areas
                doArea(&(config->echoAreas[i]), argv[k]);
-/*            
-            for (i=0; i < config->localAreaCount; i++)
-               // scan local areas
-               doArea(&(config->localAreas[i]), argv[k]);
-*/
             k++;
          }
          writeToDupeFile();

@@ -140,6 +140,7 @@ s_dupeMemory *readDupeFile() {
        // readFile
        doReading(f, dupeMemory);
        fclose(f);
+       w_log(LL_FILE, "Reading dupes done");
    } else {
        if (fexist(fileName)) w_log('2', "Error reading dupes");
        else if( errno != ENOENT)

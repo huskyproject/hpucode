@@ -100,14 +100,6 @@ SOURCE=.\scanmsg.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\tree.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\tree.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\uuecode.c
 # End Source File
 # Begin Source File

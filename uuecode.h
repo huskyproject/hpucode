@@ -27,7 +27,8 @@ typedef struct _UUEFile
 } UUEFile ;
 
 
-int processMsg(HAREA oldArea, dword msgNumb);
+int processMsg(HAREA hArea, dword msgNumb);
+int cutUUEformMsg(HAREA hArea, dword msgNumb);
 
 
 UUEFile* MakeUUEFile(int nsec, char *name);
@@ -36,6 +37,7 @@ void FreeUUEChain();
 void AddPart(UUEFile* uuc, char* uuepart, int section, int slen);
 
 int      nDelMsg;
+int      nCutMsg;
 dword*   toBeDeleted;
 dword    nMaxDeleted;
 UUEFile  *UFilesHead;
