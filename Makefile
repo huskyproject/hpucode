@@ -32,10 +32,11 @@ hpucode: $(OBJS)
 	$(CC) $(CFLAGS) $(CDEFS) -c $<
         
 clean:
-	$(RM) $(RMOPT) *.o *~
+	-$(RM) $(RMOPT) *$(OBJ)
+	-$(RM) $(RMOPT) *~
 
 distclean: clean
-	-$(RM) $(RMOPT) hpucode
+	-$(RM) $(RMOPT) hpucode$(EXE)
 	-$(RM) $(RMOPT) hpucode.info
 	-$(RM) $(RMOPT) hpucode.html
 
@@ -43,7 +44,7 @@ info:
 	makeinfo --no-split hpucode.texi
 
 html:
-	makeinfo --html hpucode.texi
+	makeinfo --html --no-split hpucode.texi
 
 docs: info html
 
@@ -58,7 +59,7 @@ ifdef INFODIR
 endif
 ifdef HTMLDIR
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)
-	$(INSTALL) hpucode*html $(HTMLDIR)
+	$(INSTALL) hpucode.html $(HTMLDIR)
 endif
 
 uninstall:
