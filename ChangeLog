@@ -1,3 +1,7 @@
+2003-02-10 Monday 10:16  mche
+
+	* src/uuefile.c (1.20): fix Areadesc
+
 2003-02-07 Friday 10:25  sfpavel
 
 	* Makefile (1.7), debian/changelog (1.4), debian/control (1.2),
