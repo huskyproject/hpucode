@@ -246,7 +246,13 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
         return;
 
     if(section == 1)
+    {
         uuc->description = sstrdup((char*)xmsg.subj);
+        uuc->origin.zone  = xmsg.orig.zone;
+        uuc->origin.net   = xmsg.orig.net;
+        uuc->origin.node  = xmsg.orig.node;
+        uuc->origin.point = xmsg.orig.point;
+    }
 
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
@@ -342,7 +348,6 @@ void MakeTicFile(UUEFile* uuc)
    char *newticfile = NULL;
    char *fname      = NULL;
    char *areagroup  = NULL;
-   char origstr[36] = "";
    s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
    
    while( !link && i < config->addrCount )
@@ -371,10 +376,6 @@ void MakeTicFile(UUEFile* uuc)
 
    areagroup = findFileGroup(currArea->areaName);
 
-   if(xmsg.orig.point == 0)
-       sprintf(origstr, "%d:%d/%d", xmsg.orig.zone, xmsg.orig.net, xmsg.orig.node);
-   else
-       sprintf(origstr, "%d:%d/%d.%d", xmsg.orig.zone, xmsg.orig.net, xmsg.orig.node, xmsg.orig.point);
 
    if (config->outtab != NULL)
        recodeToTransportCharset(uuc->description);
@@ -385,7 +386,7 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle, "Desc %s\r\n", uuc->description);
    fprintf(tichandle, "From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle, "To %s\r\n",   aka2str(link->hisAka));
-   fprintf(tichandle, "Origin %s\r\n", origstr);
+   fprintf(tichandle, "Origin %s\r\n", aka2str(uuc->origin));
    fprintf(tichandle, "Size %lu\r\n", stbuf.st_size);
    fprintf(tichandle, "Crc %08lX\r\n", (unsigned long) filecrc32(fname));
    fprintf(tichandle, "Pw %s\r\n", link->fileFixPwd);

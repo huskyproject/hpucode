@@ -48,6 +48,7 @@ typedef struct _UUEFile
    char**           UUEparts;
    dword*           toBeDeleted;
     char            *description;
+  s_addr            origin;
   struct _UUEFile*  next;
   struct _UUEFile*  prev;
 } UUEFile ;
