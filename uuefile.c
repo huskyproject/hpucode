@@ -261,37 +261,35 @@ void MakeFile(UUEFile* uuc)
             if(patimat(uuc->m_fname,invalidExt[i]))
                 xstrcat(&uuc->m_fname,"_");
         }
-
-        w_log(LL_INFO, "file: %15s has %d complete sections is saved",
-            uuc->m_fname,uuc->m_nSections);
         xstrscat(&fname,config->protInbound,uuc->m_fname,NULL);
 #ifdef WINNT
         OemToChar(fname, fname);
 #endif    
-
-        if(!fexist(fname))
-        {
+        if(!fexist(fname)) {
             out = fopen(fname, "wb");
-            for(i = 0; i < uuc->m_nSections; i++)
-            {
-                if( DecodePart(uuc->UUEparts[i], out) == 0)
-                    break;
+            if(out) {
+                for(i = 0; i < uuc->m_nSections; i++)
+                {
+                    if( DecodePart(uuc->UUEparts[i], out) == 0)
+                        break;
+                }
+                fclose(out);
+                if(i == uuc->m_nSections)
+                {
+                    w_log(LL_INFO, "file: %15s has %d complete sections is saved",
+                        uuc->m_fname,uuc->m_nSections);
+                    MakeTicFile(uuc);
+                    nodel = 0;
+                }
+                else
+                {
+                    remove(fname);
+                    nodel = 1;
+                }
+            } else {
+                w_log(LL_ERROR,"file: %15s can not be created", uuc->m_fname);
             }
-            fclose(out);
-            if(i == uuc->m_nSections)
-            {
-                w_log(LL_CREAT, "Decoded file created: %s", uuc->m_fname);   
-                MakeTicFile(uuc);
-                nodel = 0;
-            }
-            else
-            {
-                remove(fname);
-                nodel = 1;
-            }
-        }
-        else
-        {
+        } else {
             w_log(LL_CREAT,"file: %15s detected in inbound", uuc->m_fname);
         }
     }
