@@ -1,0 +1,113 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@setfilename hpucode.info
+@settitle hpucode manual
+@setchapternewpage odd
+@c %**end of header
+
+@ifinfo
+This file documents hpucode.
+
+Copyright 2002 Husky Development Team
+
+@end ifinfo
+
+@titlepage
+@title hpucode manual
+@subtitle uue scanner for fido message bases
+@author Max Chernogor
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 2002 Husky Development Team 
+
+@end titlepage
+
+@dircategory Fidonet Software
+@direntry
+* hpucode: (hpucode).		UUE Scanner and decoder.
+@end direntry
+
+@node Top, , , (dir)
+@top hpucode
+
+This document describes the use of hpucode.
+
+@menu
+* About::			About hpucode
+* Algorithm::			How it works
+* Keywords::			FidoConfig keywords
+* Parameters::			Command-line parameters
+* Feedback::			Contact info
+@end menu
+
+@node About, Algorithm, Top, Top
+@chapter About hpucode
+
+	hpucode is a uue code scanner and decoder. It can decode
+multisection messages with uue, which is being posted by popular
+encoders such as UUEWizard, AutoUUE, hpt post -u :]
+
+@node Algorithm, Keywords, About, Top
+@chapter How it works
+
+	hpucode scans all echoareas passed via command line for
+uuecode. If uue code found, it extracts it and decodes to protected
+inbound. There is an opportunity to create tic file for each decoded
+file. To use this ability you should defile yourself as link in
+fidoconfig. Tics is being created from your address, but origin will be
+set to the address of original message poster. If ImportLog is defined
+in fidoconfig and exists, only areas from this file will be scanned for
+uue code.
+
+
+@node Keywords, Parameters, Algorithm, Top
+@chapter FidoConfig keywords
+
+@table @asis
+@item Syntax:
+@code{UUEEchoGroup <groupname> <areamask> [[areamask] ... ]}
+@item Example:
+@code{UUEEchoGroup PICS RU.SEX.* SU.COOL.STARS}
+@end table
+
+	This token describes a group of echoareas which will be scanned
+for uue code. @code{groupname} is a name of filearea where decoded
+files will be posted. If UUEEchoGroup not defined, filearea will be
+named uue.<areatag> For example:
+uue was found in area RU.PICTURES.ADV, so filearea when file is being
+posted will be named uue.RU.PICTURES.ADV
+
+@node Parameters, Feedback, Keywords, Top
+@chapter Command-line parameters
+
+Usage: @code{hpucode} -[del|cut] [[<areamask1>] 
+@itemize @bullet
+@item -del
+Remove successfully decoded messages from msgbases
+@item -cut
+Cut uue code from message body. If uue is multisectional, only
+1st message will be cut, messages with all other sections will be
+deleted
+@item Example:
+@code{hpucode -cut ru.* su.* pvt.* netmail}
+@end itemize
+
+
+@node Feedback, , Parameters, Top
+@chapter Contacting the author
+
+Max Chernogor is the main developer of hpucode.
+You can reach him at:
+
+@itemize @bullet
+@item Fidonet:
+2:464/108, 
+2:550/4077.51
+
+@item e-mail:
+mche@@ua.fm
+
+@end itemize
+
+@bye
