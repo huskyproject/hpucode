@@ -1,15 +1,18 @@
-hpucode HISTORY
-
-This file describe changes in hpucode.
-
-Changes after 1.0-release.
+HPUCODE 1.4 stable
+This file describe changes between hpucode-1.2-stable and hpucode-1.4-stable
 
 1. MAJOR feature improvements:
-  - new functionality for decoding splited messages.
-
+  - implement unify version string generation;
+  - create bsy-file while working;
+  - added limit for number of sections (10000);
+  - new functionality for decoding splited messages;
+  - change uue detection algorithm;
+  
 2. CONFIG changes:
+  - added "Areadesc" token to generated tic-file;
 
 3. IMPORTANT bugfixes:
-  - strip path from filename if present in 'begin' uu-code line.
+  - check for NULL strings where TIC creating.
+
 
 $Id$
