@@ -1,3 +1,7 @@
+2003-02-06 Thursday 11:15  mche
+
+	* src/scanmsg.c (1.12): fix warnings
+
 2003-02-04 Tuesday 14:32  mche
 
 	* src/scanmsg.c (1.11): uue detection algorithm changed
