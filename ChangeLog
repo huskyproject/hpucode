@@ -1,3 +1,12 @@
+2002-10-24 Thursday 12:36  stas_degteff
+
+	* src/dupe.c, src/uuefile.c, make/makefile.djg
+	(hpucode-1_2-stable.[1,2,1]): Tune DJGPP compilation
+
+2002-10-24 Thursday 12:16  stas_degteff
+
+	* src/scanmsg.c (hpucode-1_2-stable.1): cosmetic fix (typo error)
+
 2002-10-14 Monday 06:30  sfpavel
 
 	* src/uuefile.c (hpucode-1_2-stable.1): Fix OS/2 EMX build
