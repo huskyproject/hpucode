@@ -373,14 +373,17 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle, "Created by %s, written by Max Chernogor\r\n",versionStr);
    fprintf(tichandle, "File %s\r\n", uuc->m_fname);
    fprintf(tichandle, "Area %s\r\n", areagroup);
-   fprintf(tichandle, "Areadesc %UUE decoded from %s\r\n", currArea->areaName);
-   fprintf(tichandle, "Desc %s\r\n", uuc->description);
+   if(currArea->areaName)
+     fprintf(tichandle, "Areadesc %UUE decoded from %s\r\n", currArea->areaName);
+   if(uuc->description)
+     fprintf(tichandle, "Desc %s\r\n", uuc->description);
    fprintf(tichandle, "From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle, "To %s\r\n",   aka2str(link->hisAka));
    fprintf(tichandle, "Origin %s\r\n", aka2str(uuc->origin));
    fprintf(tichandle, "Size %lu\r\n", (unsigned long)stbuf.st_size);
    fprintf(tichandle, "Crc %08lX\r\n", (unsigned long) filecrc32(fname));
-   fprintf(tichandle, "Pw %s\r\n", link->fileFixPwd);
+   if(link->fileFixPwd)
+     fprintf(tichandle, "Pw %s\r\n", link->fileFixPwd);
 
    fclose(tichandle);
    w_log(LL_CREAT, "tic file:%s created for file:%s",newticfile, uuc->m_fname);   
