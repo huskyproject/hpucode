@@ -4,7 +4,7 @@ COPT=	-O2
 LFLAGS=-mno-cygwin
 
 
-OBJS    = uuecode.o uuefile.o scanmsg.o tree.o dupe.o
+OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
 LINKSMAPI=../smapi/libsmapicyg.a /lib/w32api/libuser32.a
 LINKFIDOC=../fidoconf/libfidoconfigcyg.a
 
