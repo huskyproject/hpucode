@@ -225,11 +225,12 @@ int main(int argc, char **argv) {
         }
         if(impLog) fclose(impLog);
         writeToDupeFile();
+        MsgCloseApi();
+        w_log(LL_STOP, "End");
+        closeLog();
         disposeConfig(config);
         FreeUUEChain();
         nfree(UFilesHead);
-        w_log(LL_STOP, "End");
-        closeLog();
         return 0;
     } else {
         printf("Could not read fido config\n");
