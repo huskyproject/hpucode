@@ -25,7 +25,7 @@ void addPart(char *text, int section, int amount, char* name, int type)
 
     if(end)
     {
-        end--; 
+        if( rr > 1 ) end--; 
         partlen = end-begin;
         if(partlen < 12)
             return;
