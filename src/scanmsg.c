@@ -299,7 +299,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    
    memset(&xmsg, 0 , sizeof(xmsg));
 
-   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, (unsigned char*)ctl)<0) {
+   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, (unsigned char*)ctl)==(dword)-1L) {
       rc = 0;
    } else {
       if(scan_cut == 0)
