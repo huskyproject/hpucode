@@ -3,8 +3,7 @@
 #
 
 CC      = gcc
-CFLAGS=	-D__NT__ -I../h -I../.. -Wall -pedantic -c -Wno-char-subscripts -mno-cygwin
-COPT=	-O3
+CFLAGS=-c -O3 -D__NT__ -I../h -I../.. -Wall -pedantic -mno-cygwin
 LFLAGS=-mno-cygwin -L../../smapi/ -L../../fidoconf
 
 SRC_DIR = ../src/
