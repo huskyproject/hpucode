@@ -1,3 +1,7 @@
+2003-06-16 Monday 17:50  d_sergienko
+
+	* src/scanmsg.c (1.24): fix bad pointer usage
+
 2003-06-14 Saturday 08:20  mche
 
 	* src/scanmsg.c (1.23): fix bug with cutting UUE code from message
