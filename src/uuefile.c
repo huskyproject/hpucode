@@ -28,8 +28,6 @@
 #include "dupe.h"
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fidoconf/crc.h>
-#include <fidoconf/recode.h>
 #include <huskylib/huskylib.h>
 
 

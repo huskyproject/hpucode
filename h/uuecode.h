@@ -33,9 +33,9 @@
 #include <smapi/msgapi.h>
 #include <fidoconf/fidoconf.h>
 #include <fidoconf/common.h>
-#include <fidoconf/xstr.h>
-#include <fidoconf/log.h>
-#include <fidoconf/tree.h>
+#include <huskylib/xstr.h>
+#include <huskylib/log.h>
+#include <huskylib/tree.h>
 
 #define MAX              64
 #define MAX_SECTIONS     10000
