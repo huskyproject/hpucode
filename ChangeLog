@@ -1,3 +1,7 @@
+2002-04-11 Thursday 17:35  mche
+
+	* uuefile.c (1.16): do not generate empty files
+
 2002-04-08 Monday 15:48  mche
 
 	* vixie.h (1.2), tree.c (1.2), tree.h (1.2): no message
