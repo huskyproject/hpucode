@@ -267,7 +267,6 @@ int ScanArea(char *carea)
    
 int main(int argc, char **argv) {
     
-    s_area       *area   = NULL;
     struct _minf m;
     char* buff=NULL;
 
