@@ -1,0 +1,15 @@
+Source: hpucode
+Section: contrib/mail
+Priority: optional
+Maintainer: Pavel Andreew <pavel@collage.etel.ru>
+Build-Depends: debhelper (>> 4.0.0), libsmapi2-dev(>=2.3.0-1)
+Standards-Version: 3.5.7
+
+Package: hpucode
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: UUE scanner for fido message bases
+ hpucode is an uue code scanner and decoder. It can decode
+ multisection messages with uue, which is being posted by
+ popular encoders such as UUEWizard, AutoUUE, hpt post -u :]
+
