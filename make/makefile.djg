@@ -6,25 +6,24 @@
 
 CC      = gcc
 CFLAGS	= -Wall -c -g
-CDEFS	= -D__FLAT__ -DMSDOS -DNOSEMAPHORES
-COPT	= -O3 -fomit-frame-pointer -fstrength-reduce -mcpu=i486 -I../h -I../..
-LFLAGS  = -s -L../../fidoconf -L../../smapi
+CINCL	= -I../h -I../../fidoconf -I../../smapi -I../../huskylib
+CDEFS	= -D__FLAT__ -DMSDOS
+COPT	= -O3 -fomit-frame-pointer -fstrength-reduce -mcpu=i486
+LFLAGS  = -s -L../../fidoconf -L../../smapi/make -L../../huskylib/make
 
 RM	= del
 
-
 SRC_DIR = ../src/
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
-LINKSMAPI=../../smapi/smapidjg.a
-LINKFIDOC=../../fidoconf/fconfdjg.a
+LIBS	= -lsmapidjg -lfconfdjg -lhuskydjg
 
 all: $(OBJS) hpucode.exe
 
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $(CDEFS) $(COPT) $<
+	$(CC) $(CFLAGS) $(CINCL) $(CDEFS) $(COPT) $<
 
 hpucode.exe: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) ../../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
+	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) $(LIBS)
 
 clean:
 	-$(RM) *.o

@@ -10,7 +10,8 @@
 #STATIC= -static
 
 CC	= gcc
-CFLAGS	= -DUNIX -I../h/ -I../../ -Wall -pedantic -c
+CFLAGS	= -DUNIX -Wall -pedantic -c
+CINCL	= -I../h/ -I../../fidoconf -I../../smapi -I../../huskylib
 COPT	= -O2
 LFLAGS	= $(STATIC)
 INSTALL	= install -c
@@ -21,7 +22,7 @@ IMANDIR	= /usr/local/man/
 
 
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
-LIBS	= ../../smapi/libsmapibsd.a ../../fidoconf/libfidoconfigbsd.a
+LIBS	= ../../huskylib/make/libshuskybsd.a ../../smapi/make/libsmapibsd.a ../../fidoconf/libfidoconfigbsd.a
 SRC_DIR = ../src/
 MAN_DIR	= ../man/
 
@@ -34,11 +35,11 @@ all: $(OBJS) $(TARGET)
 # This is the rule for BSD make
 .PATH.c	:  $(SRC_DIR)
 .c.o:
-	$(CC) $(CFLAGS) $(CDEFS) $<
+	$(CC) $(CFLAGS) $(CINCL) $(CDEFS) $<
 
 # And this is the rule if you are using GNU make
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(CINCL) $<
 
 $(TARGET): $(OBJS)
 	$(CC) $(LFLAGS) -o $(TARGET) $(OBJS) $(LIBS)

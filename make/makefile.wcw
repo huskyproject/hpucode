@@ -6,10 +6,12 @@ CC      = wcc386
 LINK    = WLINK
 
 CFLAGS  = -zq -wx -bt=nt -i..\h;..\.. -oneatx -5
-LFLAGS  =
+CINCL	= -i..\h, ..\..\fidoconf, -i..\h, ..\..\smapi, -i..\h;..\..\huskylib
+LFLAGS  = system nt
 
 OBJS    = uuecode.obj uuefile.obj scanmsg.obj dupe.obj
 SRC_DIR = ..\src
+LIBS	= Library ..\..\huskylib\make\huskywcw.lib, ..\..\smapi\make\smapiwcw.lib, ..\..\fidoconf\fconfwcw.lib 
 
 all: hpucode.exe
 
@@ -19,7 +21,7 @@ $(OBJS): $(SRC_DIR)\*.c
 
 hptucode.exe: $(OBJS)
   @echo linking hpucode
-  $(LINK) $(LFLAGS) FILE uuecode.obj, uuefile.obj, scanmsg.obj, dupe.obj Library ..\..\smapi\smapiwcw, ..\..\fidoconf\fconfwcw.lib NAME hpucode.exe
+  $(LINK) $(LFLAGS) FILE uuecode.obj, uuefile.obj, scanmsg.obj, dupe.obj $(LIBS) NAME hpucode.exe
 
 clean:
 	-DEL *.OBJ

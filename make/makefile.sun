@@ -3,21 +3,24 @@
 #
 # Use GNU version of make (gmake)
 #
-CC       = gcc
-CFLAGS   = -c -g -O2 -DUNIX -I../h -I../..
-LFLAGS   = -s -L../../fidoconf -L../../smapi
+CC	= gcc
+CFLAGS	= -c -g -O2 -DUNIX
+CINCL	= -I../h -I../../fidoconf -I../../smapi -I../../huskylib
+LFLAGS	= -s -L../../fidoconf -L../../smapi/make -L../../huskylib/make
 
-OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
-SRC_DIR = ../src/
+OBJS	= uuecode.o uuefile.o scanmsg.o dupe.o
+SRC_DIR	= ../src/
+
+LIBS	= -lhuskysun -lsmapisun -lfidoconfigsun
 
 all: $(OBJS) \
 	hpucode
 
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(CINCL) $<
 
 hpucode: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode $(OBJS) -lsmapisun -lfidoconfigsun
+	$(CC) $(LFLAGS) -o hpucode $(OBJS) $(LIBS)
 
 clean:
 	-rm -f *.o

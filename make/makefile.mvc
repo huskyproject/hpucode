@@ -2,22 +2,26 @@
 #
 # Microsoft Visual C++ Makefile
 
-CC=     cl
-CFLAGS= -nologo -Zp1 -I..\.. -I..\h
+CC	= cl
+CFLAGS	= -nologo -Zp1
+CINCL	= -I..\h -I..\..\fidoconf -I..\..\smapi -I..\..\huskylib
 CDEFS=  -D__NT__ -DNT -DWINNT -D_CONSOLE
 COPT=   -O2
 
-SMAPIL=	..\..\smapi\smapimvc.lib user32.lib
-FCONFL=	..\..\fidoconf\fconfmvc.lib
+SRC_DIR	= ..\src
+
+LIBS	= ..\..\huskylib\make\huskymvc.lib \
+	  ..\..\smapi\make\smapimvc.lib ..\..\fidoconf\fconfmvc.lib
 
 all: hpucode.exe
 
 hpucode.exe:
-        $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ ..\src\uuecode.c \
-                                                ..\src\uuefile.c \
-                                                ..\src\scanmsg.c \
-                                                ..\src\dupe.c    \
-                   $(FCONFL) $(SMAPIL)  
+        $(CC) $(CFLAGS) $(CINCL) $(CDEFS) $(COPT) -Fe$@ \
+	$(SRC_DIR)\uuecode.c \
+	$(SRC_DIR)\uuefile.c \
+	$(SRC_DIR)\scanmsg.c \
+	$(SRC_DIR)\dupe.c    \
+	$(LIBS)  
 
 clean:
 	-del *.obj

@@ -4,20 +4,22 @@
 # Do not support husky build enviroment
 
 CC      = gcc
-CFLAGS  = -DOS2 -I../h -I../.. -c -O3
+CFLAGS  = -DOS2 -c -O3
+CINCL	= -I../h -I../../fidoconf -I../../smapi -I../../huskylib
 COPT    = -O2
-LFLAGS  = -Zcrtdll -L../../smapi/ -L../../fidoconf
+LFLAGS  = -Zcrtdll -L../../huskylib/make -L../../smapi/make -L../../fidoconf
 
 SRC_DIR = ../src/
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
+LIBS	= -lfconfemx -lsmapiemx -lhuskyemx
 
 all: $(OBJS) hpucode.exe
 
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(CINCL) $<
 
 hpucode.exe: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfconfemx -lsmapiemx
+	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) $(LIBS)
 
 clean:
 	-del -f *.o

@@ -3,27 +3,30 @@
 #
 
 
-CC=gcc
-RM=del
+CC	= gcc
+RM	= del
 
-CDEFS=-D__NT__ -D__MINGW__ -c -I../h -I../..
-CFLAGS=-Wall
-COPT=-O3
+CFLAGS	= -Wall -c
+CINCL	= -I../h -I../../fidoconf -I../../smapi -I../../huskylib
+CDEFS	= -D__NT__ -D__MINGW__
+COPT	= -O3
+LFLAGS	= -L../../huskylib/make -L../../smapi/make -L../../fidoconf
 
-LFLAGS=-L../../smapi -L../../fidoconf
-LIBS=-lfidoconfigmgw -lsmapimgw -luser32
-SRC_DIR=../src/
+SRC_DIR	= ../src/
+
+
+OBJS	= uuecode.o uuefile.o scanmsg.o dupe.o
+LIBS	= -lfidoconfigmgw -lsmapimgw -lhuskymgw -luser32
 
 default: all
 
 TARGET=hpucode.exe
 
-OBJS=uuecode.o uuefile.o scanmsg.o dupe.o
 
 all: $(TARGET)
 
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $(CDEFS) $(COPT) $(SRC_DIR)$*.c
+	$(CC) $(CFLAGS) $(CINCL) $(CDEFS) $(COPT) $(SRC_DIR)$*.c
 
 $(TARGET): $(OBJS)
 	$(CC) $(LFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
