@@ -1,3 +1,8 @@
+2002-07-01 Monday 16:39  mche
+
+	* scanmsg.c (1.21): fix coredump when wrong uue header treated as
+	right
+
 2002-06-15 Saturday 09:57  mche
 
 	* makefile (1.5): patch by [Alexander Shiyan <shc@milas.spb.ru>]
