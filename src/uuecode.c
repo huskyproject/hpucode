@@ -50,7 +50,7 @@ int __stdcall SetFileApisToOEM(void);
 
 const int VER_MAJOR   = 1;
 const int VER_MINOR   = 2;
-const int VER_PATCH   = 1;
+const int VER_PATCH   = 2;
 /* branch is "" for CVS current, "-stable" for the release candiate branch  */
 const char *VER_BRANCH  = "-stable";
 
