@@ -39,6 +39,9 @@
 #define S_IWRITE    _S_IWRITE
 #endif
 
+#ifdef __MINGW32__
+int __stdcall SetFileApisToOEM(void);
+#endif
 
 const int VER_MAJOR   = 0;
 const int VER_MINOR   = 31;
@@ -160,6 +163,11 @@ int main(int argc, char **argv) {
         if(strcmp(argv[1], "-cut") == 0)
             nCutMsg = 1;
     }
+
+#ifdef __NT__
+    SetFileApisToOEM();
+#endif
+
     setvar("module", "hpucode");
     config = readConfig(NULL);
     
