@@ -1,3 +1,7 @@
+2003-01-21 Tuesday 06:19  stas_degteff
+
+	* hpucode.dsp (1.3): 0x0a --> 0x0d0x0a for *.dsp
+
 2003-01-12 Sunday 15:11  mche
 
 	* hpucode.dsp (1.2): define INTEL for MSVC in compiler.h
