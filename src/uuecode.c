@@ -68,11 +68,6 @@
 #define S_IWRITE    _S_IWRITE
 #endif
 
-#ifdef __MINGW32__
-int __stdcall SetFileApisToOEM(void);
-#endif
-
-
 char* versionStr      = NULL;
 
 void ScanArea(s_area *area)
