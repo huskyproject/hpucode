@@ -1,3 +1,7 @@
+2003-04-17 Thursday 07:28  mche
+
+	* hpucode.vcproj (1.3): change optimization
+
 2003-04-08 Tuesday 08:03  andr_lukyanov
 
 	* make/: makefile.bsd (1.5), makefile.cyg (1.7), makefile.djg
