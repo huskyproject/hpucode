@@ -1,3 +1,8 @@
+# $Id$
+# Legacy makefile for Watcom C, Os/2 executable
+#
+
+
 CC      = wcc386
 LINK    = WLINK
 

@@ -1,8 +1,9 @@
+# $Id$
 # Legacy makefile for FreeBSD by Tema Zelikin 2:5097/31
 #
 # Use GNU version of make (gmake)
 #
-# For not use shared libraries uncomment 'STATIC' variable
+# For use shared libraries uncomment 'STATIC' variable
 
 #STATIC= -static
 

@@ -1,3 +1,8 @@
+# $Id$
+# Legacy makefile for Sun Solaris (SunOS)
+#
+# Use GNU version of make (gmake)
+#
 CC       = gcc
 CFLAGS   = -c -g -O2 -DUNIX -I../h -I../..
 LFLAGS   = -s -L../../fidoconf -L../../smapi
