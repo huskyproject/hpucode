@@ -1,3 +1,7 @@
+2004-01-23 Friday 04:42  andr_lukyanov
+
+	* src/uuecode.c (hpucode-1_4-stable.1): Fix stdout version strings
+
 2003-12-27 Saturday 22:36  d_sergienko
 
 	* src/scanmsg.c (hpucode-1_4-stable.2): fix compiler warnings and
