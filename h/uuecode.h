@@ -71,6 +71,7 @@ s_fidoconfig *config;
 XMSG     xmsg;
 dword    currMsgUid;
 char*    versionStr;
+int      lock_fd;
 
 
 

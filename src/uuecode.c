@@ -188,6 +188,14 @@ int main(int argc, char **argv) {
     config = readConfig(NULL);
 
     if (config != NULL ) {
+        if (config->lockfile) {
+            lock_fd = lockFile(config->lockfile, config->advisoryLock);
+            if( lock_fd < 0 )
+            {
+                disposeConfig(config);
+                exit(EX_CANTCREAT);
+            }
+        }
         // load recoding tables
         initCharsets();
         if (config->intab != NULL) getctab(intab, (unsigned char*) config->intab);
@@ -204,6 +212,9 @@ int main(int argc, char **argv) {
         else
         {
             printf("\n\tProtInbound not defined\n");
+            if (config->lockfile) {
+                FreelockFile(config->lockfile ,lock_fd);
+            }
             return 1;
         }
         w_log(LL_START, "Start");
@@ -216,6 +227,9 @@ int main(int argc, char **argv) {
         m.def_zone = config->addr[0].zone;
         if (MsgOpenApi(&m)!= 0) {
             printf("MsgOpenApi Error.\n");
+            if (config->lockfile) {
+                FreelockFile(config->lockfile ,lock_fd);
+            }
             exit(1);
         }
         k = (nDelMsg || nCutMsg) ? 2 : 1;
@@ -260,6 +274,9 @@ int main(int argc, char **argv) {
         w_log(LL_STOP, "End");
         closeLog();
         doneCharsets();
+        if (config->lockfile) {
+            FreelockFile(config->lockfile ,lock_fd);
+        }
         disposeConfig(config);
         nfree(UFilesHead);
         return 0;
