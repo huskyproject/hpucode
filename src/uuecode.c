@@ -117,7 +117,7 @@ int processCommandLine(int argc, char **argv)
 }
 
 
-int fc_compareEntries(char *p_e1, char *p_e2)
+int uc_compareEntries(char *p_e1, char *p_e2)
 {
     ps_area e1 = (ps_area)p_e1;
     ps_area e2 = (ps_area)p_e2;
@@ -127,7 +127,7 @@ int fc_compareEntries(char *p_e1, char *p_e2)
         return 1;
     return 0;
 }
-int fc_deleteEntry(char *p_e1) {
+int uc_deleteEntry(char *p_e1) {
     return 1;
 }
 
@@ -147,7 +147,7 @@ void ApplyFilter(ps_area area)
         if( (Filters[i].Negative == 1) && (patimat(area->areaName,(Filters[i].Mask+1))) )
             return;
     }
-    tree_add(&FilteredAreas, fc_compareEntries, (char *)(area), fc_deleteEntry );
+    tree_add(&FilteredAreas, uc_compareEntries, (char *)(area), uc_deleteEntry );
 }
 
 int ApplyFilters() 
