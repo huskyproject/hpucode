@@ -1,3 +1,7 @@
+/*
+    $Id$
+*/
+
 #include "uuecode.h"
 
 // type == 0 - fixed amount

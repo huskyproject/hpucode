@@ -1,3 +1,7 @@
+/*
+    $Id$
+*/
+
 #ifndef _HDECODER_H_
 #define _HDECODER_H_
 

@@ -1,3 +1,7 @@
+/*
+    $Id$
+*/
+
 #include "uuecode.h"
 #include "dupe.h"
 #include <sys/stat.h>
