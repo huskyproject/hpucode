@@ -1,0 +1,14 @@
+hpucode HISTORY
+
+This file describe changes in hpucode.
+
+Changes after 1.0-release.
+
+1. MAJOR feature improvements:
+
+2. CONFIG changes:
+
+3. IMPORTANT bugfixes:
+  - strip path from filename if present in 'begin' uu-code line.
+
+$Id$
