@@ -63,7 +63,6 @@ void _addPart(char *text, int section, int amount, char* name, char* ID, int typ
         partlen = 3*(endstr-end-1)/4;
         if(DECODE_BYTE (end[0]) != partlen)
         {
-            w_log('1',"%d %d %d %c", DECODE_BYTE (end[0]) , partlen, section, *(endstr-1));
             if(!(((*(endstr-1) == '`') || (*(endstr+1) == '`'))&& (DECODE_BYTE(end[0]) == partlen-1)))
             {
                 break;
