@@ -224,12 +224,12 @@ int ScanArea(char *carea)
        highMsg = MsgGetHighMsg(oldArea);
 
        if(highMsg && (nDelMsg || nCutMsg))
-          toBeDeleted = (dword*)smalloc(highMsg * sizeof(dword));
+          toBeDeleted = (DelCutStruct*)smalloc(highMsg * sizeof(DelCutStruct));
        else
           toBeDeleted = NULL;
        
        for (nMN = 1; nMN <= highMsg; nMN++) {
-           processMsg(oldArea,nMN,0);
+           processMsg(oldArea,nMN,0,0,0);
        };
       
        if(nDelMsg && nMaxDeleted)
@@ -237,7 +237,7 @@ int ScanArea(char *carea)
            w_log(LL_INFO, "Deleting decoded messages...");
            numMsg = 0;
            for (nMN = 0; nMN < nMaxDeleted; nMN++) {
-               if(MsgKillMsg(oldArea, MsgUidToMsgn(oldArea,toBeDeleted[nMN], UID_EXACT)) == 0)
+               if(MsgKillMsg(oldArea, MsgUidToMsgn(oldArea,toBeDeleted[nMN].nDelMsg, UID_EXACT)) == 0)
                    numMsg++;
            }
            w_log(LL_INFO, "Deleted:%u of decoded messages:%u",numMsg,nMaxDeleted);
@@ -248,7 +248,7 @@ int ScanArea(char *carea)
            w_log(LL_INFO, "Cuting UUE code from  messages...");
            numMsg = 0;
            for (nMN = 0; nMN < nMaxDeleted; nMN++) {
-               processMsg(oldArea,MsgUidToMsgn(oldArea,toBeDeleted[nMN], UID_EXACT),1);
+               processMsg(oldArea,MsgUidToMsgn(oldArea,toBeDeleted[nMN].nDelMsg, UID_EXACT),1,toBeDeleted[nMN].nBegCut,toBeDeleted[nMN].nEndCut);
            }
            nMaxDeleted=0;
        }

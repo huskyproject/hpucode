@@ -27,7 +27,7 @@
 
 /*  type == 0 - fixed amount */
 /*  type == 1 - undefined amount */
-void _addPart(char *text, int section, int amount, char* name, char* ID, int type)
+void _addPart(char *text, int section, int amount, char* name, char* ID, int type, char* msgBody)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
@@ -109,14 +109,14 @@ void _addPart(char *text, int section, int amount, char* name, char* ID, int typ
             node->UUEparts = (char**)tmp;
             if(nDelMsg || nCutMsg)
             {
-                tmp = scalloc(1,node->m_nSections*sizeof(dword));
-                memcpy(tmp,node->toBeDeleted,(node->m_nSections-1)*sizeof(dword));
+                tmp = scalloc(1,node->m_nSections*sizeof(DelCutStruct));
+                memcpy(tmp,node->toBeDeleted,(node->m_nSections-1)*sizeof(DelCutStruct));
                 nfree(node->toBeDeleted);
-                node->toBeDeleted = (dword*)tmp;
+                node->toBeDeleted = (DelCutStruct*)tmp;
             }
         }
     }
-    AddPart(node, begin, section, partlen);
+    AddPart(node, msgBody, begin, section, partlen);
 }
 
 int scan4UUE(char* text,const char* ctl)
@@ -165,12 +165,12 @@ int scan4UUE(char* text,const char* ctl)
             if(szBegin)
             {
                 w_log(LL_FUNC,"%s::scan4UUE(), first section detected", __FILE__);
-                _addPart(szBegin, section, amount, OS_independed_basename(name), NULL, atype);
+                _addPart(szBegin, section, amount, OS_independed_basename(name), NULL, atype,text);
             }
         }
         else
         {
-            _addPart(szSection, section, amount, OS_independed_basename(name), NULL,atype);
+            _addPart(szSection, section, amount, OS_independed_basename(name), NULL,atype,text);
         }
         nRet = 1;
         szSection = strstr(szSection+1, "section ");
@@ -206,13 +206,13 @@ int scan4UUE(char* text,const char* ctl)
                     }
                     SPLIT[44] ='\0';
                     stripRoundingChars(SPLIT+5, " \t");
-                    _addPart(szBegin, section, amount, OS_independed_basename(name), SPLIT+5, 0);
+                    _addPart(szBegin, section, amount, OS_independed_basename(name), SPLIT+5, 0,text);
                     nfree(SPLIT);
                 }
                 else
                 {
                     w_log(LL_FUNC,"%s::scan4UUE(), single message uue detcted", __FILE__);
-                    _addPart(szBegin, 1, 1, OS_independed_basename(name), NULL, 0);
+                    _addPart(szBegin, 1, 1, OS_independed_basename(name), NULL, 0,text);
                 }
                 nRet = 1;
             }
@@ -238,7 +238,7 @@ int scan4UUE(char* text,const char* ctl)
             }
             SPLIT[44] ='\0';
             stripRoundingChars(SPLIT+5, " \t");
-            _addPart(text, section, amount, NULL, SPLIT+5, 0);
+            _addPart(text, section, amount, NULL, SPLIT+5, 0,text);
             nfree(SPLIT);
         }
     }
@@ -246,52 +246,52 @@ int scan4UUE(char* text,const char* ctl)
     return nRet;
 }
 
-char* cutUUEformMsg(char *text)
-{
-    int rr = 0;
-    char *end = NULL;
-    char *p   = NULL;
-    char *szBegin;
-    int DelMsg = 1;
+//char* cutUUEformMsg(char *text)
+//{
+//    int rr = 0;
+//    char *end = NULL;
+//    char *p   = NULL;
+//    char *szBegin;
+//    int DelMsg = 1;
+//
+//    if(!text) return NULL;
+//
+//    p = text;
+//
+//    while(p)
+//    {
+//
+//        szBegin = strstr(p, "begin ");
+//        if ((szBegin) && (DelMsg == 1)) { /* Is this first section or single UUE ? */
+//            DelMsg = 0;
+//        }
+//        //if(!szBegin) return NULL;
+//        if( szBegin ) 
+//        {
+//            szBegin = strchr(szBegin, '\r');
+//            if(!szBegin) return  NULL;
+//
+//            while(szBegin[0] == '\r')
+//                szBegin++;
+//        }
+//        end = szBegin;
+//        while( end && end[0] < '\x0061' && rr < 3)
+//        {
+//            rr = (end[0] == '\r') ?  rr+1 : 0;
+//            end++;
+//        }
+//
+//        if(end)
+//        {
+//            if( rr > 1 ) end--; 
+//            memmove(szBegin,end,strlen(end)+1);
+//        }
+//        p = end;
+//    }
+//    return  DelMsg == 0 ? text : NULL;
+//}
 
-    if(!text) return NULL;
-
-    p = text;
-
-    while(p)
-    {
-
-        szBegin = strstr(p, "begin ");
-        if ((szBegin) && (DelMsg == 1)) { /* Is this first section or single UUE ? */
-            DelMsg = 0;
-        }
-        //if(!szBegin) return NULL;
-        if( szBegin ) 
-        {
-            szBegin = strchr(szBegin, '\r');
-            if(!szBegin) return  NULL;
-
-            while(szBegin[0] == '\r')
-                szBegin++;
-        }
-        end = szBegin;
-        while( end && end[0] < '\x0061' && rr < 3)
-        {
-            rr = (end[0] == '\r') ?  rr+1 : 0;
-            end++;
-        }
-
-        if(end)
-        {
-            if( rr > 1 ) end--; 
-            memmove(szBegin,end,strlen(end)+1);
-        }
-        p = end;
-    }
-    return  DelMsg == 0 ? text : NULL;
-}
-
-int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
+int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEndCut)
 {
    HMSG msg;
    char *text = NULL;
@@ -299,7 +299,6 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
    char *p    = NULL;
    dword  textLen = 0;
    dword  ctlen = 0;
-
 
    int rc = 0;
 
@@ -324,14 +323,17 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
           ctl[ctlen] = '\0';
           scan4UUE(text,ctl);
       }
-      else
+      else if (nBegCut > 0) 
       {
-         p = cutUUEformMsg(text);
-         if(p)
-         {
-            textLen = strlen(p)+1;
-            MsgWriteMsg(msg, 0, &xmsg, (byte*)p, textLen, textLen, 0, NULL);
-         }
+          char *szBeg = text+nBegCut ;
+          char *szEnd = text+nBegCut+nEndCut;
+
+          memmove(szBeg,szEnd,strlen(szEnd)+1);
+          textLen = strlen(text)+1;
+          MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, 0, NULL);
+      }
+      else {
+          p = NULL; /*  Kill Msg */ 
       }
       rc = 1;
    }

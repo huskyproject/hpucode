@@ -193,7 +193,7 @@ UUEFile* MakeUUEFile(int nsec, char *name, char* ID)
     if(nsec>0){
         uuc->UUEparts = (char**)scalloc( nsec, sizeof(char*) );
         if(nDelMsg || nCutMsg)
-            uuc->toBeDeleted = (dword*)scalloc(nsec,sizeof(dword));
+            uuc->toBeDeleted = (DelCutStruct*)scalloc(nsec,sizeof(DelCutStruct));
     }
     if(name)
     uuc->m_fname = sstrdup(name);
@@ -230,7 +230,7 @@ int  FreeUUEFile(char *entry)
     return 1;
 }
 
-void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
+void AddPart(UUEFile* uuc, char* msgBody, char* uuepart, int section, int slen)
 {
     if(!uuc || !uuepart) return; /* Check pointers before use */
 
@@ -245,13 +245,15 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
         uuc->origin.net   = xmsg.orig.net;
         uuc->origin.node  = xmsg.orig.node;
         uuc->origin.point = xmsg.orig.point;
+        uuc->toBeDeleted[0].nBegCut = uuepart - msgBody;
+        uuc->toBeDeleted[0].nEndCut = slen;
     }
 
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
     if(nDelMsg || nCutMsg)
     {
-        uuc->toBeDeleted[uuc->m_nAdded] = currMsgUid;
+        uuc->toBeDeleted[uuc->m_nAdded].nDelMsg = currMsgUid;
     }
     uuc->m_nAdded++;
     if((uuc->m_nAdded == uuc->m_nSections) && isReady(uuc))
@@ -322,10 +324,12 @@ void MakeFile(UUEFile* uuc)
     {
         for( i = 0; i < uuc->m_nSections; i++ )
         {
-            if ( (nMaxDeleted > 0) && (toBeDeleted[nMaxDeleted-1] == uuc->toBeDeleted[i]))
+            if ( (nMaxDeleted > 0) && (toBeDeleted[nMaxDeleted-1].nDelMsg == uuc->toBeDeleted[i].nDelMsg))
                 continue; /* do not delete multiUUE message twice */
 
-            toBeDeleted[nMaxDeleted] = uuc->toBeDeleted[i];
+            toBeDeleted[nMaxDeleted].nDelMsg = uuc->toBeDeleted[i].nDelMsg;
+            toBeDeleted[nMaxDeleted].nBegCut = uuc->toBeDeleted[i].nBegCut;
+            toBeDeleted[nMaxDeleted].nEndCut = uuc->toBeDeleted[i].nEndCut;
             nMaxDeleted++;
         }
     }

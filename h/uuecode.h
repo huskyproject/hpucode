@@ -42,6 +42,13 @@
 
 #define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
 
+typedef struct _DelCut
+{
+    dword       nDelMsg;
+    UINT        nBegCut;
+    UINT        nEndCut;
+} DelCutStruct ;
+
 typedef struct _UUEFile
 {
     char*           ID;
@@ -50,25 +57,26 @@ typedef struct _UUEFile
     int             m_nAdded;
     int             m_nPerm;
     char**          UUEparts;
-    dword*          toBeDeleted;
+    DelCutStruct*   toBeDeleted;
     char*           description;
     hs_addr         origin;
 } UUEFile ;
 
 tree *UUEFileTree;
 
-int processMsg(HAREA hArea, dword msgNumb, int scan_cut);
+
+int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEndCut);
 
 UUEFile* MakeUUEFile(int nsec, char *name, char* ID);
 
 int      FreeUUEFile(char*);
 int      CompareUUEFile(char*, char*);
 
-void AddPart(UUEFile* uuc, char* uuepart, int section, int slen);
+void AddPart(UUEFile* uuc, char* msgBody, char* uuepart, int section, int slen);
 
 int      nDelMsg;
 int      nCutMsg;
-dword*   toBeDeleted;
+DelCutStruct*   toBeDeleted;
 dword    nMaxDeleted;
 s_area   *currArea;
 s_fidoconfig *config;
