@@ -1,3 +1,7 @@
+2003-05-12 Monday 07:25  mche
+
+	* src/uuecode.c (1.22): do not scan on run without masks
+
 2003-05-11 Sunday 13:44  mche
 
 	* HISTORY (1.5), h/dupe.h (1.4), h/uuecode.h (1.12), h/version.h
