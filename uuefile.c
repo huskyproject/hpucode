@@ -172,8 +172,16 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
     }
 }
 #ifdef WINNT
-#include <windows.h>
-#endif    
+#   ifdef __MINGW32__
+    typedef char *LPWSTR;
+    typedef const char *LPCWSTR;
+    DWORD __stdcall OemToCharA(LPCWSTR,LPWSTR);
+    #define OemToChar OemToCharA
+#   endif    
+#else
+#   include <windows.h>
+#endif
+
 void MakeFile(UUEFile* uuc)
 {
     FILE *out;
