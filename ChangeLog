@@ -1,3 +1,8 @@
+2002-04-23 Tuesday 18:23  mche
+
+	* dupe.c (1.9), uuefile.c (1.18): dupe search improvement.  rename
+	files like *.pkt  to *.pkt_
+
 2002-04-20 Saturday 14:46  mche
 
 	* dupe.c (1.8): dupe search improvement
