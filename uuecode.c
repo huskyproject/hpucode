@@ -71,10 +71,13 @@ void ScanArea(s_area *area)
       
        if(toBeDeleted && nMaxDeleted)
        {
-           w_log(LL_INFO, "Delete decoded messages");
+           w_log(LL_INFO, "Deleting decoded messages...");
+           numMsg = 0;
            for (currMsgNumb = 0; currMsgNumb < nMaxDeleted; currMsgNumb++) {
-               MsgKillMsg(oldArea, toBeDeleted[currMsgNumb]-currMsgNumb);
+               if(MsgKillMsg(oldArea, toBeDeleted[currMsgNumb]-currMsgNumb) == 0)
+                    numMsg++;
            }
+           w_log(LL_INFO, "Deleted:%u of decoded messages:%u",numMsg,nMaxDeleted);
            nMaxDeleted=0;
        }
        nfree(toBeDeleted);
