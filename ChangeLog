@@ -1,3 +1,12 @@
+2003-05-21 Wednesday 08:57  sfpavel
+
+	* debian/control (hpucode-1_4-stable.3): Change debian maintainer's
+	E-mail
+
+2003-05-21 Wednesday 08:49  sfpavel
+
+	* debian/changelog (hpucode-1_4-stable.5): New version: 1.4-RC1
+
 2003-02-26 Wednesday 08:36  stas_degteff
 
 	* make/makefile.cyg (1.6): Remove obsolete library 'user32' from
