@@ -121,7 +121,7 @@ UUEFile* MakeUUEFile(int nsec, char *name)
             uuc->toBeDeleted = (dword*)scalloc(nsec,sizeof(dword));
     }
     if(name)
-    strncpy(uuc->m_fname,name,MAX-1);
+    uuc->m_fname = sstrdup(name);
     return uuc;
 }
 
@@ -132,21 +132,21 @@ void FreeUUEFile(UUEFile* uuc)
     nfree(uuc->UUEparts[i]);
     nfree(uuc->toBeDeleted);
     nfree(uuc->description);
+    nfree(uuc->m_fname);
 }
 
 void FreeUUEChain()
 {
-    UUEFile* nodeToDel;
     UUEFile* node = UFilesHead->next;
-    UFilesHead->next = NULL;
-    UFilesHead->prev = UFilesHead;
-    while(node)
+    w_log(LL_FUNC,"%s::FreeUUEChain()", __FILE__);
+    while(UFilesHead->next)
     {
-        nodeToDel = node;
-        FreeUUEFile(nodeToDel);
-        node = node->next;
-        nfree(nodeToDel);
+        node = UFilesHead->next->next;
+        FreeUUEFile(UFilesHead->next);
+        //nfree(UFilesHead->next);
+        UFilesHead->next = node;
     }
+    UFilesHead->prev = UFilesHead;
 }
 
 UUEFile* FindUUEFile(char *name)
@@ -154,7 +154,7 @@ UUEFile* FindUUEFile(char *name)
     UUEFile* node = UFilesHead->next;
     while(node)
     {
-        if( stricmp(name, node->m_fname) == 0)
+        if( node->m_fname && (stricmp(name, node->m_fname) == 0) )
             break;
         node = node->next;
     }
@@ -164,7 +164,8 @@ UUEFile* FindUUEFile(char *name)
 
 void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 {
-    if(section > uuc->m_nSections || uuc->m_nAdded == uuc->m_nSections)
+    if(section > uuc->m_nSections || uuc->m_nAdded == uuc->m_nSections || 
+       uuc->UUEparts[section-1])
         return;
 
     if(section == 1)
@@ -197,8 +198,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 void MakeFile(UUEFile* uuc)
 {
     FILE *out;
-    UUEFile* prevUUEF;
-    char fname[256] = "";
+    char *fname = NULL;
     int i, nodel=0;
     
     s_textDupeEntry *msg = scalloc(sizeof(s_textDupeEntry),1);
@@ -211,8 +211,7 @@ void MakeFile(UUEFile* uuc)
     {
        w_log(LL_INFO, "file: %15s has %d complete sections is saved",
           uuc->m_fname,uuc->m_nSections);
-       strcpy(fname,config->protInbound);
-       strcat(fname,uuc->m_fname);          
+       xstrscat(&fname,config->protInbound,uuc->m_fname,NULL);
 #ifdef WINNT
         OemToChar(fname, fname);
 #endif    
@@ -249,13 +248,9 @@ void MakeFile(UUEFile* uuc)
         nMaxDeleted += uuc->m_nSections;
     }
     FreeUUEFile(uuc);
-    prevUUEF = uuc->prev;
-    prevUUEF->next = uuc->next;
-    if(uuc->next)
-        uuc->next->prev = prevUUEF;
-    if(prevUUEF->next == NULL)
-        UFilesHead->prev = prevUUEF;
-    nfree(uuc);
+    //nfree(uuc);
+    nfree(fname);
+    w_log(LL_FUNC,"%s::MakeFile(), exit", __FILE__);
 }
 
 void MakeTicFile(UUEFile* uuc)

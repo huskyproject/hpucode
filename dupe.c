@@ -89,7 +89,6 @@ int writeEntry(char *p_entry) {
 int deleteEntry(char *entry) {
    s_textDupeEntry  *entxt;
 
-   
    entxt = (s_textDupeEntry *)entry;
    nfree(entxt->from);
    nfree(entxt->filename);
@@ -112,7 +111,7 @@ void doReading(FILE *f, s_dupeMemory *mem) {
          ) != 4)
          continue;
       
-      entxt = (s_textDupeEntry*) smalloc(sizeof(s_textDupeEntry));
+      entxt = (s_textDupeEntry*) scalloc(1,sizeof(s_textDupeEntry));
 
       entxt->filename = sstrdup(fname);
       entxt->areaname = sstrdup(echoname);
@@ -120,7 +119,8 @@ void doReading(FILE *f, s_dupeMemory *mem) {
       entxt->timeCreated = timecr;
         
       tree_add(&(mem->avlTree), compareEntriesBlank, (char *) entxt, deleteEntry);
-      
+
+      nfree(line);
    }
 }
 

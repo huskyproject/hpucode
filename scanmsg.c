@@ -6,6 +6,7 @@ void addPart(char *text, int section, int amount, char* name, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
+    void *tmp;
     int partlen = 0;
     int rr = 0;
     UUEFile* node = NULL;
@@ -52,17 +53,23 @@ void addPart(char *text, int section, int amount, char* name, int type)
         if(type && section == node->m_nSections && !endstr)
         {
             node->m_nSections = section+1;
-            node->UUEparts = (char**)srealloc( node->UUEparts , node->m_nSections*sizeof(char*) );
+            tmp = scalloc(1,node->m_nSections*sizeof(char*));
+            memcpy(tmp,node->UUEparts,(node->m_nSections-1)*sizeof(char*));
+            nfree(node->UUEparts);
+            node->UUEparts = (char**)tmp;
             if(nDelMsg || nCutMsg)
             {
-                node->toBeDeleted = (dword*)srealloc(node->toBeDeleted,node->m_nSections*sizeof(dword));
+                tmp = scalloc(1,node->m_nSections*sizeof(dword));
+                memcpy(tmp,node->toBeDeleted,(node->m_nSections-1)*sizeof(dword));
+                nfree(node->toBeDeleted);
+                node->toBeDeleted = (dword*)tmp;
             }
         }
     }
     AddPart(node, begin, section, partlen);
 }
 
-int scan4UUE(const char* text, dword textLen)
+int scan4UUE(const char* text)
 {
     int nRet = 0;
     char name[MAX];
@@ -138,30 +145,23 @@ int processMsg(HAREA hArea, dword msgNumb)
    HMSG msg;
    char *text;
    dword  textLen;
-   int unsent, rc = 0;
-
+   int rc = 0;
 
    msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
    if (msg == NULL) return rc;
 
-   if (MsgReadMsg(msg, &xmsg, 0, 0, NULL, 0, NULL)<0) {
-      MsgCloseMsg(msg);
-      return rc;
-   }
-
-   unsent = (xmsg.attr & MSGLOCAL) && !(xmsg.attr & MSGSENT);
    currMsgUid = MsgMsgnToUid(hArea, msgNumb);
-
    textLen = MsgGetTextLen(msg);
-   text = (char *) smalloc(textLen+1);
-   text[textLen] = '\0';
-   
-   MsgReadMsg(msg, NULL, 0, textLen, (byte*)text, 0, NULL);
-   MsgCloseMsg(msg);
+   text = (char *) scalloc(1,(textLen+1)*sizeof(char));
 
-   scan4UUE(text,textLen);
+   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, 0, NULL)<0) {
+      rc = 0;
+   } else {
+      scan4UUE(text);
+      rc = 1;
+   }
+   MsgCloseMsg(msg);
    nfree(text);
-   rc = 1;
    
    return rc;
 }
@@ -172,7 +172,6 @@ int cutUUEformMsg(HAREA hArea, dword msgNumb)
    UCHAR  *text;
    dword  textLen;
    int rc = 0;
-
 
    msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
    if (msg == NULL) return rc;

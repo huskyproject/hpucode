@@ -15,7 +15,7 @@
 
 typedef struct _UUEFile
 {
-    char            m_fname[MAX];
+    char            *m_fname;
     int             m_nSections;
     int             m_nAdded;
     int             m_nPerm;
