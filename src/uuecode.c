@@ -194,6 +194,7 @@ int main(int argc, char **argv) {
         if (config->outtab != NULL) getctab(outtab, (unsigned char*) config->outtab);
 
         if (config->logFileDir) {
+            nfree(buff);
             xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
             openLog(buff, "hpucode", config);
             nfree(buff);
