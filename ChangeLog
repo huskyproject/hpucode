@@ -1,3 +1,7 @@
+2002-06-15 Saturday 09:57  mche
+
+	* makefile (1.5): patch by [Alexander Shiyan <shc@milas.spb.ru>]
+
 2002-06-14 Friday 14:51  mche
 
 	* uuecode.c (1.10): log message corrected
