@@ -1,3 +1,31 @@
+2002-10-18 Friday 12:07  stas_degteff
+
+	* make/: makefile.bsd (1.3), makefile.cyg (1.3), makefile.djg
+	(1.2), makefile.emx (1.2): Fix makefile's clean tag
+
+2002-10-18 Friday 12:04  stas_degteff
+
+	* h/uuecode.h (1.3), make/makefile.bsd (1.2), make/makefile.cyg
+	(1.2), make/makefile.mgw (1.4), make/makefile.mvc (1.2),
+	make/makefile.mvcdll (1.3), make/makefile.sun (1.3),
+	make/makefile.wco (1.3), make/makefile.wcw (1.3), man/hpucode.1
+	(1.2), src/scanmsg.c (1.4), src/uuefile.c (1.9): Cosmetic
+
+2002-10-18 Friday 11:45  stas_degteff
+
+	* h/version.h (1.1), src/uuecode.c (1.5): 1. change version
+	generation to husky-standard 2. set 'module' config variable to
+	'hpucode' (for if "[module]"=="hpucode")
+
+2002-10-18 Friday 11:36  stas_degteff
+
+	* version.h (1.1): file version.h was initially added on branch
+	hpucode-1_0-stable.
+
+2002-10-18 Friday 09:14  stas_degteff
+
+	* VERSION (1.1): Add version info file
+
 2002-10-14 Monday 06:34  sfpavel
 
 	* src/uuefile.c (1.8): Fix OS/2 EMX build
