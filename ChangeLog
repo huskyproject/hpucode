@@ -1,3 +1,13 @@
+2002-10-08 Tuesday 07:35  sfpavel
+
+	* debian/: changelog (1.1), control (1.1), copyright (1.1), dirs
+	(1.1), huskymak.cfg (1.1), info (1.1), rules (1.1): Create debian
+	package
+
+2002-10-08 Tuesday 07:33  sfpavel
+
+	* Makefile (1.5), man/hpucode.1 (1.1): Write man page
+
 2002-10-04 Friday 06:14  sfpavel
 
 	* make/: makefile.djg (1.1), makefile.emx (1.1): Add makefiles for
