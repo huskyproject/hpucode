@@ -194,7 +194,7 @@ void MakeFile(UUEFile* uuc)
     
     msg->filename = sstrdup(uuc->m_fname);
     msg->areaname = sstrdup(currArea->areaName);
-    msg->from     = sstrdup(xmsg.from);
+    msg->from     = sstrdup((char*)xmsg.from);
 
     if(dupeDetection(msg) == 1)
     {
