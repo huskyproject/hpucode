@@ -15,7 +15,7 @@ all: $(OBJS) hpucode.exe
 	$(CC) $(CFLAGS) $<
 
 hpucode.exe: $(OBJS)
-	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfidoconfigcyg -lsmapicyg -luser32
+	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) -lfidoconfigcyg -lsmapicyg
 
 clean:
 	-rm -f *.o
