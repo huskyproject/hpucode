@@ -1,3 +1,7 @@
+2002-03-20 Wednesday 14:39  mche
+
+	* makefile.cyg (1.2): b-tree moved from hpt to fidoconfig
+
 2002-03-19 Tuesday 16:49  mche
 
 	* makefile.sun (1.1), makefile.wcw (1.1): make files (by Serguei
