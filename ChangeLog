@@ -1,3 +1,11 @@
+2003-06-14 Saturday 08:20  mche
+
+	* src/scanmsg.c (1.23): fix bug with cutting UUE code from message
+
+2003-06-14 Saturday 08:10  mche
+
+	* src/uuefile.c (1.26): memory leak fixed
+
 2003-06-06 Friday 07:55  mche
 
 	* src/uuecode.c (1.23): prevent function names conflicts
