@@ -31,7 +31,7 @@ void addPart(char *text, int section, int amount, char* name, int type)
         if(partlen < 12)
             return;
 
-        endstr = strstr(end, "\rend\r");
+        endstr = strstr(end-1, "\rend\r");
     }
     else
         return;
