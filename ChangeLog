@@ -1,3 +1,8 @@
+2002-12-27 Friday 13:10  sfpavel
+
+	* debian/changelog, src/uuecode.c (hpucode-1_2-stable.[3,3]):
+	hpucode 1.2.2 release
+
 2002-11-20 Wednesday 08:56  stas_degteff
 
 	* HISTORY, VERSION, src/scanmsg.c (hpucode-1_2-stable.[1,1,2]):
