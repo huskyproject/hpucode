@@ -194,7 +194,7 @@ int writeToDupeFile() {
 int dupeDetection(s_textDupeEntry *msg) {
    
    int pos=0;
-   
+   int nRet = 1;   
    if (CommonDupes == NULL)
    {
       CommonDupes = readDupeFile(); //read Dupes
@@ -210,16 +210,13 @@ int dupeDetection(s_textDupeEntry *msg) {
       pos++;
    }
    
-   if (!tree_srch(&(CommonDupes->avlTree), compareEntries, (char *) msg)) {
+   if (tree_add(&(CommonDupes->avlTree), compareEntries, (char *) msg, deleteEntry)) {
       msg->timeCreated = tCR; 
-      tree_add(&(CommonDupes->avlTree), compareEntries, (char *) msg, deleteEntry);
-      return 1;
+      nRet = 1;
    }
    else {
-      deleteEntry((char *)msg);
-      return 0;
+      nRet = 0;
    }
-   
-   return 0;
+   return nRet;
 }
 
