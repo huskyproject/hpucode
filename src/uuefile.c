@@ -249,7 +249,9 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
     if(nDelMsg || nCutMsg)
+    {
         uuc->toBeDeleted[uuc->m_nAdded] = currMsgUid;
+    }
     uuc->m_nAdded++;
     if((uuc->m_nAdded == uuc->m_nSections) && isReady(uuc))
     {
@@ -318,8 +320,13 @@ void MakeFile(UUEFile* uuc)
     if( (!nodel) && (nDelMsg || nCutMsg) )
     {
         for( i = 0; i < uuc->m_nSections; i++ )
-            toBeDeleted[nMaxDeleted+i] = uuc->toBeDeleted[i];
-        nMaxDeleted += uuc->m_nSections;
+        {
+            if ( (nMaxDeleted > 0) && (toBeDeleted[nMaxDeleted-1] == uuc->toBeDeleted[i]))
+                continue; /* do not delete multiUUE message twice */
+
+            toBeDeleted[nMaxDeleted] = uuc->toBeDeleted[i];
+            nMaxDeleted++;
+        }
     }
     tree_delete(&UUEFileTree, CompareUUEFile,(char*)uuc, FreeUUEFile);
     nfree(fname);
