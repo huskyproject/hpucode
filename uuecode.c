@@ -1,9 +1,37 @@
+/* $Id$ */
+
+/*****************************************************************************
+ * HPUCODE --- Uuencoded files from FTN messagebase extractor
+ *****************************************************************************
+ * Copyright (C) 2002  Max Chernogor & Husky Team
+ *
+ * http://husky.sf.net
+ *
+ * This file is part of HUSKY fidonet package.
+ *
+ * HUSKY is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2, or (at your option) any
+ * later version.
+ *
+ * HUSKY is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with HPT; see the file COPYING.  If not, write to the Free
+ * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+ *****************************************************************************/
+
 #include <errno.h>
 #include <time.h>
 #include <string.h>
+
 #include "uuecode.h"
 #include "dupe.h"
 #include "cvsdate.h"
+#include "version.h"
 
 #ifdef UNIX
 #include <unistd.h>
@@ -40,8 +68,6 @@
 #endif
 
 
-const int VER_MAJOR   = 0;
-const int VER_MINOR   = 31;
 char* versionStr      = NULL;
 
 void ScanArea(s_area *area)
@@ -125,24 +151,35 @@ int main(int argc, char **argv) {
     struct _minf m;
     char* buff=NULL;
     
-    xscatprintf(&buff, "%u.%u", VER_MAJOR, VER_MINOR);
+
+    setvar("module", "hpucode");
+
+    xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
+    setvar("version", buff);
     
 #ifdef __linux__
     xstrcat(&buff, "/lnx");
-#elif defined(__FreeBSD__) || defined(__NetBSD__)
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
     xstrcat(&buff, "/bsd");
 #elif defined(__OS2__) || defined(OS2)
     xstrcat(&buff, "/os2");
-#elif defined(__NT__)
+#elif defined(__NT__) || defined(__MINGW32__) || defined(_WINNT)
     xstrcat(&buff, "/w32");
+#elif defined(WINDOWS)
+    xstrcat(&buff, "/win");
+#elif defined(__CYGWIN__)
+    xstrcat(&buff, "/cyg");
 #elif defined(__sun__)
     xstrcat(&buff, "/sun");
-#elif defined(MSDOS)
+#elif defined(__DJGPP__)
+    xstrcat(&buff, "/dpmi");
+#elif defined(MSDOS) || defined(DOS) || defined(__DOS__)
     xstrcat(&buff, "/dos");
 #elif defined(__BEOS__)
     xstrcat(&buff, "/beos");
 #endif
-    xscatprintf(&buff, " %s", cvs_date);
+
+    if( strcmp(VER_BRANCH,"-stable") ) xscatprintf(&buff, " %s", cvs_date);
     xscatprintf(&versionStr,"hpuCode %s", buff);
     nfree(buff);
     
@@ -214,11 +251,11 @@ int main(int argc, char **argv) {
                 }
             } else {
                 for (i=0; i < config->netMailAreaCount; i++)
-                    // scan netmail areas
+                    /* scan netmail areas */
                     doArea(&(config->netMailAreas[i]), argv[k]);
                 
                 for (i=0; i < config->echoAreaCount; i++)
-                    // scan echomail areas
+                    /* scan echomail areas */
                     doArea(&(config->echoAreas[i]), argv[k]);
             }
             k++;
