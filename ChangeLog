@@ -1,3 +1,12 @@
+2002-10-10 Thursday 13:11  sfpavel
+
+	* debian/changelog (1.2): New debian package: 1.2-stable
+
+2002-10-10 Thursday 13:07  sfpavel
+
+	* src/uuecode.c (1.4): Add VER_PATCH and VER_BRANCH into version
+	info
+
 2002-10-08 Tuesday 07:35  sfpavel
 
 	* debian/: changelog (1.1), control (1.1), copyright (1.1), dirs
