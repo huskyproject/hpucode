@@ -82,6 +82,26 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     AddPart(node, begin, section, partlen);
 }
 
+/*  Get the object name from the end of a full or partial pathname (OS-independed).
+    This function gets the file (or directory) name from the end of a full
+    or partial pathname for any path style: UNIX, DOS or mixed (mixed style
+    may be used in Windows NT OS family).
+    Returns the file (or directory) name: pointer to part of all original pathname.
+*/
+char *OS_independed_basename(const char *pathname)
+{ register char *fname=NULL, *pname=(char*)pathname;
+
+  /* Process Unix-style, result to pathname */
+  if( (fname = strrchr(pname,'/')) ) pname = ++fname;
+
+  /* Process DOS-style */
+  if( (fname = strrchr(pname,'\\')) ) ++fname;
+  else fname = pname;
+
+  return fname;
+}
+
+
 int scan4UUE(const char* text)
 {
     int nRet = 0;
@@ -129,12 +149,12 @@ int scan4UUE(const char* text)
             if(szBegin)
             {
                 w_log(LL_FUNC,"%s::scan4UUE(), first section detected", __FILE__);
-                _addPart(szBegin, section, amount, name, atype);
+                _addPart(szBegin, section, amount, OS_independed_basename(name), atype);
             }
         }
         else
         {
-            _addPart(szSection, section, amount, name, atype);
+            _addPart(szSection, section, amount, OS_independed_basename(name), atype);
         }
         szSection = strstr(szSection+1, "section ");
     }
@@ -147,7 +167,7 @@ int scan4UUE(const char* text)
             {
                 if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
                     w_log(LL_FUNC,"%s::scan4UUE(), single message uue detected", __FILE__);
-                    _addPart(szBegin, 1, 1, name, 0);
+                    _addPart(szBegin, 1, 1, OS_independed_basename(name), 0);
                 }
             }
             szBegin = strstr(szBegin+1, "begin ");
