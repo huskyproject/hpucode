@@ -18,19 +18,18 @@ LINKFIDOC=../fidoconf/libfidoconfigbsd.a
 all: $(OBJS) hpucode
 
 %.o: %.c
-        $(CC) $(CFLAGS) $*.c
+	$(CC) $(CFLAGS) $*.c
 
 hpucode: $(OBJS)
-        $(CC) $(LFLAGS) -o hpucode $(OBJS) ../smapi/patmat.o $(LINKSMAPI)
-$(LINKFIDOC)
+	$(CC) $(LFLAGS) -o hpucode $(OBJS) ../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
 
 clean:
-        -rm -f *.o
-        -rm *~
-        -rm
-        -rm hpucode
+	-rm -f *.o
+	-rm *~
+	-rm
+	-rm hpucode
 
 distclean: clean
-        -rm hpucode
-        -rm *.1.gz
-        -rm *.log
+	-rm hpucode
+	-rm *.1.gz
+	-rm *.log
