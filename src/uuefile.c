@@ -362,7 +362,7 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle,"Desc %s\r\n", uuc->description);
    fprintf(tichandle,"From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle,"To %s\r\n",   aka2str(link->hisAka));
-   fprintf(tichandle,"Origin %d:%d\r\n",origstr);
+   fprintf(tichandle,"Origin %s\r\n",origstr);
    fprintf(tichandle,"Size %lu\r\n", stbuf.st_size);
    fprintf(tichandle,"Crc %08lX\r\n",filecrc32(fname));
    fprintf(tichandle,"Pw %s\r\n",link->fileFixPwd);
