@@ -1,3 +1,22 @@
+2003-02-07 Friday 10:25  sfpavel
+
+	* Makefile (1.7), debian/changelog (1.4), debian/control (1.2),
+	debian/copyright (1.2), debian/huskymak.cfg (1.2): New debian
+	package
+
+2003-02-07 Friday 10:25  sfpavel
+
+	* src/scanmsg.c (1.14): Remove unused variables
+
+2003-02-07 Friday 10:06  sfpavel
+
+	* src/: dupe.c (1.7), scanmsg.c (1.13), uuecode.c (1.12), uuefile.c
+	(1.19): Change C++ comments to C comments
+
+2003-02-07 Friday 10:03  sfpavel
+
+	* HISTORY (1.2), VERSION (1.2): Update HISTORY and VERSION
+
 2003-02-06 Thursday 11:15  mche
 
 	* src/scanmsg.c (1.12): fix warnings
