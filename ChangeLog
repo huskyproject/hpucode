@@ -1,3 +1,7 @@
+2003-05-14 Wednesday 23:16  nssoft
+
+	* Makefile (1.11): Fix makefiles.
+
 2003-05-12 Monday 07:25  mche
 
 	* src/uuecode.c (1.22): do not scan on run without masks
