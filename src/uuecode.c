@@ -202,8 +202,7 @@ int main(int argc, char **argv) {
         }
         /*  load recoding tables */
         initCharsets();
-        if (config->intab != NULL) getctab(intab, (unsigned char*) config->intab);
-        if (config->outtab != NULL) getctab(outtab, (unsigned char*) config->outtab);
+        getctabs(config->intab,config->outtab);
 
         if (config->logFileDir) {
             nfree(buff);
