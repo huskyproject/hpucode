@@ -131,6 +131,7 @@ void FreeUUEFile(UUEFile* uuc)
     for(i = 0; i < uuc->m_nSections; i++)
     nfree(uuc->UUEparts[i]);
     nfree(uuc->toBeDeleted);
+    nfree(uuc->description);
 }
 
 void FreeUUEChain()
@@ -165,6 +166,10 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 {
     if(section > uuc->m_nSections || uuc->m_nAdded == uuc->m_nSections)
         return;
+
+    if(section == 1)
+        uuc->description = sstrdup((char*)xmsg.subj);
+
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
     if(nDelMsg)
@@ -281,7 +286,7 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle,"Created by uuecode, written by Max Chernogor\r\n");
    fprintf(tichandle,"File %s\r\n", uuc->m_fname);
    fprintf(tichandle,"Area %s\r\n", currArea->areaName);
-   fprintf(tichandle,"Desc %s\r\n", description);
+   fprintf(tichandle,"Desc %s\r\n", uuc->description);
    fprintf(tichandle,"From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle,"To %s\r\n",   aka2str(link->hisAka));
    fprintf(tichandle,"Origin %s\r\n",aka2str(link->hisAka));
@@ -291,5 +296,5 @@ void MakeTicFile(UUEFile* uuc)
 
    fclose(tichandle);
    nfree(newticfile);
-   nfree(description);
+   
 }

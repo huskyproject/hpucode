@@ -114,22 +114,22 @@ int main(int argc, char **argv) {
    struct _minf m;
    char* buff=NULL;
    
-   printf(  "\n::  uuecode v0.1\n");
+   printf(  "\n::  hpucode v0.1\n");
    if( argc < 2 ) {
-  	   printf ("::  usage: uuecode [ -del ] [areamask1 areamask2 ...] \n");
+  	   printf ("::  usage: hpucode [ -del ] [areamask1 areamask2 ...] \n");
    } else {
       if((argc > 2) && (strcmp(argv[1], "-del") == 0))
          nDelMsg = 1;
       else
          nDelMsg = 0;
       
-      setvar("module", "uuecode");
+      setvar("module", "hpucode");
       config = readConfig(NULL);
       
       if (config != NULL ) {
          if (config->logFileDir) {
-            xstrscat(&buff, config->logFileDir, "uuecode.log", NULL);
-            openLog(buff, "uuecode", config);
+            xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
+            openLog(buff, "hpucode", config);
             nfree(buff);
          } 
          if(config->protInbound)
@@ -141,7 +141,6 @@ int main(int argc, char **argv) {
          }
          w_log(LL_START, "Start");
          currArea = NULL;
-         description = NULL;
          toBeDeleted = NULL;
          nMaxDeleted = 0;
          UFilesHead = scalloc(1,sizeof(UUEFile));
@@ -173,7 +172,6 @@ int main(int argc, char **argv) {
          disposeConfig(config);
          FreeUUEChain();
          nfree(UFilesHead);
-         nfree(description);
          w_log(LL_STOP, "End");
          closeLog();
          return 0;

@@ -21,6 +21,7 @@ typedef struct _UUEFile
     int             m_nPerm;
    char**           UUEparts;
    dword*           toBeDeleted;
+    char            *description;
   struct _UUEFile*  next;
   struct _UUEFile*  prev;
 } UUEFile ;
@@ -42,7 +43,7 @@ s_area   *currArea;
 s_fidoconfig *config;
 XMSG     xmsg;
 dword   currMsgUid;
-char *description;
+
 
 
 #endif
