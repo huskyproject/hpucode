@@ -8,6 +8,48 @@ void MakeFile(UUEFile* uuc);
 void MakeTicFile(UUEFile* uuc);
 void FreeUUEFile(UUEFile* uuc);
 
+typedef struct  {
+    char* areamask;
+    char* fileEcho;
+}   uueFileGroup;
+
+unsigned int fileGroupscount = 0;
+uueFileGroup *uueFileGroups  = NULL;
+
+void initFileGroups()
+{
+    unsigned int i = 0;
+	char *tok;
+
+    if(!config->numuuEGrp || uueFileGroups)
+        return;
+    for(i = 0; i < config->numuuEGrp; i++)
+    {
+        tok = strtok(config->uuEGrp[i], " \t,");
+        tok = strtok(NULL, " \t,");
+        while (tok) {
+            uueFileGroups = srealloc(uueFileGroups, sizeof(uueFileGroup)*(fileGroupscount+1));
+            uueFileGroups[fileGroupscount].areamask = sstrdup(tok);
+            uueFileGroups[fileGroupscount].fileEcho = config->uuEGrp[i];
+            fileGroupscount++;
+            tok = strtok(NULL, " \t,");
+        }
+    }
+}
+
+char* findFileGroup(char* areaMask)
+{
+    unsigned int i = 0;
+    initFileGroups();
+
+    if(!uueFileGroups)
+        return areaMask;
+    for(i = 0; i < fileGroupscount; i++) {
+        if (patimat(uueFileGroups[i].areamask,areaMask))
+            return uueFileGroups[fileGroupscount].fileEcho;
+    }
+    return areaMask;
+}
 
 #define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
 
@@ -16,6 +58,7 @@ typedef unsigned char BYTE;
 int DecodePart(char *text, FILE *outfile)
 {
     char *linep	= NULL;
+
     size_t   linelen	= 0;
     int      linecnt	= 0;
     BYTE outbyte	[3];
@@ -284,12 +327,12 @@ void MakeTicFile(UUEFile* uuc)
    }
 
    newticfile=makeUniqueDosFileName(config->protInbound,"tic",config);
-
+   
    tichandle=fopen(newticfile,"wb");
 
    fprintf(tichandle,"Created by uuecode, written by Max Chernogor\r\n");
    fprintf(tichandle,"File %s\r\n", uuc->m_fname);
-   fprintf(tichandle,"Area uue.%s\r\n", currArea->areaName);
+   fprintf(tichandle,"Area uue.%s\r\n", findFileGroup(currArea->areaName));
    fprintf(tichandle,"Desc %s\r\n", uuc->description);
    fprintf(tichandle,"From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle,"To %s\r\n",   aka2str(link->hisAka));
