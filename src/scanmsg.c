@@ -34,8 +34,6 @@ void _addPart(char *text, int section, int amount, char* name, char* ID, int typ
     char *endstr = NULL;
     void *tmp = NULL;
     int partlen =  0;
-    int partlen1 = 0;
-    int rr = 0;
     UUEFile* node = NULL;
     UUEFile  nfnd;
     w_log(LL_FUNC,"%s::addPart()", __FILE__);
@@ -117,7 +115,7 @@ int scan4UUE(char* text,const char* ctl)
 {
     int nRet = 0;
     char name[MAX];
-    int perms = 0;
+    unsigned int perms = 0;
     int section = 0;
     int amount = 0;
     int atype = 0; 
