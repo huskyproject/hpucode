@@ -210,7 +210,7 @@ int dupeDetection(s_textDupeEntry *msg) {
       pos++;
    }
    
-   if (tree_srchall(&(CommonDupes->avlTree), compareEntries, (char *) msg)) {
+   if (!tree_srch(&(CommonDupes->avlTree), compareEntries, (char *) msg)) {
       msg->timeCreated = tCR; 
       tree_add(&(CommonDupes->avlTree), compareEntries, (char *) msg, deleteEntry);
       return 1;
