@@ -1,3 +1,7 @@
+2003-01-12 Sunday 15:11  mche
+
+	* hpucode.dsp (1.2): define INTEL for MSVC in compiler.h
+
 2003-01-09 Thursday 06:57  mche
 
 	* src/scanmsg.c (1.7), src/uuefile.c (1.14), h/uuecode.h (1.7):
