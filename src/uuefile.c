@@ -235,8 +235,8 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
 {
     if(!uuc || !uuepart) return; /* Check pointers before use */
 
-    if(section > uuc->m_nSections || uuc->m_nAdded == uuc->m_nSections || 
-       uuc->UUEparts[section-1])
+    if(section <=0 || section > uuc->m_nSections ||
+       uuc->m_nAdded == uuc->m_nSections || uuc->UUEparts[section-1])
         return;
 
     if(section == 1)
