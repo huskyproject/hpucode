@@ -1,3 +1,8 @@
+2004-01-14 Wednesday 03:54  andr_lukyanov
+
+	* h/version.h (1.6), src/uuecode.c (1.26): Small fix - remove
+	include fidoconf/version.h
+
 2003-10-27 Monday 12:19  stas_degteff
 
 	* src/uuecode.c (1.25): Remove unused variable 'area'. (Thanks to
