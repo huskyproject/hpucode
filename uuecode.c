@@ -48,7 +48,7 @@ void ScanArea(s_area *area)
 {
    char* areaName;
    HAREA oldArea;
-   dword highMsg, numMsg/*, hw*/;
+   dword highMsg, numMsg,nMN;
    word areaType = area -> msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
    
    
@@ -65,17 +65,17 @@ void ScanArea(s_area *area)
 
        toBeDeleted = nDelMsg ? (dword*)smalloc(highMsg * sizeof(dword)) : NULL;
        
-       for (currMsgNumb = 1; currMsgNumb <= highMsg; currMsgNumb++) {
-           processMsg(oldArea);
+       for (nMN = 1; nMN <= highMsg; nMN++) {
+           processMsg(oldArea,nMN);
        };
       
        if(toBeDeleted && nMaxDeleted)
        {
            w_log(LL_INFO, "Deleting decoded messages...");
            numMsg = 0;
-           for (currMsgNumb = 0; currMsgNumb < nMaxDeleted; currMsgNumb++) {
-               if(MsgKillMsg(oldArea, toBeDeleted[currMsgNumb]-currMsgNumb) == 0)
-                    numMsg++;
+           for (nMN = 0; nMN < nMaxDeleted; nMN++) {
+               if(MsgKillMsg(oldArea, MsgUidToMsgn(oldArea,toBeDeleted[nMN], UID_EXACT)) == 0)
+                   numMsg++;
            }
            w_log(LL_INFO, "Deleted:%u of decoded messages:%u",numMsg,nMaxDeleted);
            nMaxDeleted=0;

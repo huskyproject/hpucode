@@ -84,7 +84,7 @@ int scan4UUE(char* text, dword textLen)
     return nRet;
 }
 
-int processMsg(HAREA oldArea)
+int processMsg(HAREA oldArea, dword msgNumb)
 {
    HMSG msg;
    char *text;
@@ -92,7 +92,7 @@ int processMsg(HAREA oldArea)
    int unsent, rc = 0;
 
 
-   msg = MsgOpenMsg(oldArea, MOPEN_RW, currMsgNumb);
+   msg = MsgOpenMsg(oldArea, MOPEN_RW, msgNumb);
    if (msg == NULL) return rc;
 
    if (MsgReadMsg(msg, &xmsg, 0, 0, NULL, 0, NULL)<0) {
@@ -101,7 +101,8 @@ int processMsg(HAREA oldArea)
    }
 
    unsent = (xmsg.attr & MSGLOCAL) && !(xmsg.attr & MSGSENT);
-   
+   currMsgUid = MsgMsgnToUid(oldArea, msgNumb);
+
    textLen = MsgGetTextLen(msg);
    text = (char *) malloc(textLen+1);
    text[textLen] = '\0';

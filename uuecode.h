@@ -50,7 +50,7 @@ typedef struct _UUEFile
 } UUEFile ;
 
 
-int processMsg(HAREA oldArea);
+int processMsg(HAREA oldArea, dword msgNumb);
 
 
 UUEFile* MakeUUEFile(int nsec, char *name);
@@ -65,7 +65,7 @@ UUEFile  *UFilesHead;
 s_area   *currArea;
 s_fidoconfig *config;
 XMSG     xmsg;
-dword   currMsgNumb;
+dword   currMsgUid;
 char *description;
 
 

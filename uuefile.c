@@ -164,7 +164,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
     uuc->UUEparts[section-1] = scalloc( slen+1, sizeof(char) );
     strncpy(uuc->UUEparts[section-1],uuepart,slen);
     if(nDelMsg)
-        uuc->toBeDeleted[uuc->m_nAdded] = currMsgNumb;
+        uuc->toBeDeleted[uuc->m_nAdded] = currMsgUid;
     uuc->m_nAdded++;
     if((uuc->m_nAdded == uuc->m_nSections) && isReady(uuc))
     {
@@ -225,7 +225,7 @@ void MakeFile(UUEFile* uuc)
 
 void MakeTicFile(UUEFile* uuc)
 {
-   unsigned int i;
+   unsigned int i=0;
    struct stat stbuf;
    FILE *tichandle;
    char *newticfile;
