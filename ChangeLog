@@ -1,3 +1,8 @@
+2002-06-06 Thursday 13:29  mche
+
+	* uuecode.c (1.8), uuecode.h (1.10), uuefile.c (1.22): Date of
+	compilation added to version string Scan areas using importlogfile
+
 2002-06-01 Saturday 18:55  mche
 
 	* uuecode.c (1.7): prevent memoryleak
