@@ -28,7 +28,6 @@
 #include <huskylib/huskylib.h>
 #include "uuecode.h"
 #include "dupe.h"
-#include "cvsdate.h"
 #include "version.h"
 
 #ifdef UNIX
@@ -53,7 +52,7 @@
 #include <share.h>
 #endif
 
-char* versionStr      = NULL;
+char *versionStr;
 int  nDelMsg, nCutMsg, nAllAreas;
 
 typedef struct {
@@ -68,8 +67,8 @@ static tree* FilteredAreas = NULL;
 
 void start_help(void) {
 
-    fprintf(stdout, "%s by Max Chernogor\n",versionStr);
-    fprintf(stdout,"Usage: hpucode [ -del|-cut|-all ] [areamask1 !areamask2 ...] \n\n");
+    fprintf(stdout, "%s\n",versionStr);
+    fprintf(stdout,"\nUsage: hpucode [ -del|-cut|-all ] [areamask1 !areamask2 ...] \n");
     fprintf(stdout,"Options:  -del, -cut, -all\n");
     fprintf(stdout,"          -del - delete decoded messages\n");
     fprintf(stdout,"          -cut - cut UUE code from decoded messages\n");
@@ -278,7 +277,7 @@ int main(int argc, char **argv) {
     xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
     setvar("version", buff);
     
-    versionStr = GenVersionStr( "hpuCode", VER_MAJOR, VER_MINOR, VER_PATCH,
+    versionStr = GenVersionStr( "hpucode", VER_MAJOR, VER_MINOR, VER_PATCH,
                                VER_BRANCH, cvs_date );
     nDelMsg = nCutMsg = nAllAreas = 0;
 
