@@ -1,3 +1,7 @@
+2002-03-27 Wednesday 12:19  mche
+
+	* scanmsg.c (1.14): fix bug with detection end of uue-code
+
 2002-03-25 Monday 10:20  mche
 
 	* dupe.c (1.5), scanmsg.c (1.13), uuecode.h (1.8), uuefile.c
