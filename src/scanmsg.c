@@ -300,6 +300,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
 
    text = (char *) scalloc(1,(textLen+1)*sizeof(char));
    ctl = (char *) scalloc(1,(ctlen+1)*sizeof(char));
+   p = text;
    
    memset(&xmsg, 0 , sizeof(xmsg));
 
