@@ -321,6 +321,7 @@ void MakeTicFile(UUEFile* uuc)
    char *newticfile=NULL;
    char fname[256] = "";
    char *areagroup = NULL;
+   char origstr[36] = "";
    s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
    
    while( !link && i < config->addrCount )
@@ -350,13 +351,18 @@ void MakeTicFile(UUEFile* uuc)
 
    areagroup = findFileGroup(currArea->areaName);
 
+   if(xmsg.orig.point == 0)
+       sprintf(origstr, "%d:%d/%d", xmsg.orig.zone, xmsg.orig.net, xmsg.orig.node);
+   else
+       sprintf(origstr, "%d:%d/%d.%d", xmsg.orig.zone, xmsg.orig.net, xmsg.orig.node, xmsg.orig.point);
+
    fprintf(tichandle,"Created by %s, written by Max Chernogor\r\n",versionStr);
    fprintf(tichandle,"File %s\r\n", uuc->m_fname);
    fprintf(tichandle,"Area %s\r\n", areagroup);
    fprintf(tichandle,"Desc %s\r\n", uuc->description);
    fprintf(tichandle,"From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle,"To %s\r\n",   aka2str(link->hisAka));
-   fprintf(tichandle,"Origin %s\r\n",aka2str(link->hisAka));
+   fprintf(tichandle,"Origin %d:%d\r\n",origstr);
    fprintf(tichandle,"Size %lu\r\n", stbuf.st_size);
    fprintf(tichandle,"Crc %08lX\r\n",filecrc32(fname));
    fprintf(tichandle,"Pw %s\r\n",link->fileFixPwd);
