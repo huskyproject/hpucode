@@ -37,9 +37,9 @@ void addPart(char *text, int section, int amount, char* name)
     node = FindUUEFile(name);
     if(!node)
     {
-        if(section == amount && !endstr )
+        if(section > amount && !endstr )
         {
-            amount++;
+            amount = section;
         }
         node = MakeUUEFile(amount,name);
         node->prev = UFilesHead->prev;
@@ -48,9 +48,9 @@ void addPart(char *text, int section, int amount, char* name)
     }
     else
     {
-        if(section == node->m_nSections && !endstr)
+        if(section > node->m_nSections && !endstr)
         {
-            node->m_nSections = section+1;
+            node->m_nSections = section;
             node->UUEparts = (char**)srealloc( node->UUEparts , node->m_nSections*sizeof(char*) );
             if(nDelMsg)
             {
