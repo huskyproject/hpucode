@@ -192,6 +192,12 @@ int scan4UUE(char* text,const char* ctl)
                     w_log(LL_FUNC,"%s::scan4UUE(), SPLITed message uue detcted", __FILE__);
                     section = 10*(SPLIT[45]-'0') + SPLIT[46] - '0';
                     amount  = 10*(SPLIT[48]-'0') + SPLIT[49] - '0';
+                    if((section > amount) || (section <= 0) || (amount <=0))
+                    {
+                        w_log(LL_WARN,"Incorrect number of sections [%d/%d]",section,amount);
+                        szBegin = strstr(szBegin+1, "begin ");
+                        continue;
+                    }
                     if(amount > MAX_SECTIONS) 
                     {
                         w_log(LL_WARN,"Number of sections:%d too much for decoding",amount);
