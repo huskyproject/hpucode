@@ -1,22 +1,22 @@
 # Microsoft Visual C++ Makefile
 
 CC=     cl
-CFLAGS= -nologo -MD -Zp1 -I. -I.. 
+CFLAGS= -nologo -MD -Zp1 -I..\.. -I..\h
 CDEFS=  -D__NT__ -DNT -DWINNT -D_CONSOLE -D_MAKE_DLL
 COPT=   -Ob2
 TLIB=   lib -nologo
 
-SMAPIL=	..\smapi\smapimvc.lib msvcrt.lib Kernel32.lib user32.lib 
-FCONFL=	..\fidoconf\fconfmvc.lib
+SMAPIL=	..\..\smapi\smapimvc.lib msvcrt.lib Kernel32.lib user32.lib 
+FCONFL=	..\..\fidoconf\fconfmvc.lib
 
 all: hpucode.exe
 
 hpucode.exe:
-        $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ uuecode.c \
-                                                uuefile.c \
-                                                scanmsg.c \
-                                                dupe.c    \
-                   $(FCONFL) $(SMAPIL)    
+        $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ ..\src\uuecode.c \
+                                                ..\src\uuefile.c \
+                                                ..\src\scanmsg.c \
+                                                ..\src\dupe.c    \
+                   $(FCONFL) $(SMAPIL)  
 
 clean:
 	-del *.obj
