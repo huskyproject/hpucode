@@ -10,7 +10,7 @@ void _addPart(char *text, int section, int amount, char* name, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
-    void *tmp;
+    void *tmp = NULL;
     int partlen = 0;
     int rr = 0;
     UUEFile* node = NULL;
@@ -86,11 +86,11 @@ int scan4UUE(const char* text)
 {
     int nRet = 0;
     char name[MAX];
-    int perms;
-    int section;
-    int amount;
-    int atype;
-    float ff;
+    int perms = 0;
+    int section = 0;
+    int amount = 0;
+    int atype = 0; 
+    float ff = 0.0;
     int multi = 0;
     char *szSection = NULL;
     char *szBegin   = NULL;
@@ -188,8 +188,8 @@ char* cutUUEformMsg(char *text)
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
 {
    HMSG msg;
-   char *text;
-   dword  textLen;
+   char *text = NULL;
+   dword  textLen = 0;
    int rc = 0;
 
    msg = MsgOpenMsg(hArea, MOPEN_RW, msgNumb);
