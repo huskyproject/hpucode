@@ -48,8 +48,12 @@
 int __stdcall SetFileApisToOEM(void);
 #endif
 
-const int VER_MAJOR   = 0;
-const int VER_MINOR   = 31;
+const int VER_MAJOR   = 1;
+const int VER_MINOR   = 3;
+const int VER_PATCH   = 0;
+/* branch is "" for CVS current, "-stable" for the release candiate branch  */
+const char *VER_BRANCH  = "";
+
 char* versionStr      = NULL;
 
 void ScanArea(s_area *area)
@@ -137,7 +141,7 @@ int main(int argc, char **argv) {
     struct _minf m;
     char* buff=NULL;
     
-    xscatprintf(&buff, "%u.%u", VER_MAJOR, VER_MINOR);
+    xscatprintf(&buff, "%u.%u.%u%s", VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH);
     
 #ifdef __linux__
     xstrcat(&buff, "/lnx");
@@ -154,7 +158,8 @@ int main(int argc, char **argv) {
 #elif defined(__BEOS__)
     xstrcat(&buff, "/beos");
 #endif
-    xscatprintf(&buff, " %s", cvs_date);
+
+    if (strcmp(VER_BRANCH,"-stable")!=0) xscatprintf(&buff, " %s", cvs_date);
     xscatprintf(&versionStr,"hpuCode %s", buff);
     nfree(buff);
     
