@@ -258,7 +258,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
         MakeFile(uuc);
     }
 }
-#if !defined(UNIX) && !defined(OS2) && !defined(__DJGPP__)
+#if !defined(UNIX) && !defined(OS2) && !defined(__DJGPP__) && !defined (__EMX__)
 #   include <windows.h>
 #endif
 
