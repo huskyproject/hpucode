@@ -1,3 +1,8 @@
+2002-11-20 Wednesday 08:44  stas_degteff
+
+	* HISTORY (1.1), src/scanmsg.c (1.6): security fix: strip path from
+	filename extracted from 'begin' uu-code line.
+
 2002-11-12 Tuesday 13:25  stas_degteff
 
 	* make/makefile.bsd (1.4): Fix FreeBSD legacy makefile (Thanks to
