@@ -1,3 +1,8 @@
+2002-03-25 Monday 10:20  mche
+
+	* dupe.c (1.5), scanmsg.c (1.13), uuecode.h (1.8), uuefile.c
+	(1.15): some memory leaks fixed
+
 2002-03-21 Thursday 13:05  mche
 
 	* dupe.c (1.4), h-decoder.dsp (1.2), scanmsg.c (1.12), uuecode.c
