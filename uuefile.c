@@ -258,7 +258,7 @@ void MakeTicFile(UUEFile* uuc)
    unsigned int i=0;
    struct stat stbuf;
    FILE *tichandle;
-   char *newticfile;
+   char *newticfile=NULL;
    char fname[256] = "";
    s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
    
@@ -277,6 +277,11 @@ void MakeTicFile(UUEFile* uuc)
    strcat(fname,uuc->m_fname);          
 
    stat(fname,&stbuf);
+   if(stbuf.st_size == 0)
+   {
+       remove(fname);
+       return;
+   }
 
    newticfile=makeUniqueDosFileName(config->protInbound,"tic",config);
 
