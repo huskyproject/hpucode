@@ -31,7 +31,7 @@ void _addPart(char *text, int section, int amount, char* name, int type)
         if( rr > 1 ) end--; 
 //        w_log(LL_FUNC,"last line %s", end);
         partlen = end-begin;
-        if(partlen < 12)
+        if(partlen < 2)
             return;
 
         endstr = strstr(end-1, "\rend\r");
