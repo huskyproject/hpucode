@@ -4,8 +4,10 @@
 
 void addPart(char *text, int section, int amount, char* name)
 {
-    char *begin = NULL, *end= NULL;
+    char *begin = NULL, *end = NULL; 
+    char *endstr = NULL;
     int partlen = 0;
+    int rr = 0;
     UUEFile* node = NULL;
     begin = strchr(text, '\r');
     if(!begin) return;
@@ -14,14 +16,20 @@ void addPart(char *text, int section, int amount, char* name)
         begin++;
 
     end = begin;
-    while( end && end[0] < '\x0061' )
+    while( end && end[0] < '\x0061' && rr < 3)
+    {
+        rr = (end[0] == '\r') ?  rr+1 : 0;
         end++;
+    }
 
     if(end)
     {
+        end--; 
         partlen = end-begin;
         if(partlen < 12)
             return;
+
+        endstr = strstr(end, "\rend\r");
     }
     else
         return;
@@ -29,10 +37,26 @@ void addPart(char *text, int section, int amount, char* name)
     node = FindUUEFile(name);
     if(!node)
     {
+        if(section == amount && !endstr )
+        {
+            amount++;
+        }
         node = MakeUUEFile(amount,name);
         node->prev = UFilesHead->prev;
         UFilesHead->prev->next = node; // add to end
         UFilesHead->prev       = node; // save end pos
+    }
+    else
+    {
+        if(section == node->m_nSections && !endstr)
+        {
+            node->m_nSections = section+1;
+            node->UUEparts = (char**)srealloc( node->UUEparts , node->m_nSections*sizeof(char*) );
+            if(nDelMsg)
+            {
+                node->toBeDeleted = (dword*)srealloc(node->toBeDeleted,node->m_nSections*sizeof(dword));
+            }
+        }
     }
     AddPart(node, begin, section, partlen);
 }
@@ -44,6 +68,7 @@ int scan4UUE(char* text, dword textLen)
     int perms;
     int section;
     int amount;
+    float ff;
     int multi = 0;
     char *szSection = NULL;
     char *szBegin   = NULL;
@@ -54,22 +79,35 @@ int scan4UUE(char* text, dword textLen)
         if(sscanf(szSection,"section %d of %d of file %s",&section, &amount, name) == 3)
         {
             multi = 1;
-            if(section == 1)
+        }
+        else
+        {
+            if(sscanf(szSection,"section %d of uuencode %f of file %s",&section,&ff,name) == 3)
             {
-                szBegin = strstr(szSection, "begin ");
-                while(szBegin)
-                {
-                    if(sscanf(szBegin, "begin %o %s", &perms, name) == 2) {
-                        addPart(szBegin, section, amount, name);
-                    }
-                    szBegin = strstr(szBegin+1, "begin ");
-                }
+                amount = section;
+                multi = 1;
             }
             else
             {
-                addPart(szSection, section, amount, name);
+                amount = 0;
             }
-
+        }
+        if(amount == 0) 
+        {
+            szSection = strstr(szSection+1, "section ");
+            continue;
+        }
+        if(section == 1)
+        {
+            szBegin = strstr(szSection, "begin ");
+            if(szBegin)
+            {
+                addPart(szBegin, section, amount, name);
+            }
+        }
+        else
+        {
+            addPart(szSection, section, amount, name);
         }
         szSection = strstr(szSection+1, "section ");
     }
