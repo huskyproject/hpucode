@@ -1,3 +1,8 @@
+2002-10-11 Friday 03:27  sfpavel
+
+	* debian/: changelog, control, rules (hpucode-1_2-stable.[1,1,1]):
+	New debian package
+
 2002-10-10 Thursday 13:15  sfpavel
 
 	* src/uuecode.c (hpucode-1_2-stable.1): Update version number
