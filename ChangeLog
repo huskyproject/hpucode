@@ -1,3 +1,8 @@
+2002-04-04 Thursday 09:40  mche
+
+	* scanmsg.c (1.15), uuecode.c (1.6), uuecode.h (1.9): new feature
+	"-cut" implemented
+
 2002-03-27 Wednesday 12:19  mche
 
 	* scanmsg.c (1.14): fix bug with detection end of uue-code
