@@ -297,8 +297,8 @@
 2002-10-08 Tuesday 07:33  sfpavel
 
 	* Makefile (1.5), man/hpucode.1 (1.1) (utags:
-	hpucode-1_2_2-release, hpucode-1_2_3-release,
-	hpucode-1_2_4-release, hpucode-1_2-release): Write man page
+	hpucode-1_2_4-release, hpucode-1_2_2-release, hpucode-1_2-release,
+	hpucode-1_2_3-release): Write man page
 
 2002-10-04 Friday 06:14  sfpavel
 
