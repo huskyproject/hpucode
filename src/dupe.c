@@ -155,7 +155,7 @@ s_dupeMemory *readDupeFile() {
 void freeDupeMemory() {
    
    if (CommonDupes != NULL) {
-      tree_deinit(&(CommonDupes -> avlTree), deleteEntry);
+      tree_mung(&(CommonDupes -> avlTree), deleteEntry);
       nfree(CommonDupes);
    };
 }
