@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <smapi/msgapi.h>
 #include <smapi/prog.h>
 #include <fidoconf/fidoconf.h>
