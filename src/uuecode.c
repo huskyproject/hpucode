@@ -49,10 +49,10 @@ int __stdcall SetFileApisToOEM(void);
 #endif
 
 const int VER_MAJOR   = 1;
-const int VER_MINOR   = 3;
+const int VER_MINOR   = 2;
 const int VER_PATCH   = 0;
 /* branch is "" for CVS current, "-stable" for the release candiate branch  */
-const char *VER_BRANCH  = "";
+const char *VER_BRANCH  = "-stable";
 
 char* versionStr      = NULL;
 
