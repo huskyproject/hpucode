@@ -1,3 +1,12 @@
+2003-10-17 Friday 07:33  andr_lukyanov
+
+	* make/: makefile.cyg (1.8), makefile.djg (1.6), makefile.emx
+	(1.4), makefile.inc (1.1): Fix compilation with huskymak.cfg.*
+
+2003-10-17 Friday 05:47  andr_lukyanov
+
+	* src/uuefile.c (1.27): Fixed OS/2 EMX compilation
+
 2003-10-16 Thursday 16:28  mche
 
 	* src/scanmsg.c (1.27): fix broken '-cut' functionality
