@@ -1,272 +1,272 @@
-2002-08-01 Thursday 14:58  mche
+2002-08-01 Thursday 05:58  mche
 
 	* uuefile.c (1.23): fix log message about file creation.
 
-2002-07-24 Wednesday 13:34  mche
+2002-07-24 Wednesday 04:34  mche
 
 	* uuecode.c (1.14): do not scan area twice
 
-2002-07-22 Monday 13:56  mche
+2002-07-22 Monday 04:56  mche
 
 	* makefile.mvcdll (1.5): corrected file cleaning
 
-2002-07-18 Thursday 13:56  mche
+2002-07-18 Thursday 04:56  mche
 
 	* uuecode.c (1.13): OEM filenames support
 
-2002-07-16 Tuesday 22:02  stas
+2002-07-16 Tuesday 13:02  stas
 
 	* makefile.bsd (1.1): Add legacy makefile for FreeBSD
 
-2002-07-08 Monday 16:24  mche
+2002-07-08 Monday 07:24  mche
 
 	* uuecode.c (1.12): fix wrong log message
 
-2002-07-04 Thursday 08:32  mche
+2002-07-03 Wednesday 23:32  mche
 
 	* uuecode.c (1.11): MsgCloseApi call added
 
-2002-07-01 Monday 16:39  mche
+2002-07-01 Monday 07:39  mche
 
 	* scanmsg.c (1.21): fix coredump when wrong uue header treated as
 	right
 
-2002-06-15 Saturday 09:57  mche
+2002-06-15 Saturday 00:57  mche
 
 	* makefile (1.5): patch by [Alexander Shiyan <shc@milas.spb.ru>]
 
-2002-06-14 Friday 14:51  mche
+2002-06-14 Friday 05:51  mche
 
 	* uuecode.c (1.10): log message corrected
 
-2002-06-12 Wednesday 08:10  mche
+2002-06-11 Tuesday 23:10  mche
 
 	* uuecode.c (1.9): misspeling fix
 
-2002-06-06 Thursday 13:29  mche
+2002-06-06 Thursday 04:29  mche
 
 	* uuecode.c (1.8), uuecode.h (1.10), uuefile.c (1.22): Date of
 	compilation added to version string Scan areas using importlogfile
 
-2002-06-01 Saturday 18:55  mche
+2002-06-01 Saturday 09:55  mche
 
 	* uuecode.c (1.7): prevent memoryleak
 
-2002-05-18 Saturday 16:33  mche
+2002-05-18 Saturday 07:33  mche
 
 	* makefile (1.4): install, uninstall added
 
-2002-05-14 Tuesday 17:11  mche
+2002-05-14 Tuesday 08:11  mche
 
 	* scanmsg.c (1.20): detection of uue-code improved one more :)
 
-2002-05-12 Sunday 17:29  mche
+2002-05-12 Sunday 08:29  mche
 
 	* scanmsg.c (1.19): detection of uue-code improved
 
-2002-05-12 Sunday 14:40  mche
+2002-05-12 Sunday 05:40  mche
 
 	* scanmsg.c (1.18): detection of uue-code improved
 
-2002-05-11 Saturday 11:37  mche
+2002-05-11 Saturday 02:37  mche
 
 	* scanmsg.c (1.17): fixed detecting end of uue part if message has
 	no tirline or origin
 
-2002-05-04 Saturday 16:47  mche
+2002-05-04 Saturday 07:47  mche
 
 	* uuefile.c (1.21): uuechogroup patern match
 
-2002-05-03 Friday 10:56  mche
+2002-05-03 Friday 01:56  mche
 
 	* scanmsg.c (1.16): detectin end of uue part improved
 
-2002-04-29 Monday 10:07  mche
+2002-04-29 Monday 01:07  mche
 
 	* uuefile.c (1.20): EchoAreaGroups selection fixed
 
-2002-04-26 Friday 11:31  d.sergienko
+2002-04-26 Friday 02:31  d.sergienko
 
 	* makefile.wco (1.1): forgot to add new makefile :)
 
-2002-04-26 Friday 11:30  d.sergienko
+2002-04-26 Friday 02:30  d.sergienko
 
 	* uuefile.c (1.19): added OS/2 support (patch from Andr Luk'yanov)
 
-2002-04-23 Tuesday 18:23  mche
+2002-04-23 Tuesday 09:23  mche
 
 	* dupe.c (1.9), uuefile.c (1.18): dupe search improvement.  rename
 	files like *.pkt  to *.pkt_
 
-2002-04-20 Saturday 14:46  mche
+2002-04-20 Saturday 05:46  mche
 
 	* dupe.c (1.8): dupe search improvement
 
-2002-04-12 Friday 15:02  mche
+2002-04-12 Friday 06:02  mche
 
 	* uuefile.c (1.17): EchoAreaGroups
 
-2002-04-11 Thursday 17:35  mche
+2002-04-11 Thursday 08:35  mche
 
 	* uuefile.c (1.16): do not generate empty files
 
-2002-04-08 Monday 15:48  mche
+2002-04-08 Monday 06:48  mche
 
 	* vixie.h (1.2), tree.c (1.2), tree.h (1.2): no message
 
-2002-04-08 Monday 15:41  mche
+2002-04-08 Monday 06:41  mche
 
 	* dupe.c (1.7): speedup dupe search (need to check)
 
-2002-04-05 Friday 16:43  mche
+2002-04-05 Friday 06:43  mche
 
 	* dupe.c (1.6): making dupes more reliable
 
-2002-04-04 Thursday 09:40  mche
+2002-04-03 Wednesday 23:40  mche
 
 	* scanmsg.c (1.15), uuecode.c (1.6), uuecode.h (1.9): new feature
 	"-cut" implemented
 
-2002-03-27 Wednesday 12:19  mche
+2002-03-27 Wednesday 03:19  mche
 
 	* scanmsg.c (1.14): fix bug with detection end of uue-code
 
-2002-03-25 Monday 10:20  mche
+2002-03-25 Monday 01:20  mche
 
 	* dupe.c (1.5), scanmsg.c (1.13), uuecode.h (1.8), uuefile.c
 	(1.15): some memory leaks fixed
 
-2002-03-21 Thursday 13:05  mche
+2002-03-21 Thursday 04:05  mche
 
 	* dupe.c (1.4), h-decoder.dsp (1.2), scanmsg.c (1.12), uuecode.c
 	(1.5), uuecode.h (1.7), uuefile.c (1.14): added cuting uue code and
 	some log warnings
 
-2002-03-20 Wednesday 14:39  mche
+2002-03-20 Wednesday 05:39  mche
 
 	* makefile.cyg (1.2): b-tree moved from hpt to fidoconfig
 
-2002-03-19 Tuesday 16:49  mche
+2002-03-19 Tuesday 07:49  mche
 
 	* makefile.sun (1.1), makefile.wcw (1.1): make files (by Serguei
 	Revtov)
 
-2002-03-18 Monday 16:40  mche
+2002-03-18 Monday 07:40  mche
 
 	* dupe.h (1.3), makefile (1.3), makefile.mvc (1.3), makefile.mvcdll
 	(1.4): b-tree moved from hpt to fidoconfig
 
-2002-03-16 Saturday 10:42  mche
+2002-03-16 Saturday 01:42  mche
 
 	* scanmsg.c (1.11): fixed bug with detection "end"
 
-2002-03-15 Friday 12:53  mche
+2002-03-15 Friday 03:53  mche
 
 	* .cvs2cl (1.1): no message
 
-2002-03-13 Wednesday 08:27  mche
+2002-03-12 Tuesday 23:27  mche
 
 	* .cvsignore (1.1): no message
 
-2002-03-11 Monday 14:39  mche
+2002-03-11 Monday 05:39  mche
 
 	* scanmsg.c (1.10): fixed detection uuencode messages
 
-2002-03-11 Monday 13:21  mche
+2002-03-11 Monday 04:21  mche
 
 	* scanmsg.c (1.9): fixed bug with detecting end of section
 
-2002-03-11 Monday 09:04  mche
+2002-03-11 Monday 00:04  mche
 
 	* makefile.mvcdll (1.3): speed optimization
 
-2002-03-11 Monday 08:32  mche
+2002-03-10 Sunday 23:32  mche
 
 	* scanmsg.c (1.8): fixed bug with detecting end of section
 
-2002-03-06 Wednesday 09:01  mche
+2002-03-06 Wednesday 00:01  mche
 
 	* uuefile.c (1.13): area prefix added
 
-2002-03-01 Friday 08:38  mche
+2002-02-28 Thursday 23:38  mche
 
 	* scanmsg.c (1.7), uuecode.c (1.4), uuecode.h (1.6), uuefile.c
 	(1.12): fixed bug with wrong description
 
-2002-02-28 Thursday 14:45  mche
+2002-02-28 Thursday 05:45  mche
 
 	* scanmsg.c (1.6), uuefile.c (1.11): fixed bug with detection of
 	uue parts
 
-2002-02-28 Thursday 10:16  mche
+2002-02-28 Thursday 01:16  mche
 
 	* scanmsg.c (1.5), uuefile.c (1.10): fixed bug with wrong
 	description
 
-2002-02-25 Monday 15:57  mche
+2002-02-25 Monday 06:57  mche
 
 	* scanmsg.c (1.4), uuefile.c (1.9): some warnings removed
 
-2002-02-25 Monday 15:50  mche
+2002-02-25 Monday 06:50  mche
 
 	* dupe.c (1.3), dupe.h (1.2): autoclean dupehistory added
 
-2002-02-25 Monday 15:49  mche
+2002-02-25 Monday 06:49  mche
 
 	* uuecode.h (1.5), uuefile.c (1.8): code cleanup
 
-2002-02-24 Sunday 16:14  mche
+2002-02-24 Sunday 07:14  mche
 
 	* uuefile.c (1.7), makefile.cyg (1.1): fixed bug with compilations
 	under Cygwin
 
-2002-02-24 Sunday 16:10  mche
+2002-02-24 Sunday 07:10  mche
 
 	* uuecode.h (1.4), uuefile.c (1.6): fixed bug with compilations
 	under Cygwin
 
-2002-02-24 Sunday 12:35  mche
+2002-02-24 Sunday 03:35  mche
 
 	* makefile.mvc (1.2), makefile.mvcdll (1.2): changed exe-name
 
-2002-02-24 Sunday 12:01  mche
+2002-02-24 Sunday 03:01  mche
 
 	* scanmsg.c (1.3), uuecode.c (1.3), uuecode.h (1.3), uuefile.c
 	(1.5): deleting decoded messages algorithm changed
 
-2002-02-22 Friday 16:54  mche
+2002-02-22 Friday 07:54  mche
 
 	* uuecode.c (1.2): added log messaged
 
-2002-02-22 Friday 16:53  mche
+2002-02-22 Friday 07:53  mche
 
 	* uuefile.c (1.4): code cleanup
 
-2002-02-22 Friday 16:31  mche
+2002-02-22 Friday 07:31  mche
 
 	* uuefile.c (1.3): code cleanup
 
-2002-02-22 Friday 16:26  mche
+2002-02-22 Friday 07:26  mche
 
 	* dupe.c (1.2), scanmsg.c (1.2): code cleanup
 
-2002-02-22 Friday 16:21  mche
+2002-02-22 Friday 07:21  mche
 
 	* makefile (1.2): makefile corrected
 
-2002-02-22 Friday 16:17  mche
+2002-02-22 Friday 07:17  mche
 
 	* uuecode.h (1.2): code cleanup
 
-2002-02-22 Friday 14:08  mche
+2002-02-22 Friday 05:08  mche
 
 	* uuefile.c (1.2): fixed bug with deleting decoded messages
 
-2002-02-22 Friday 12:21  mche
+2002-02-22 Friday 03:21  mche
 
 	* makefile (1.1): # Generic Makefile for hpucode
 
-2002-02-22 Friday 10:15  mche
+2002-02-22 Friday 01:15  mche
 
 	* dupe.c (1.1), dupe.h (1.1), h-decoder.dsp (1.1), makefile.mvc
 	(1.1), makefile.mvcdll (1.1), scanmsg.c (1.1), tree.c (1.1), tree.h
