@@ -6,6 +6,7 @@
 #include "dupe.h"
 #include <sys/stat.h>
 #include <fidoconf/crc.h>
+#include <fidoconf/recode.h>
 
 
 static char *invalidExt[] = {"*.mo?", "*.tu?", "*.we?", "*.th?", "*.fr?", 
@@ -355,6 +356,9 @@ void MakeTicFile(UUEFile* uuc)
        sprintf(origstr, "%d:%d/%d", xmsg.orig.zone, xmsg.orig.net, xmsg.orig.node);
    else
        sprintf(origstr, "%d:%d/%d.%d", xmsg.orig.zone, xmsg.orig.net, xmsg.orig.node, xmsg.orig.point);
+
+   if (config->outtab != NULL)
+       recodeToTransportCharset(uuc->description);
 
    fprintf(tichandle, "Created by %s, written by Max Chernogor\r\n",versionStr);
    fprintf(tichandle, "File %s\r\n", uuc->m_fname);

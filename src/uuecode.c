@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <time.h>
 #include <string.h>
+#include <fidoconf/recode.h>
 #include "uuecode.h"
 #include "dupe.h"
 #include "cvsdate.h"
@@ -178,8 +179,13 @@ int main(int argc, char **argv) {
 
     setvar("module", "hpucode");
     config = readConfig(NULL);
-    
+
     if (config != NULL ) {
+        // load recoding tables
+        initCharsets();
+        if (config->intab != NULL) getctab(intab, (unsigned char*) config->intab);
+        if (config->outtab != NULL) getctab(outtab, (unsigned char*) config->outtab);
+
         if (config->logFileDir) {
             xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
             openLog(buff, "hpucode", config);
@@ -245,6 +251,7 @@ int main(int argc, char **argv) {
         FreeUUEChain();
         w_log(LL_STOP, "End");
         closeLog();
+        doneCharsets();
         disposeConfig(config);
         nfree(UFilesHead);
         return 0;
