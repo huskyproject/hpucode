@@ -9,13 +9,13 @@ CFLAGS	= -Wall -c -g
 CINCL	= -I../h -I../../fidoconf -I../../smapi -I../../huskylib
 CDEFS	= -D__FLAT__ -DMSDOS
 COPT	= -O3 -fomit-frame-pointer -fstrength-reduce -mcpu=i486
-LFLAGS  = -s -L../../fidoconf -L../../smapi/make -L../../huskylib/make
+LFLAGS  = -s
 
 RM	= del
 
 SRC_DIR = ../src/
 OBJS    = uuecode.o uuefile.o scanmsg.o dupe.o
-LIBS	= -lsmapidjg -lfconfdjg -lhuskydjg
+LIBS	= ../../fidoconf/make/fconfdjg.a ../../smapi/make/smapidjg.a ../../huskylib/make/huskydjg.a
 
 all: $(OBJS) hpucode.exe
 
