@@ -3,10 +3,14 @@
 # Legacy makefile for DOS DPMI
 # Do not support husky build enviroment
 
+
 CC      = gcc
-CFLAGS  = -DNOSEMAPHORES -DUNIX  -c -g -Wall -O2 -I../h -I../..
+CFLAGS	= -Wall -c -g
+CDEFS	= -D__FLAT__ -DMSDOS -DNOSEMAPHORES
+COPT	= -O3 -fomit-frame-pointer -fstrength-reduce -mcpu=i486 -I../h -I../..
 LFLAGS  = -s -L../../fidoconf -L../../smapi
-COPT    = -O2 -mcpu=i486
+
+RM	= del
 
 
 SRC_DIR = ../src/
@@ -17,17 +21,15 @@ LINKFIDOC=../../fidoconf/fconfdjg.a
 all: $(OBJS) hpucode.exe
 
 %.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(CDEFS) $(COPT) $<
 
 hpucode.exe: $(OBJS)
 	$(CC) $(LFLAGS) -o hpucode.exe $(OBJS) ../../smapi/patmat.o $(LINKSMAPI) $(LINKFIDOC)
 
 clean:
-	-rm -f *.o
-	-rm *~
-	-rm 
+	-$(RM) *.o
+	-$(RM) hpucode.exe
 
 distclean: clean
-	-rm hpucode.exe
-	-rm *.1.gz
-	-rm *.log
+	-$(RM) hpucode.exe
+	-$(RM) *.1.gz

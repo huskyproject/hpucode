@@ -272,7 +272,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
     BOOL    __stdcall OemToCharA(LPCWSTR,LPWSTR);
     #define OemToChar OemToCharA
 #   endif    
-#elif !defined(UNIX) && !defined(OS2)
+#elif !defined(UNIX) && !defined(OS2) && !defined(__DJGPP__)
 #   include <windows.h>
 #endif
 
@@ -387,7 +387,7 @@ void MakeTicFile(UUEFile* uuc)
    fprintf(tichandle, "From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle, "To %s\r\n",   aka2str(link->hisAka));
    fprintf(tichandle, "Origin %s\r\n", aka2str(uuc->origin));
-   fprintf(tichandle, "Size %lu\r\n", stbuf.st_size);
+   fprintf(tichandle, "Size %lu\r\n", (unsigned long)stbuf.st_size);
    fprintf(tichandle, "Crc %08lX\r\n", (unsigned long) filecrc32(fname));
    fprintf(tichandle, "Pw %s\r\n", link->fileFixPwd);
 
