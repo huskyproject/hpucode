@@ -1,3 +1,7 @@
+2002-06-12 Wednesday 08:10  mche
+
+	* uuecode.c (1.9): misspeling fix
+
 2002-06-06 Thursday 13:29  mche
 
 	* uuecode.c (1.8), uuecode.h (1.10), uuefile.c (1.22): Date of
