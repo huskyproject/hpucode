@@ -1,15 +1,12 @@
 hpucode HISTORY
 
-This file describe changes in hpucode.
-
-Changes after 1.0-release.
+This file describe changes between hpucode-1.4-stable and hpucode-1.9-current
 
 1. MAJOR feature improvements:
-  - new functionality for decoding splited messages.
 
 2. CONFIG changes:
 
 3. IMPORTANT bugfixes:
-  - strip path from filename if present in 'begin' uu-code line.
+
 
 $Id$
