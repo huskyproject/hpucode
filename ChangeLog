@@ -1,3 +1,8 @@
+2004-03-09 Tuesday 20:25  mche
+
+	* src/: scanmsg.c (1.30), uuefile.c (1.30): fix crash when -del or
+	-cut are not specified
+
 2004-03-07 Sunday 12:44  mche
 
 	* src/scanmsg.c (1.29): fix rewriting of cut messages
