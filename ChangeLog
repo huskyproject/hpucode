@@ -1,3 +1,7 @@
+2004-03-07 Sunday 12:44  mche
+
+	* src/scanmsg.c (1.29): fix rewriting of cut messages
+
 2004-03-06 Saturday 20:17  mche
 
 	* h/uuecode.h (1.13), src/scanmsg.c (1.28), src/uuecode.c (1.27),
