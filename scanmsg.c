@@ -16,9 +16,12 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     
     while(begin[0] == '\r')
         begin++;
-
+    
     end = begin;
-    while( *end  && (unsigned char)(*end) < '\x0061' && rr < 3)
+    while( *end  && 
+                   (unsigned char)(*end) < '\x0061' && 
+                  ((unsigned char)(*end) > '\x0020' || (unsigned char)(*end) == '\r') && 
+          rr < 3)
     {
         rr = (end[0] == '\r') ?  rr+1 : 0;
         end++;
@@ -29,7 +32,6 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     if(end)
     {
         if( rr > 1 ) end--; 
-//        w_log(LL_FUNC,"last line %s", end);
         partlen = end-begin;
         if(partlen < 2)
             return;
@@ -38,6 +40,10 @@ void _addPart(char *text, int section, int amount, char* name, int type)
     }
     else
         return;
+
+    if(type == 0 && !endstr && amount == 1)
+        return;
+
 
     node = FindUUEFile(name);
     if(!node)
