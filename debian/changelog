@@ -1,8 +1,9 @@
 hpucode (1.2.0-1) unstable; urgency=low
 
   * New cvs version: create 1.2-stable branch
+  * Update debian depends for stable branch
 
- -- Pavel Andreew <pavel@collage.etel.ru>  Thu, 10 Oct 2002 19:10:38 +0600
+ -- Pavel Andreew <pavel@collage.etel.ru>  Thu, 10 Oct 2002 19:14:49 +0600
 
 hpucode (0.31-20021008-1) unstable; urgency=low
 
