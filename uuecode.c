@@ -226,10 +226,10 @@ int main(int argc, char **argv) {
         if(impLog) fclose(impLog);
         writeToDupeFile();
         MsgCloseApi();
+        FreeUUEChain();
         w_log(LL_STOP, "End");
         closeLog();
         disposeConfig(config);
-        FreeUUEChain();
         nfree(UFilesHead);
         return 0;
     } else {
