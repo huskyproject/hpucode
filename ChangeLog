@@ -1,3 +1,7 @@
+2002-10-23 Wednesday 10:21  mche
+
+	* src/uuecode.c (1.6): clean type redefinition for win32 compilers
+
 2002-10-22 Tuesday 10:46  sfpavel
 
 	* debian/changelog (1.3), h/version.h (1.2): New debian package
