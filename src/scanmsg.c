@@ -28,7 +28,7 @@
 
 // type == 0 - fixed amount
 // type == 1 - undefined amount
-void _addPart(char *text, int section, int amount, char* name, char* ID, int type)
+void _addPart(const char *text, int section, int amount, char* name, char* ID, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;

@@ -121,7 +121,7 @@ void ScanArea(s_area *area)
 
        nfree(toBeDeleted);
        MsgCloseArea(oldArea);
-       tree_deinit(&UUEFileTree, FreeUUEFile);
+       tree_mung(&UUEFileTree, FreeUUEFile);
    }
    else {
        if (oldArea) MsgCloseArea(oldArea);
