@@ -1,3 +1,7 @@
+2003-03-31 Monday 20:49  d_sergienko
+
+	* Makefile (1.9): -lfidoconfig -> -lfidoconf
+
 2003-03-17 Monday 13:08  stas_degteff
 
 	* src/uuecode.c (1.19): Hide getctab() and arrays intab, outtab:
