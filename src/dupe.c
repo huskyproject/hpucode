@@ -128,7 +128,7 @@ s_dupeMemory *readDupeFile() {
    s_dupeMemory *dupeMemory;
 
    dupeMemory = smalloc(sizeof(s_dupeMemory));
-   tree_init(&(dupeMemory->avlTree));
+   tree_init(&(dupeMemory->avlTree),1);
    
    xstrscat(&fileName, config->dupeHistoryDir, "uuecode.dup", NULL);
    w_log('2', "Reading dupes from %s", fileName);
