@@ -1,13 +1,24 @@
+2002-12-30 Monday 14:59  stas_degteff
+
+	* VERSION, src/uuecode.c (hpucode-1_2-stable.[3,5]): Change version
+	to 1.2.2-stable
+
+2002-12-30 Monday 14:58  stas_degteff
+
+	* VERSION, src/uuecode.c (hpucode-1_2-stable.[2,4]) (utags:
+	hpucode-1_2_2-release): 1.2.2-release
+
 2002-12-27 Friday 13:10  sfpavel
 
-	* debian/changelog, src/uuecode.c (hpucode-1_2-stable.[3,3])
-	(utags: hpucode-1_2_2-release): hpucode 1.2.2 release
+	* debian/changelog (tags: hpucode-1_2_2-release), src/uuecode.c
+	(hpucode-1_2-stable.[3,3]): hpucode 1.2.2 release
 
 2002-11-20 Wednesday 08:56  stas_degteff
 
-	* HISTORY, VERSION, src/scanmsg.c (hpucode-1_2-stable.[1,1,2])
-	(utags: hpucode-1_2_2-release): security fix: strip path from
-	filename extracted from 'begin' uu-code line
+	* HISTORY (tags: hpucode-1_2_2-release), VERSION, src/scanmsg.c
+	(tags: hpucode-1_2_2-release) (hpucode-1_2-stable.[1,1,2]):
+	security fix: strip path from filename extracted from 'begin'
+	uu-code line
 
 2002-11-20 Wednesday 08:44  stas_degteff
 
