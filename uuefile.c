@@ -45,15 +45,16 @@ void initFileGroups()
 char* findFileGroup(char* areaMask)
 {
     unsigned int i = 0;
+    char* areagroup = NULL;
     initFileGroups();
 
     if(!uueFileGroups)
-        return areaMask;
+        return xstrscat(&areagroup,"uue.",areaMask,NULL);
     for(i = 0; i < fileGroupscount; i++) {
         if (patimat(uueFileGroups[i].areamask,areaMask))
-            return uueFileGroups[fileGroupscount].fileEcho;
+            return sstrdup(uueFileGroups[i].fileEcho);
     }
-    return areaMask;
+    return xstrscat(&areagroup,"uue.",areaMask,NULL);
 }
 
 #define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
@@ -317,6 +318,7 @@ void MakeTicFile(UUEFile* uuc)
    FILE *tichandle;
    char *newticfile=NULL;
    char fname[256] = "";
+   char *areagroup = NULL;
    s_link* link = getLinkFromAddr( config,*(currArea->useAka) );
    
    while( !link && i < config->addrCount )
@@ -344,9 +346,11 @@ void MakeTicFile(UUEFile* uuc)
    
    tichandle=fopen(newticfile,"wb");
 
+   areagroup = findFileGroup(currArea->areaName);
+
    fprintf(tichandle,"Created by uuecode, written by Max Chernogor\r\n");
    fprintf(tichandle,"File %s\r\n", uuc->m_fname);
-   fprintf(tichandle,"Area uue.%s\r\n", findFileGroup(currArea->areaName));
+   fprintf(tichandle,"Area %s\r\n", areagroup);
    fprintf(tichandle,"Desc %s\r\n", uuc->description);
    fprintf(tichandle,"From %s\r\n", aka2str(link->hisAka));
    fprintf(tichandle,"To %s\r\n",   aka2str(link->hisAka));
@@ -358,4 +362,5 @@ void MakeTicFile(UUEFile* uuc)
    fclose(tichandle);
    w_log(LL_CREAT, "tic file:%s created for file:%s",newticfile, uuc->m_fname);   
    nfree(newticfile);
+   nfree(areagroup);
 }
