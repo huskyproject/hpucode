@@ -87,15 +87,13 @@ char* findFileGroup(char* areaMask)
 
 #define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
 
-typedef unsigned char BYTE;
-
 int DecodePart(char *text, FILE *outfile)
 {
     char *linep	= NULL;
 
     size_t   linelen	= 0;
     int      linecnt	= 0;
-    BYTE outbyte	[3];
+    UCHAR outbyte	[3];
     char* endl =NULL;  
     char* linebuf = text;
     int lastlen = 0;
