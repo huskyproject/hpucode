@@ -14,7 +14,6 @@ hpucode.exe:
         $(CC) $(CFLAGS) $(CDEFS) $(COPT)  -Fe$@ uuecode.c \
                                                 uuefile.c \
                                                 scanmsg.c \
-												tree.c    \
                                                 dupe.c    \
                    $(FCONFL) $(SMAPIL)  
 

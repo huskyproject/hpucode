@@ -18,7 +18,7 @@ endif
 
 CDEFS= -D$(OSTYPE) $(ADDCDEFS)
 
-OBJS= uuecode.o uuefile.o scanmsg.o tree.o dupe.o
+OBJS= uuecode.o uuefile.o scanmsg.o dupe.o
 
 all: hpucode
 
