@@ -51,13 +51,6 @@ s_dupeMemory *CommonDupes=NULL;
 static time_t  tCR=0;
 static time_t  maxTimeLifeDupesInArea=0;
 
-int compareEntriesBlank(char *e1, char *e2) {
-   int rc=1;
-   unused(e1); unused(e2);
-   return rc;
-}
-
-
 int compareEntries(char *p_e1, char *p_e2) {
    const s_textDupeEntry  *atxt,   *btxt;
    int rc = 1;
@@ -118,7 +111,7 @@ void doReading(FILE *f, s_dupeMemory *mem) {
       entxt->from     = sstrdup(fromname);
       entxt->timeCreated = timecr;
         
-      tree_add(&(mem->avlTree), compareEntriesBlank, (char *) entxt, deleteEntry);
+      tree_add(&(mem->avlTree), compareEntries, (char *) entxt, deleteEntry);
 
       nfree(line);
    }
@@ -219,7 +212,7 @@ int dupeDetection(s_textDupeEntry *msg) {
    
    if (tree_srchall(&(CommonDupes->avlTree), compareEntries, (char *) msg)) {
       msg->timeCreated = tCR; 
-      tree_add(&(CommonDupes->avlTree), compareEntriesBlank, (char *) msg, deleteEntry);
+      tree_add(&(CommonDupes->avlTree), compareEntries, (char *) msg, deleteEntry);
       return 1;
    }
    else {
