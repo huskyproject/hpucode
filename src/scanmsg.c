@@ -65,6 +65,8 @@ void _addPart(char *text, int section, int amount, char* name, char* ID, int typ
         {
             if(!(((*(endstr-1) == '`') || (*(endstr+1) == '`'))&& (DECODE_BYTE(end[0]) == partlen-1)))
             {
+                while(*endstr++ == '\r') { };
+                end = endstr-1;
                 break;
             }
         }
