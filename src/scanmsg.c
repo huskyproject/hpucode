@@ -48,13 +48,10 @@ void _addPart(const char *text, int section, int amount, char* name, char* ID, i
         if(!endstr)
             return;
         partlen = 3*(endstr-begin-1)/4;
-        if(DECODE_BYTE (begin[0]) != partlen)
-        {
-            if(!((*(endstr-1) == '`') && (DECODE_BYTE(begin[0]) == partlen-1)))
-            {
-                break;
-            }
-        }
+        if(DECODE_BYTE (begin[0]) == partlen)
+            break;
+        if(((*(endstr-1) == '`') && (DECODE_BYTE(begin[0]) == partlen-1)))
+            break;
         while(*endstr++ == '\r') { };
         begin = endstr-1;
     }
