@@ -252,6 +252,7 @@ char* cutUUEformMsg(char *text)
     char *end = NULL;
     char *p   = NULL;
     char *szBegin;
+    int DelMsg = 1;
 
     if(!text) return NULL;
 
@@ -261,6 +262,9 @@ char* cutUUEformMsg(char *text)
     {
 
         szBegin = strstr(p, "begin ");
+        if ((szBegin) && (DelMsg == 1)) { /* Is this first section or single UUE ? */
+            DelMsg = 0;
+        }
         //if(!szBegin) return NULL;
         if( szBegin ) 
         {
@@ -284,7 +288,7 @@ char* cutUUEformMsg(char *text)
         }
         p = end;
     }
-    return text;
+    return  DelMsg == 0 ? text : NULL;
 }
 
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut)
