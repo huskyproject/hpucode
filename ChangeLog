@@ -1,0 +1,113 @@
+2002-03-15 Friday 12:53  mche
+
+	* .cvs2cl (1.1): no message
+
+2002-03-13 Wednesday 08:27  mche
+
+	* .cvsignore (1.1): no message
+
+2002-03-11 Monday 14:39  mche
+
+	* scanmsg.c (1.10): fixed detection uuencode messages
+
+2002-03-11 Monday 13:21  mche
+
+	* scanmsg.c (1.9): fixed bug with detecting end of section
+
+2002-03-11 Monday 09:04  mche
+
+	* makefile.mvcdll (1.3): speed optimization
+
+2002-03-11 Monday 08:32  mche
+
+	* scanmsg.c (1.8): fixed bug with detecting end of section
+
+2002-03-06 Wednesday 09:01  mche
+
+	* uuefile.c (1.13): area prefix added
+
+2002-03-01 Friday 08:38  mche
+
+	* scanmsg.c (1.7), uuecode.c (1.4), uuecode.h (1.6), uuefile.c
+	(1.12): fixed bug with wrong description
+
+2002-02-28 Thursday 14:45  mche
+
+	* scanmsg.c (1.6), uuefile.c (1.11): fixed bug with detection of
+	uue parts
+
+2002-02-28 Thursday 10:16  mche
+
+	* scanmsg.c (1.5), uuefile.c (1.10): fixed bug with wrong
+	description
+
+2002-02-25 Monday 15:57  mche
+
+	* scanmsg.c (1.4), uuefile.c (1.9): some warnings removed
+
+2002-02-25 Monday 15:50  mche
+
+	* dupe.c (1.3), dupe.h (1.2): autoclean dupehistory added
+
+2002-02-25 Monday 15:49  mche
+
+	* uuecode.h (1.5), uuefile.c (1.8): code cleanup
+
+2002-02-24 Sunday 16:14  mche
+
+	* uuefile.c (1.7), makefile.cyg (1.1): fixed bug with compilations
+	under Cygwin
+
+2002-02-24 Sunday 16:10  mche
+
+	* uuecode.h (1.4), uuefile.c (1.6): fixed bug with compilations
+	under Cygwin
+
+2002-02-24 Sunday 12:35  mche
+
+	* makefile.mvc (1.2), makefile.mvcdll (1.2): changed exe-name
+
+2002-02-24 Sunday 12:01  mche
+
+	* scanmsg.c (1.3), uuecode.c (1.3), uuecode.h (1.3), uuefile.c
+	(1.5): deleting decoded messages algorithm changed
+
+2002-02-22 Friday 16:54  mche
+
+	* uuecode.c (1.2): added log messaged
+
+2002-02-22 Friday 16:53  mche
+
+	* uuefile.c (1.4): code cleanup
+
+2002-02-22 Friday 16:31  mche
+
+	* uuefile.c (1.3): code cleanup
+
+2002-02-22 Friday 16:26  mche
+
+	* dupe.c (1.2), scanmsg.c (1.2): code cleanup
+
+2002-02-22 Friday 16:21  mche
+
+	* makefile (1.2): makefile corrected
+
+2002-02-22 Friday 16:17  mche
+
+	* uuecode.h (1.2): code cleanup
+
+2002-02-22 Friday 14:08  mche
+
+	* uuefile.c (1.2): fixed bug with deleting decoded messages
+
+2002-02-22 Friday 12:21  mche
+
+	* makefile (1.1): # Generic Makefile for hpucode
+
+2002-02-22 Friday 10:15  mche
+
+	* dupe.c (1.1), dupe.h (1.1), h-decoder.dsp (1.1), makefile.mvc
+	(1.1), makefile.mvcdll (1.1), scanmsg.c (1.1), tree.c (1.1), tree.h
+	(1.1), uuecode.c (1.1), uuecode.h (1.1), uuedecoder.dsp (1.1),
+	uuefile.c (1.1), vixie.h (1.1): Initial revision
+
