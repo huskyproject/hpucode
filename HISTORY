@@ -5,6 +5,8 @@ HPUCODE 1.9 current
 Changes between hpucode 1.4-stable and hpucode 1.9-current
 
 1. MAJOR feature improvements:
+  - New command line switch "-all" - scan all areas ignore importlog file
+  - Exclude masks (hpucode -all !ru.u* ru.* !ru.sex.* !ru.?????)
 
 2. CONFIG changes:
 

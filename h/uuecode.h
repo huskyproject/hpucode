@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*****************************************************************************
  * HPUCODE --- Uuencoded files from FTN messagebase extractor
  *****************************************************************************
@@ -23,6 +21,8 @@
  * along with HPT; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  *****************************************************************************/
+/* $Id$ */
+
 
 #ifndef _HDECODER_H_
 #define _HDECODER_H_

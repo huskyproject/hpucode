@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*****************************************************************************
  * HPUCODE --- Uuencoded files from FTN messagebase extractor
  *****************************************************************************
@@ -23,6 +21,8 @@
  * along with HPT; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  *****************************************************************************/
+/* $Id$ */
+
 
 #ifndef VERSION_H
 #define VERSION_H
@@ -31,7 +31,7 @@
 
 /* basic version number */
 #define VER_MAJOR 1
-#define VER_MINOR 9
+#define VER_MINOR 11
 #define VER_PATCH 0
 #define VER_BRANCH BRANCH_CURRENT
 

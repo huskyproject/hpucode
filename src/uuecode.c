@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*****************************************************************************
  * HPUCODE --- Uuencoded files from FTN messagebase extractor
  *****************************************************************************
@@ -23,11 +21,10 @@
  * along with HPT; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  *****************************************************************************/
-
+/* $Id$ */
 
 #include <errno.h>
 #include <time.h>
-#include <string.h>
 #include <huskylib/huskylib.h>
 #include "uuecode.h"
 #include "dupe.h"
@@ -53,31 +50,166 @@
 
 
 #if defined ( __WATCOMC__ )
-#include <string.h>
-#include <stdlib.h>
-#include <smapi/prog.h>
 #include <share.h>
-#endif
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1200)
-#include <share.h>
-#endif
-#ifdef _MAKE_DLL_MVC_    
-#define SH_DENYNO   _SH_DENYNO
-#define S_IREAD     _S_IREAD
-#define S_IWRITE    _S_IWRITE
 #endif
 
 char* versionStr      = NULL;
+int  nDelMsg, nCutMsg, nAllAreas;
 
-void ScanArea(s_area *area)
+typedef struct {
+    int   Negative;
+    char* Mask;
+} sFilters;
+
+sFilters* Filters=NULL; 
+int nFilters = 0;
+
+static tree* FilteredAreas = NULL;
+
+void start_help(void) {
+
+    fprintf(stdout, "%s by Max Chernogor\n",versionStr);
+    fprintf(stdout,"Usage: hpucode [ -del|-cut|-all ] [areamask1 !areamask2 ...] \n\n");
+    fprintf(stdout,"Options:  -del, -cut, -all\n");
+    fprintf(stdout,"          -del - delete decoded messages\n");
+    fprintf(stdout,"          -cut - cut UUE code from decoded messages\n");
+    fprintf(stdout,"          -all - scans all areas defined by areamsks in command line;\n");
+    fprintf(stdout,"                 by default hpucode scans areas that match areamasks\n");
+    fprintf(stdout,"                 from importlog file\n");
+}
+
+
+int processCommandLine(int argc, char **argv)
+{
+    int i = 0;
+
+    if (argc == 1)
+    {
+        start_help();
+        return 1;
+    }
+
+    Filters = scalloc(sizeof(sFilters),argc);
+
+    while (i < argc-1) {
+        i++;
+        if        (stricmp(argv[i], "-del") == 0) {
+            nDelMsg = 1;
+            continue;
+        } else if (stricmp(argv[i], "-cut") == 0) {
+            nCutMsg = 1;
+            continue;
+        } else if (stricmp(argv[i], "-all") == 0) {
+            nAllAreas = 1;
+            continue;
+        } else if (stricmp(argv[i], "-h") == 0) {
+            start_help();
+            continue;
+        } else {
+            Filters[nFilters].Mask = argv[i];
+            if (argv[i][0] == '!')
+                Filters[nFilters].Negative = 1;
+            nFilters++;
+        }
+    } /* endwhile */
+
+    return nFilters;
+}
+
+
+int fc_compareEntries(char *p_e1, char *p_e2)
+{
+    ps_area e1 = (ps_area)p_e1;
+    ps_area e2 = (ps_area)p_e2;
+    if(stricmp(e1->areaName,e2->areaName) < 0)
+        return -1;
+    else if(stricmp(e1->areaName,e2->areaName) > 0)
+        return 1;
+    return 0;
+}
+int fc_deleteEntry(char *p_e1) {
+    return 1;
+}
+
+void ApplyFilter(ps_area area) 
+{
+    int i;
+    for(i = 0; i < nFilters; i++)
+    {
+        if( (Filters[i].Negative == 0) && (patimat(area->areaName,Filters[i].Mask)) )
+            break;
+    }
+    if (i == nFilters)
+        return;
+
+    for(i = 0; i < nFilters; i++)
+    {
+        if( (Filters[i].Negative == 1) && (patimat(area->areaName,(Filters[i].Mask+1))) )
+            return;
+    }
+    tree_add(&FilteredAreas, fc_compareEntries, (char *)(area), fc_deleteEntry );
+}
+
+int ApplyFilters() 
+{
+    FILE  *impLog = NULL;
+    ps_area  area = NULL;
+
+    tree_init(&FilteredAreas, 1);
+
+    if(!nAllAreas)
+    {
+        char* buff=NULL;
+
+        impLog = fopen(config->importlog, "r");
+        if(impLog) 
+        {
+            while (!feof(impLog)) {
+                buff = readLine(impLog);
+                if(!buff) break;
+                if ((area = getNetMailArea(config, buff)) == NULL) {
+                    area = getArea(config, buff);
+                } 
+                ApplyFilter(area);
+                nfree(buff);
+            }
+            fclose(impLog);
+        }
+    }
+    if(impLog) {
+        w_log(LL_SCANNING,
+        "Using importlogfile -> scanning only listed areas that match the mask");
+    }  else {
+        unsigned i;
+
+        w_log(LL_SCANNING,
+        "Scanning all areas that match the mask");
+
+        for (i=0; i < config->netMailAreaCount; i++)
+            ApplyFilter(&(config->netMailAreas[i]));
+
+        for (i=0; i < config->echoAreaCount; i++)
+            ApplyFilter(&(config->echoAreas[i]));
+
+        for (i=0; i < config->localAreaCount; i++)
+            ApplyFilter(&(config->localAreas[i]));
+
+    }
+    return tree_count(&FilteredAreas);
+}
+
+
+int ScanArea(char *carea)
 {
    char* areaName;
    HAREA oldArea;
    dword highMsg, numMsg,nMN;
    word areaType;
+   ps_area area = (ps_area)carea;
 
-   if(!area) return;
+   if(!area) return 1;
+
+   w_log(LL_SCANNING, "Scan area: %s", area -> areaName);
 
    areaType = area -> msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
 
@@ -130,59 +262,24 @@ void ScanArea(s_area *area)
        if (oldArea) MsgCloseArea(oldArea);
        w_log(LL_ERROR, "Could not open %s ", areaName);
    }
+   return 1;
 }
    
-void doArea(s_area *area, char *cmp)
-{
-    if(!area || !cmp || area->scn == 1) /*  do not scan area twice */
-        return;
-
-    if (patimat(area->areaName,cmp)) 
-    {
-        if ((area -> msgbType & MSGTYPE_SQUISH) == MSGTYPE_SQUISH ||
-            (area -> msgbType & MSGTYPE_JAM) == MSGTYPE_JAM ||
-            (area -> msgbType & MSGTYPE_SDM) == MSGTYPE_SDM) {
-            w_log(LL_SCANNING, "Scan area: %s", area -> areaName);
-            ScanArea(area);
-            area->scn = 1;
-        }
-    }
-}
-
 int main(int argc, char **argv) {
     
-    unsigned int i;
-    int          k;
-    FILE         *impLog = NULL;
     s_area       *area   = NULL;
-
     struct _minf m;
     char* buff=NULL;
-    
-
-    setvar("module", "hpucode");
 
     xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
     setvar("version", buff);
     
     versionStr = GenVersionStr( "hpuCode", VER_MAJOR, VER_MINOR, VER_PATCH,
                                VER_BRANCH, cvs_date );
+    nDelMsg = nCutMsg = nAllAreas = 0;
 
-    
-    printf(  "\n::  %s by Max Chernogor\n",versionStr);
-    
-    if( argc < 2 ) {
-        printf ("::  usage: hpucode [ -del|-cut ] [areamask1 areamask2 ...] \n");
+    if (processCommandLine(argc, argv) == 0) 
         return 0;
-    }
-    nDelMsg = nCutMsg = 0;
-    if(argc > 2)
-    { 
-        if(strcmp(argv[1], "-del") == 0)
-            nDelMsg = 1;
-        if(strcmp(argv[1], "-cut") == 0)
-            nCutMsg = 1;
-    }
 
 #ifdef __NT__
     SetFileApisToOEM();
@@ -191,37 +288,44 @@ int main(int argc, char **argv) {
     setvar("module", "hpucode");
     config = readConfig(NULL);
 
-    if (config != NULL ) {
-        if (config->lockfile) {
-            lock_fd = lockFile(config->lockfile, config->advisoryLock);
-            if( lock_fd < 0 )
-            {
-                disposeConfig(config);
-                exit(EX_CANTCREAT);
-            }
-        }
-        /*  load recoding tables */
-        initCharsets();
-        getctabs(config->intab,config->outtab);
+    if (!config) {
+        printf("Could not read fido config\n");
+        return 1;
+    }
 
-        if (config->logFileDir) {
-            nfree(buff);
-            xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
-            initLog(config->logFileDir, config->logEchoToScreen, config->loglevels, config->screenloglevels);
-            openLog(buff, versionStr);
-            nfree(buff);
-        } 
-        if(config->protInbound)
-            _createDirectoryTree(config->protInbound);
-        else
+    if (config->lockfile) {
+        lock_fd = lockFile(config->lockfile, config->advisoryLock);
+        if( lock_fd < 0 )
         {
-            printf("\n\tProtInbound not defined\n");
-            if (config->lockfile) {
-                FreelockFile(config->lockfile ,lock_fd);
-            }
-            return 1;
+            disposeConfig(config);
+            exit(EX_CANTCREAT);
         }
-        w_log(LL_START, "Start");
+    }
+    /*  load recoding tables */
+    initCharsets();
+    getctabs(config->intab,config->outtab);
+
+    if (config->logFileDir) {
+        nfree(buff);
+        xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
+        initLog(config->logFileDir, config->logEchoToScreen, config->loglevels, config->screenloglevels);
+        openLog(buff, versionStr);
+        nfree(buff);
+    } 
+    if(config->protInbound)
+        _createDirectoryTree(config->protInbound);
+    else
+    {
+        printf("\n\tProtInbound not defined\n");
+        if (config->lockfile) {
+            FreelockFile(config->lockfile ,lock_fd);
+        }
+        return 1;
+    }
+    w_log(LL_START, "Start");
+
+    if(ApplyFilters())
+    {
         currArea = NULL;
         toBeDeleted = NULL;
         nMaxDeleted = 0;
@@ -234,60 +338,18 @@ int main(int argc, char **argv) {
             }
             exit(1);
         }
-        k = (nDelMsg || nCutMsg) ? 2 : 1;
-        impLog = fopen(config->importlog, "r");
-
-        if(impLog)
-            w_log(LL_SCANNING,
-            "Using importlogfile -> scanning only listed areas that match the mask");
-        else
-            w_log(LL_SCANNING,
-            "Scanning all areas that match the mask");
-
-        while(k < argc)           
-        {
-            if(impLog)
-            {
-                rewind(impLog);
-                while (!feof(impLog)) {
-                    buff = readLine(impLog);
-                    if(!buff) break;
-                    if ((area = getNetMailArea(config, buff)) == NULL) {
-                        area = getArea(config, buff);
-                    } 
-                    doArea(area, argv[k]);
-                    nfree(buff);
-                }
-            } else {
-                for (i=0; i < config->netMailAreaCount; i++)
-                    /*  scan netmail areas */
-                    doArea(&(config->netMailAreas[i]), argv[k]);
-                
-                for (i=0; i < config->echoAreaCount; i++)
-                    /*  scan echomail areas */
-                    doArea(&(config->echoAreas[i]), argv[k]);
-
-                for (i=0; i < config->localAreaCount; i++)
-                    /*  scan local areas */
-                    doArea(&(config->localAreas[i]), argv[k]);
-
-            }
-            k++;
-        }
-        if(impLog) fclose(impLog);
+        tree_trav( &FilteredAreas, &ScanArea);
         writeToDupeFile();
         MsgCloseApi();
-        w_log(LL_STOP, "End");
-        closeLog();
-        doneCharsets();
-        if (config->lockfile) {
-            FreelockFile(config->lockfile ,lock_fd);
-        }
-        disposeConfig(config);
-        return 0;
-    } else {
-        printf("Could not read fido config\n");
-        return 1;
+    }  else {
+        w_log(LL_STOP, "Nothing to scan");
     }
+    w_log(LL_STOP, "End");
+    closeLog();
+    doneCharsets();
+    if (config->lockfile) {
+        FreelockFile(config->lockfile ,lock_fd);
+    }
+    disposeConfig(config);
     return 0;
 }
