@@ -38,7 +38,7 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #include <share.h>
 #endif
-#ifdef _MAKE_DLL_MVC_    
+#ifdef _MAKE_DLL_MVC_
 #define SH_DENYNO   _SH_DENYNO
 #define S_IREAD     _S_IREAD
 #define S_IWRITE    _S_IWRITE
@@ -50,7 +50,7 @@ int __stdcall SetFileApisToOEM(void);
 
 const int VER_MAJOR   = 1;
 const int VER_MINOR   = 2;
-const int VER_PATCH   = 2;
+const int VER_PATCH   = 3;
 /* branch is "" for CVS current, "-stable" for the release candiate branch  */
 const char *VER_BRANCH  = "-stable";
 
@@ -62,27 +62,27 @@ void ScanArea(s_area *area)
    HAREA oldArea;
    dword highMsg, numMsg,nMN;
    word areaType = area -> msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
-   
-   
+
+
    currArea = area;
    areaName = area -> fileName;
-   
+
    oldArea = MsgOpenArea((byte *) areaName, MSGAREA_NORMAL, areaType);
-   
+
    if (oldArea != NULL) {
-       
-       
+
+
        highMsg = MsgGetHighMsg(oldArea);
 
        if(highMsg && (nDelMsg || nCutMsg))
           toBeDeleted = (dword*)smalloc(highMsg * sizeof(dword));
        else
           toBeDeleted = NULL;
-       
+
        for (nMN = 1; nMN <= highMsg; nMN++) {
            processMsg(oldArea,nMN,0);
        };
-      
+
        if(nDelMsg && nMaxDeleted)
        {
            w_log(LL_INFO, "Deleting decoded messages...");
@@ -113,13 +113,13 @@ void ScanArea(s_area *area)
        w_log(LL_ERROR, "Could not open %s ", areaName);
    }
 }
-   
+
 void doArea(s_area *area, char *cmp)
 {
     if(area->scn == 1) // do not scan area twice
         return;
 
-    if (patimat(area->areaName,cmp)) 
+    if (patimat(area->areaName,cmp))
     {
         if ((area -> msgbType & MSGTYPE_SQUISH) == MSGTYPE_SQUISH ||
             (area -> msgbType & MSGTYPE_JAM) == MSGTYPE_JAM ||
@@ -132,7 +132,7 @@ void doArea(s_area *area, char *cmp)
 }
 
 int main(int argc, char **argv) {
-    
+
     unsigned int i;
     int          k;
     FILE         *impLog = NULL;
@@ -140,9 +140,9 @@ int main(int argc, char **argv) {
 
     struct _minf m;
     char* buff=NULL;
-    
+
     xscatprintf(&buff, "%u.%u.%u%s", VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH);
-    
+
 #ifdef __linux__
     xstrcat(&buff, "/lnx");
 #elif defined(__FreeBSD__) || defined(__NetBSD__)
@@ -162,16 +162,16 @@ int main(int argc, char **argv) {
     if (strcmp(VER_BRANCH,"-stable")!=0) xscatprintf(&buff, " %s", cvs_date);
     xscatprintf(&versionStr,"hpuCode %s", buff);
     nfree(buff);
-    
+
     printf(  "\n::  %s by Max Chernogor\n",versionStr);
-    
+
     if( argc < 2 ) {
         printf ("::  usage: hpucode [ -del|-cut ] [areamask1 areamask2 ...] \n");
         return 0;
     }
     nDelMsg = nCutMsg = 0;
     if(argc > 2)
-    { 
+    {
         if(strcmp(argv[1], "-del") == 0)
             nDelMsg = 1;
         if(strcmp(argv[1], "-cut") == 0)
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
             xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
             openLog(buff, "hpucode", config);
             nfree(buff);
-        } 
+        }
         if(config->protInbound)
             _createDirectoryTree(config->protInbound);
         else
@@ -219,13 +219,13 @@ int main(int argc, char **argv) {
         impLog = fopen(config->importlog, "r");
 
         if(impLog)
-            w_log(LL_INFO, 
+            w_log(LL_INFO,
             "Using importlogfile -> scanning only listed areas that match the mask");
         else
-            w_log(LL_INFO, 
+            w_log(LL_INFO,
             "Scanning all areas that match the mask");
 
-        while(k < argc)           
+        while(k < argc)
         {
             if(impLog)
             {
@@ -235,7 +235,7 @@ int main(int argc, char **argv) {
                     if(!buff) break;
                     if ((area = getNetMailArea(config, buff)) == NULL) {
                         area = getArea(config, buff);
-                    } 
+                    }
                     doArea(area, argv[k]);
                     nfree(buff);
                 }
@@ -243,7 +243,7 @@ int main(int argc, char **argv) {
                 for (i=0; i < config->netMailAreaCount; i++)
                     // scan netmail areas
                     doArea(&(config->netMailAreas[i]), argv[k]);
-                
+
                 for (i=0; i < config->echoAreaCount; i++)
                     // scan echomail areas
                     doArea(&(config->echoAreas[i]), argv[k]);

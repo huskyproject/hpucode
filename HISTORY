@@ -6,4 +6,8 @@ Bugfixes after 1.0-release:
 
 - security fix: strip path from filename extracted from 'begin' uu-code line.
 
+Bugfixes after 1.2.2-release:
+
+- Fix NULL pointer prints in Pw field of TIC file
+
 $Id$
