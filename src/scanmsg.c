@@ -28,7 +28,7 @@
 
 // type == 0 - fixed amount
 // type == 1 - undefined amount
-void _addPart(const char *text, int section, int amount, char* name, char* ID, int type)
+void _addPart(char *text, int section, int amount, char* name, char* ID, int type)
 {
     char *begin = NULL, *end = NULL; 
     char *endstr = NULL;
@@ -113,7 +113,7 @@ void _addPart(const char *text, int section, int amount, char* name, char* ID, i
     AddPart(node, begin, section, partlen);
 }
 
-int scan4UUE(const char* text,const char* ctl)
+int scan4UUE(char* text,const char* ctl)
 {
     int nRet = 0;
     char name[MAX];
