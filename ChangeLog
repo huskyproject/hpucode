@@ -1,3 +1,7 @@
+2002-07-08 Monday 16:24  mche
+
+	* uuecode.c (1.12): fix wrong log message
+
 2002-07-04 Thursday 08:32  mche
 
 	* uuecode.c (1.11): MsgCloseApi call added
