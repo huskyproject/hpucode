@@ -1,3 +1,14 @@
+2002-11-20 Wednesday 08:56  stas_degteff
+
+	* HISTORY, VERSION, src/scanmsg.c (hpucode-1_2-stable.[1,1,2]):
+	security fix: strip path from filename extracted from 'begin'
+	uu-code line
+
+2002-11-20 Wednesday 08:44  stas_degteff
+
+	* HISTORY (1.1): security fix: strip path from filename extracted
+	from 'begin' uu-code line.
+
 2002-11-12 Tuesday 13:07  stas_degteff
 
 	* make/makefile.bsd (hpucode-1_2-stable.1): Fix FreeBSD legacy
@@ -24,6 +35,10 @@
 
 	* src/scanmsg.c (tags: hpucode-1_2-release) (hpucode-1_2-stable.1):
 	cosmetic fix (typo error)
+
+2002-10-18 Friday 09:14  stas_degteff
+
+	* VERSION (1.1): Add version info file
 
 2002-10-14 Monday 06:30  sfpavel
 
