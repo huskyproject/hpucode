@@ -348,7 +348,7 @@ void MakeTicFile(UUEFile* uuc)
 
    areagroup = findFileGroup(currArea->areaName);
 
-   fprintf(tichandle,"Created by uuecode, written by Max Chernogor\r\n");
+   fprintf(tichandle,"Created by %s, written by Max Chernogor\r\n",versionStr);
    fprintf(tichandle,"File %s\r\n", uuc->m_fname);
    fprintf(tichandle,"Area %s\r\n", areagroup);
    fprintf(tichandle,"Desc %s\r\n", uuc->description);

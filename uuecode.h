@@ -42,7 +42,8 @@ UUEFile  *UFilesHead;
 s_area   *currArea;
 s_fidoconfig *config;
 XMSG     xmsg;
-dword   currMsgUid;
+dword    currMsgUid;
+char*    versionStr;
 
 
 

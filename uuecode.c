@@ -3,6 +3,7 @@
 #include <string.h>
 #include "uuecode.h"
 #include "dupe.h"
+#include "cvsdate.h"
 
 #ifdef UNIX
 #include <unistd.h>
@@ -39,10 +40,9 @@
 #endif
 
 
-
-unsigned long msgCopied, msgProcessed; // per Area
-unsigned long totaloldMsg, totalmsgCopied;
-
+const int VER_MAJOR   = 0;
+const int VER_MINOR   = 31;
+char* versionStr      = NULL;
 
 void ScanArea(s_area *area)
 {
@@ -102,93 +102,138 @@ void ScanArea(s_area *area)
    }
 }
    
-void handleArea(s_area *area)
-{
-   if ((area -> msgbType & MSGTYPE_SQUISH) == MSGTYPE_SQUISH ||
-      (area -> msgbType & MSGTYPE_JAM) == MSGTYPE_JAM ||
-      (area -> msgbType & MSGTYPE_SDM) == MSGTYPE_SDM) {
-      w_log(LL_INFO, "Scan area: %s", area -> areaName);
-      msgCopied = 0;
-      msgProcessed = 0;
-      ScanArea(area);
-   };
-}
-
 void doArea(s_area *area, char *cmp)
 {
-   if (patimat(area->areaName,cmp)) handleArea(area);
+    if (patimat(area->areaName,cmp)) 
+    {
+        if ((area -> msgbType & MSGTYPE_SQUISH) == MSGTYPE_SQUISH ||
+            (area -> msgbType & MSGTYPE_JAM) == MSGTYPE_JAM ||
+            (area -> msgbType & MSGTYPE_SDM) == MSGTYPE_SDM) {
+            w_log(LL_INFO, "Scan area: %s", area -> areaName);
+            ScanArea(area);
+        }
+    }
 }
 
 int main(int argc, char **argv) {
-   
-   unsigned int i;
-   int          k;
-   struct _minf m;
-   char* buff=NULL;
-   
-   printf(  "\n::  hpucode v0.3\n");
-   if( argc < 2 ) {
-       printf ("::  usage: hpucode [ -del|-cut ] [areamask1 areamask2 ...] \n");
-   } else {
-       nDelMsg = nCutMsg = 0;
-       if(argc > 2)
-       { 
-           if(strcmp(argv[1], "-del") == 0)
-               nDelMsg = 1;
-           if(strcmp(argv[1], "-cut") == 0)
-               nCutMsg = 1;
-       }
-       setvar("module", "hpucode");
-       config = readConfig(NULL);
-       
-      if (config != NULL ) {
-         if (config->logFileDir) {
+    
+    unsigned int i;
+    int          k;
+    FILE         *impLog = NULL;
+    s_area       *area   = NULL;
+
+    struct _minf m;
+    char* buff=NULL;
+    
+    xscatprintf(&buff, "%u.%u", VER_MAJOR, VER_MINOR);
+    
+#ifdef __linux__
+    xstrcat(&buff, "/lnx");
+#elif defined(__FreeBSD__) || defined(__NetBSD__)
+    xstrcat(&buff, "/bsd");
+#elif defined(__OS2__) || defined(OS2)
+    xstrcat(&buff, "/os2");
+#elif defined(__NT__)
+    xstrcat(&buff, "/w32");
+#elif defined(__sun__)
+    xstrcat(&buff, "/sun");
+#elif defined(MSDOS)
+    xstrcat(&buff, "/dos");
+#elif defined(__BEOS__)
+    xstrcat(&buff, "/beos");
+#endif
+    xscatprintf(&buff, " %s", cvs_date);
+    xscatprintf(&versionStr,"hpuCode %s", buff);
+    nfree(buff);
+    
+    printf(  "\n::  %s by Max Chernogor\n",versionStr);
+    
+    if( argc < 2 ) {
+        printf ("::  usage: hpucode [ -del|-cut ] [areamask1 areamask2 ...] \n");
+        return 0;
+    }
+    nDelMsg = nCutMsg = 0;
+    if(argc > 2)
+    { 
+        if(strcmp(argv[1], "-del") == 0)
+            nDelMsg = 1;
+        if(strcmp(argv[1], "-cut") == 0)
+            nCutMsg = 1;
+    }
+    setvar("module", "hpucode");
+    config = readConfig(NULL);
+    
+    if (config != NULL ) {
+        if (config->logFileDir) {
             xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
             openLog(buff, "hpucode", config);
             nfree(buff);
-         } 
-         if(config->protInbound)
+        } 
+        if(config->protInbound)
             _createDirectoryTree(config->protInbound);
-         else
-         {
+        else
+        {
             printf("\n\tProtInbound not defined\n");
             return 1;
-         }
-         w_log(LL_START, "Start");
-         currArea = NULL;
-         toBeDeleted = NULL;
-         nMaxDeleted = 0;
-         UFilesHead = scalloc(1,sizeof(UUEFile));
-         UFilesHead->prev = UFilesHead;
-         m.req_version = 2;
-         m.def_zone = config->addr[0].zone;
-         if (MsgOpenApi(&m)!= 0) {
+        }
+        w_log(LL_START, "Start");
+        currArea = NULL;
+        toBeDeleted = NULL;
+        nMaxDeleted = 0;
+        UFilesHead = scalloc(1,sizeof(UUEFile));
+        UFilesHead->prev = UFilesHead;
+        m.req_version = 2;
+        m.def_zone = config->addr[0].zone;
+        if (MsgOpenApi(&m)!= 0) {
             printf("MsgOpenApi Error.\n");
             exit(1);
-         }
-         k = (nDelMsg || nCutMsg) ? 2 : 1;
-         while(k < argc)           
-         {
-            for (i=0; i < config->netMailAreaCount; i++)
-               // scan netmail areas
-               doArea(&(config->netMailAreas[i]), argv[k]);
-            
-            for (i=0; i < config->echoAreaCount; i++)
-               // scan echomail areas
-               doArea(&(config->echoAreas[i]), argv[k]);
+        }
+        k = (nDelMsg || nCutMsg) ? 2 : 1;
+        impLog = fopen(config->importlog, "r");
+
+        if(impLog)
+            w_log(LL_INFO, 
+            "Using importlogfile -> scaning only listed areas that match the mask");
+        else
+            w_log(LL_INFO, 
+            "Scaning all areas that match the mask");
+
+        while(k < argc)           
+        {
+            if(impLog)
+            {
+                rewind(impLog);
+                while (!feof(impLog)) {
+                    buff = readLine(impLog);
+                    if(!buff) break;
+                    if ((area = getNetMailArea(config, buff)) == NULL) {
+                        area = getArea(config, buff);
+                    } 
+                    doArea(area, argv[k]);
+                    nfree(buff);
+                }
+            } else {
+                for (i=0; i < config->netMailAreaCount; i++)
+                    // scan netmail areas
+                    doArea(&(config->netMailAreas[i]), argv[k]);
+                
+                for (i=0; i < config->echoAreaCount; i++)
+                    // scan echomail areas
+                    doArea(&(config->echoAreas[i]), argv[k]);
+            }
             k++;
-         }
-         writeToDupeFile();
-         disposeConfig(config);
-         FreeUUEChain();
-         nfree(UFilesHead);
-         w_log(LL_STOP, "End");
-         closeLog();
-         return 0;
-      } else {
-         printf("Could not read fido config\n");
-         return 1;
-      }
-   }
-   return 0;
+        }
+        if(impLog) fclose(impLog);
+        writeToDupeFile();
+        disposeConfig(config);
+        FreeUUEChain();
+        nfree(UFilesHead);
+        w_log(LL_STOP, "End");
+        closeLog();
+        return 0;
+    } else {
+        printf("Could not read fido config\n");
+        return 1;
+    }
+    return 0;
 }
