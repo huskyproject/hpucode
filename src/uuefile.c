@@ -30,6 +30,7 @@
 #include <sys/stat.h>
 #include <fidoconf/crc.h>
 #include <fidoconf/recode.h>
+#include <huskylib/huskylib.h>
 
 
 static char *invalidExt[] = {"*.mo?", "*.tu?", "*.we?", "*.th?", "*.fr?", 

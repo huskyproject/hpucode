@@ -29,6 +29,7 @@
 #include <time.h>
 #include <string.h>
 #include <fidoconf/recode.h>
+#include <huskylib/huskylib.h>
 #include "uuecode.h"
 #include "dupe.h"
 #include "cvsdate.h"

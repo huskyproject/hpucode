@@ -45,6 +45,7 @@
 */
 
 #include <errno.h>
+#include <huskylib/huskylib.h>
 #include "uuecode.h"
 #include "dupe.h"
 
