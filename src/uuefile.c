@@ -264,15 +264,7 @@ void AddPart(UUEFile* uuc, char* uuepart, int section, int slen)
         MakeFile(uuc);
     }
 }
-#if defined(WINNT)
-#   ifdef __MINGW32__
-    typedef int   BOOL;
-    typedef char *LPWSTR;
-    typedef const char *LPCWSTR;
-    BOOL    __stdcall OemToCharA(LPCWSTR,LPWSTR);
-    #define OemToChar OemToCharA
-#   endif    
-#elif !defined(UNIX) && !defined(OS2) && !defined(__DJGPP__)
+#if !defined(UNIX) && !defined(OS2) && !defined(__DJGPP__)
 #   include <windows.h>
 #endif
 
