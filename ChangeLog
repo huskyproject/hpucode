@@ -1,3 +1,11 @@
+2003-07-09 Wednesday 15:28  mche
+
+	* src/scanmsg.c (1.25): more accurate detection end of uue part
+
+2003-06-21 Saturday 11:03  mche
+
+	* make/hpucode.vcproj (1.2): documentation build added
+
 2003-06-16 Monday 17:50  d_sergienko
 
 	* src/scanmsg.c (1.24): fix bad pointer usage
