@@ -60,6 +60,9 @@ info:
 html:
 	makeinfo --html --no-split hpucode.texi
 
+txt:
+	makeinfo --html --no-split hpucode.texi >hpucode.txt
+
 docs: info html
 
 all: hpucode docs hpucode.1.gz
