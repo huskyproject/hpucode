@@ -248,6 +248,7 @@ void AddPart(UUEFile* uuc, char* msgBody, char* uuepart, int section, int slen)
         if(nDelMsg || nCutMsg) {
             uuc->toBeDeleted[0].nBegCut = uuepart - msgBody;
             uuc->toBeDeleted[0].nEndCut = slen;
+			uuc->toBeDeleted[0].nDelMsg = currMsgUid;
         }
     }
 
