@@ -127,6 +127,9 @@ int uc_compareEntries(char *p_e1, char *p_e2)
     return 0;
 }
 int uc_deleteEntry(char *p_e1) {
+    
+    unused(p_e1);
+    
     return 1;
 }
 
