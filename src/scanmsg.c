@@ -315,7 +315,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEnd
    
    memset(&xmsg, 0 , sizeof(xmsg));
 
-   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, (unsigned char*)ctl)<0) {
+   if (MsgReadMsg(msg, &xmsg, 0, textLen, (byte*)text, ctlen, (byte*)ctl) == (dword)(-1L)) {
       rc = 0;
    } else {
       if(scan_cut == 0)
@@ -335,7 +335,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEnd
               MsgCloseMsg(msg);
               msg = MsgOpenMsg(hArea, MOPEN_CREATE, msgNumb);
           }
-          MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, ctlen, ctl);
+          MsgWriteMsg(msg, 0, &xmsg, (byte*)text, textLen, textLen, ctlen, (byte*)ctl);
       }
       else {
           p = NULL; /*  Kill Msg */ 

@@ -213,7 +213,7 @@ int ScanArea(char *carea)
 
    w_log(LL_SCANNING, "Scan area: %s", area -> areaName);
 
-   areaType = area -> msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
+   areaType = (word)area->msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
 
    currArea = area;
    areaName = area -> fileName;
@@ -336,7 +336,7 @@ int main(int argc, char **argv) {
         toBeDeleted = NULL;
         nMaxDeleted = 0;
         m.req_version = 2;
-        m.def_zone = config->addr[0].zone;
+        m.def_zone = (word)config->addr[0].zone;
         if (MsgOpenApi(&m)!= 0) {
             printf("MsgOpenApi Error.\n");
             if (config->lockfile) {
