@@ -11,7 +11,7 @@ LFLAGS	= -s -L../../fidoconf -L../../smapi/make -L../../huskylib/make
 OBJS	= uuecode.o uuefile.o scanmsg.o dupe.o
 SRC_DIR	= ../src/
 
-LIBS	= -lhuskysun -lsmapisun -lfidoconfigsun
+LIBS	= -lsmapisun -lfidoconfigsun -lhuskysun
 
 all: $(OBJS) \
 	hpucode
