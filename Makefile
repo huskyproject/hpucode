@@ -72,19 +72,19 @@ endif
 endif
         
 install: all
-	$(INSTALL) $(IBOPT) hpucode$(_EXE) $(BINDIR)
+	$(INSTALL) $(IBOPT) hpucode$(_EXE) $(DESTDIR)$(BINDIR)
 ifdef INFODIR
-	-$(MKDIR) $(MKDIROPT) $(INFODIR)
-	$(INSTALL) $(IMOPT) hpucode.info $(INFODIR)
-	-install-info --info-dir=$(INFODIR)  $(INFODIR)$(DIRSEP)hpucode.info
+	-$(MKDIR) $(MKDIROPT) $(DESTDIR)$(INFODIR)
+	$(INSTALL) $(IMOPT) hpucode.info $(DESTDIR)$(INFODIR)
+	-install-info --info-dir=$(INFODIR)  $(DESTDIR)$(INFODIR)$(DIRSEP)hpucode.info
 endif
 ifdef HTMLDIR
-	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)
-	$(INSTALL) $(IMOPT) hpucode.html $(HTMLDIR)
+	-$(MKDIR) $(MKDIROPT) $(DESTDIR)$(HTMLDIR)
+	$(INSTALL) $(IMOPT) hpucode.html $(DESTDIR)$(HTMLDIR)
 endif
 ifdef MANDIR
-	-$(MKDIR) $(MKDIROPT) $(MANDIR)$(DIRSEP)man1
-	$(INSTALL) $(IMOPT) hpucode.1.gz $(MANDIR)$(DIRSEP)man1
+	-$(MKDIR) $(MKDIROPT) $(DESTDIR)$(MANDIR)$(DIRSEP)man1
+	$(INSTALL) $(IMOPT) hpucode.1.gz $(DESTDIR)$(MANDIR)$(DIRSEP)man1
 endif
 
 uninstall:
