@@ -2,37 +2,31 @@
 # Legacy makefile for MinGW32
 #
 
+## include common makefiles part ##
+include ../../huskybse/huskymak.mgw
+include makefile.inc
 
-CC	= gcc
-RM	= del
+CINCL	+= -I$(H_DIR) -I../../fidoconf -I../../smapi -I../../huskylib
 
-CFLAGS	= -Wall -c
-CINCL	= -I../h -I../../fidoconf -I../../smapi -I../../huskylib
-CDEFS	= -D__NT__ -D__MINGW__
-COPT	= -O3
-LFLAGS	= -L../../huskylib/make -L../../smapi/make -L../../fidoconf
-
-SRC_DIR	= ../src/
-
-
-OBJS	= uuecode.o uuefile.o scanmsg.o dupe.o
-LIBS	= -lfidoconfigmgw -lsmapimgw -lhuskymgw -luser32
+LIBS	= ../../fidoconf/make/$(LIBPREFIX)fidoconfig$(LIBSUFFIX)$(_LIB) \
+	  ../../smapi/make/$(LIBPREFIX)smapi$(LIBSUFFIX)$(_LIB) \
+	  ../../huskylib/make/$(LIBPREFIX)husky$(LIBSUFFIX)$(_LIB)
 
 default: all
 
-TARGET=hpucode.exe
-
+TARGET=$(LIBNAME)$(_EXE)
 
 all: $(TARGET)
 
-%.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $(CINCL) $(CDEFS) $(COPT) $(SRC_DIR)$*.c
+%$(_OBJ): $(_SRC_DIR)%$(_C)
+	@echo Compiling $<
+	@$(CC) $(CFLAGS) $(CINCL) $(CDEFS) $(OBJOPT) $(_SRC_DIR)$*$(_C)
 
 $(TARGET): $(OBJS)
-	$(CC) $(LFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
+	@$(CC) $(CFLAGS) $(EXENAMEFLAG) $(TARGET) $(OBJS) $(LIBS)
 
 clean:
-	-$(RM) *.o
+	-$(RM) *$(_OBJ)
 
 distclean:
 	-$(RM) $(TARGET)
