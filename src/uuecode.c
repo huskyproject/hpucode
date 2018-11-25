@@ -64,15 +64,16 @@ sFilters* Filters=NULL;
 int nFilters = 0;
 
 static tree* FilteredAreas = NULL;
+char *configfile = NULL;
 
 void start_help(void) {
 
     fprintf(stdout, "%s\n",versionStr);
-    fprintf(stdout,"\nUsage: hpucode [ -del|-cut|-all ] [areamask1 !areamask2 ...] \n");
-    fprintf(stdout,"Options:  -del, -cut, -all\n");
+    fprintf(stdout,"\nUsage: hpucode [-c config][ -del|-cut|-all ] [areamask1 !areamask2 ...] \n");
+    fprintf(stdout,"Options:  -c   - read configuration from alternate fidoconfig file\n");
     fprintf(stdout,"          -del - delete decoded messages\n");
     fprintf(stdout,"          -cut - cut UUE code from decoded messages\n");
-    fprintf(stdout,"          -all - scans all areas defined by areamsks in command line;\n");
+    fprintf(stdout,"          -all - scans all areas defined by areamasks in command line;\n");
     fprintf(stdout,"                 by default hpucode scans areas that match areamasks\n");
     fprintf(stdout,"                 from importlog file\n");
 }
@@ -103,6 +104,16 @@ int processCommandLine(int argc, char **argv)
             continue;
         } else if (stricmp(argv[i], "-h") == 0) {
             start_help();
+            continue;
+        } else if (stricmp(argv[i], "-c") == 0) {
+            i++;
+            if (argv[i]!=NULL)
+                xstrcat(&configfile, argv[i]);
+            else
+            {
+                w_log( LL_ERR, "Fatal: parameter after \"-c\" is required\n" );
+                exit ( 1 );
+            }
             continue;
         } else {
             Filters[nFilters].Mask = argv[i];
@@ -292,7 +303,7 @@ int main(int argc, char **argv) {
 #endif
 
     setvar("module", "hpucode");
-    config = readConfig(NULL);
+    config = readConfig( configfile );
 
     if (!config) {
         printf("Could not read fido config\n");
