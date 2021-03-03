@@ -391,9 +391,9 @@ void MakeTicFile(UUEFile* uuc)
      fprintf(tichandle, "Areadesc UUE decoded from %s\r\n", currArea->areaName);
    if(uuc->description)
      fprintf(tichandle, "Desc %s\r\n", uuc->description);
-   fprintf(tichandle, "From %s\r\n", aka2str(link->hisAka));
-   fprintf(tichandle, "To %s\r\n",   aka2str(link->hisAka));
-   fprintf(tichandle, "Origin %s\r\n", aka2str(uuc->origin));
+   fprintf(tichandle, "From %s\r\n", aka2str(&link->hisAka));
+   fprintf(tichandle, "To %s\r\n",   aka2str(&link->hisAka));
+   fprintf(tichandle, "Origin %s\r\n", aka2str(&uuc->origin));
    fprintf(tichandle, "Size %lu\r\n", (unsigned long)stbuf.st_size);
    fprintf(tichandle, "Crc %08lX\r\n", (unsigned long) filecrc32(fname));
    if(link->filefix.pwd)
