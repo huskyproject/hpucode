@@ -82,4 +82,4 @@ extern char * versionStr;
 extern int lock_fd;
 
 
-#endif // ifndef _HDECODER_H_
+#endif

@@ -314,50 +314,52 @@ int scan4UUE(char * text, const char * ctl)
     return nRet;
 } /* scan4UUE */
 
-//char* cutUUEformMsg(char *text)
-//{
-//    int rr = 0;
-//    char *end = NULL;
-//    char *p   = NULL;
-//    char *szBegin;
-//    int DelMsg = 1;
-//
-//    if(!text) return NULL;
-//
-//    p = text;
-//
-//    while(p)
-//    {
-//
-//        szBegin = strstr(p, "begin ");
-//        if ((szBegin) && (DelMsg == 1)) { /* Is this first section or single UUE ? */
-//            DelMsg = 0;
-//        }
-//        //if(!szBegin) return NULL;
-//        if( szBegin )
-//        {
-//            szBegin = strchr(szBegin, '\r');
-//            if(!szBegin) return  NULL;
-//
-//            while(szBegin[0] == '\r')
-//                szBegin++;
-//        }
-//        end = szBegin;
-//        while( end && end[0] < '\x0061' && rr < 3)
-//        {
-//            rr = (end[0] == '\r') ?  rr+1 : 0;
-//            end++;
-//        }
-//
-//        if(end)
-//        {
-//            if( rr > 1 ) end--;
-//            memmove(szBegin,end,strlen(end)+1);
-//        }
-//        p = end;
-//    }
-//    return  DelMsg == 0 ? text : NULL;
-//}
+#if 0
+char* cutUUEformMsg(char *text)
+{
+    int rr = 0;
+    char *end = NULL;
+    char *p   = NULL;
+    char *szBegin;
+    int DelMsg = 1;
+
+    if(!text) return NULL;
+
+    p = text;
+
+    while(p)
+    {
+
+        szBegin = strstr(p, "begin ");
+        if ((szBegin) && (DelMsg == 1)) { /* Is this first section or single UUE ? */
+            DelMsg = 0;
+        }
+        /* if(!szBegin) return NULL; */
+        if( szBegin )
+        {
+            szBegin = strchr(szBegin, '\r');
+            if(!szBegin) return  NULL;
+
+            while(szBegin[0] == '\r')
+                szBegin++;
+        }
+        end = szBegin;
+        while( end && end[0] < '\x0061' && rr < 3)
+        {
+            rr = (end[0] == '\r') ?  rr+1 : 0;
+            end++;
+        }
+
+        if(end)
+        {
+            if( rr > 1 ) end--;
+            memmove(szBegin,end,strlen(end)+1);
+        }
+        p = end;
+    }
+    return  DelMsg == 0 ? text : NULL;
+}
+#endif
 
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEndCut)
 {
