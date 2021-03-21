@@ -16,7 +16,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with HPT; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -48,333 +48,431 @@
 #include <sys/stat.h>
 
 
-#if defined ( __WATCOMC__ )
+#if defined (__WATCOMC__)
 #include <share.h>
 #endif
 
-tree *UUEFileTree;
-int      nDelMsg, nCutMsg, nAllAreas;
-DelCutStruct*   toBeDeleted;
-dword    nMaxDeleted;
-s_area   *currArea;
-s_fidoconfig *config;
-XMSG     xmsg;
-dword    currMsgUid;
-char*    versionStr;
-int      lock_fd;
+tree * UUEFileTree;
+int nDelMsg, nCutMsg, nAllAreas;
+DelCutStruct * toBeDeleted;
+dword nMaxDeleted;
+s_area * currArea;
+s_fidoconfig * config;
+XMSG xmsg;
+dword currMsgUid;
+char * versionStr;
+int lock_fd;
 
-typedef struct {
-    int   Negative;
-    char* Mask;
+typedef struct
+{
+    int    Negative;
+    char * Mask;
 } sFilters;
 
-sFilters* Filters=NULL; 
-int nFilters = 0;
+sFilters * Filters          = NULL;
+int nFilters                = 0;
+static tree * FilteredAreas = NULL;
+char * configfile           = NULL;
 
-static tree* FilteredAreas = NULL;
-char *configfile = NULL;
-
-void start_help(void) {
-
-    fprintf(stdout, "%s\n",versionStr);
-    fprintf(stdout,"\nUsage: hpucode [-c config][ -del|-cut|-all ] [areamask1 !areamask2 ...] \n");
-    fprintf(stdout,"Options:  -c   - read configuration from alternate fidoconfig file\n");
-    fprintf(stdout,"          -del - delete decoded messages\n");
-    fprintf(stdout,"          -cut - cut UUE code from decoded messages\n");
-    fprintf(stdout,"          -all - scans all areas defined by areamasks in command line;\n");
-    fprintf(stdout,"                 by default hpucode scans areas that match areamasks\n");
-    fprintf(stdout,"                 from importlog file\n");
+void start_help(void)
+{
+    fprintf(stdout, "%s\n", versionStr);
+    fprintf(stdout,
+            "\nUsage: hpucode [-c config][ -del|-cut|-all ] [areamask1 !areamask2 ...] \n");
+    fprintf(stdout, "Options:  -c   - read configuration from alternate fidoconfig file\n");
+    fprintf(stdout, "          -del - delete decoded messages\n");
+    fprintf(stdout, "          -cut - cut UUE code from decoded messages\n");
+    fprintf(stdout, "          -all - scans all areas defined by areamasks in command line;\n");
+    fprintf(stdout, "                 by default hpucode scans areas that match areamasks\n");
+    fprintf(stdout, "                 from importlog file\n");
 }
 
-
-int processCommandLine(int argc, char **argv)
+int processCommandLine(int argc, char ** argv)
 {
     int i = 0;
 
-    if (argc == 1)
+    if(argc == 1)
     {
         start_help();
         return 0;
     }
 
-    Filters = scalloc(sizeof(sFilters),argc);
+    Filters = scalloc(sizeof(sFilters), argc);
 
-    while (i < argc-1) {
+    while(i < argc - 1)
+    {
         i++;
-        if        (stricmp(argv[i], "-del") == 0) {
+
+        if(stricmp(argv[i], "-del") == 0)
+        {
             nDelMsg = 1;
             continue;
-        } else if (stricmp(argv[i], "-cut") == 0) {
+        }
+        else if(stricmp(argv[i], "-cut") == 0)
+        {
             nCutMsg = 1;
             continue;
-        } else if (stricmp(argv[i], "-all") == 0) {
+        }
+        else if(stricmp(argv[i], "-all") == 0)
+        {
             nAllAreas = 1;
             continue;
-        } else if (stricmp(argv[i], "-h") == 0) {
+        }
+        else if(stricmp(argv[i], "-h") == 0)
+        {
             start_help();
             continue;
-        } else if (stricmp(argv[i], "-c") == 0) {
+        }
+        else if(stricmp(argv[i], "-c") == 0)
+        {
             i++;
-            if (argv[i]!=NULL)
+
+            if(argv[i] != NULL)
+            {
                 xstrcat(&configfile, argv[i]);
+            }
             else
             {
-                w_log( LL_ERR, "Fatal: parameter after \"-c\" is required\n" );
-                exit ( 1 );
+                w_log(LL_ERR, "Fatal: parameter after \"-c\" is required\n");
+                exit(1);
             }
+
             continue;
-        } else {
+        }
+        else
+        {
             Filters[nFilters].Mask = argv[i];
-            if (argv[i][0] == '!')
+
+            if(argv[i][0] == '!')
+            {
                 Filters[nFilters].Negative = 1;
+            }
+
             nFilters++;
         }
     } /* endwhile */
 
     return nFilters;
-}
+} /* processCommandLine */
 
-
-int uc_compareEntries(char *p_e1, char *p_e2)
+int uc_compareEntries(char * p_e1, char * p_e2)
 {
     ps_area e1 = (ps_area)p_e1;
     ps_area e2 = (ps_area)p_e2;
-    if(stricmp(e1->areaName,e2->areaName) < 0)
+
+    if(stricmp(e1->areaName, e2->areaName) < 0)
+    {
         return -1;
-    else if(stricmp(e1->areaName,e2->areaName) > 0)
+    }
+    else if(stricmp(e1->areaName, e2->areaName) > 0)
+    {
         return 1;
+    }
+
     return 0;
 }
-int uc_deleteEntry(char *p_e1) {
-    
+
+int uc_deleteEntry(char * p_e1)
+{
     unused(p_e1);
-    
     return 1;
 }
 
-void ApplyFilter(ps_area area) 
+void ApplyFilter(ps_area area)
 {
     int i;
-    for(i = 0; i < nFilters; i++)
-    {
-        if( (Filters[i].Negative == 0) && (patimat(area->areaName,Filters[i].Mask)) )
-            break;
-    }
-    if (i == nFilters)
-        return;
 
     for(i = 0; i < nFilters; i++)
     {
-        if( (Filters[i].Negative == 1) && (patimat(area->areaName,(Filters[i].Mask+1))) )
-            return;
+        if((Filters[i].Negative == 0) && (patimat(area->areaName, Filters[i].Mask)))
+        {
+            break;
+        }
     }
-    tree_add(&FilteredAreas, uc_compareEntries, (char *)(area), uc_deleteEntry );
+
+    if(i == nFilters)
+    {
+        return;
+    }
+
+    for(i = 0; i < nFilters; i++)
+    {
+        if((Filters[i].Negative == 1) && (patimat(area->areaName, (Filters[i].Mask + 1))))
+        {
+            return;
+        }
+    }
+    tree_add(&FilteredAreas, uc_compareEntries, (char *)(area), uc_deleteEntry);
 }
 
-int ApplyFilters() 
+int ApplyFilters()
 {
-    FILE  *impLog = NULL;
-    ps_area  area = NULL;
+    FILE * impLog = NULL;
+    ps_area area  = NULL;
 
     tree_init(&FilteredAreas, 1);
 
     if(!nAllAreas)
     {
-        char* buff=NULL;
-
+        char * buff = NULL;
         impLog = fopen(config->importlog, "r");
-        if(impLog) 
+
+        if(impLog)
         {
-            while (!feof(impLog)) {
+            while(!feof(impLog))
+            {
                 buff = readLine(impLog);
-                if(!buff) break;
-                if ((area = getNetMailArea(config, buff)) == NULL) {
+
+                if(!buff)
+                {
+                    break;
+                }
+
+                if((area = getNetMailArea(config, buff)) == NULL)
+                {
                     area = getArea(config, buff);
-                } 
+                }
+
                 ApplyFilter(area);
                 nfree(buff);
             }
             fclose(impLog);
         }
     }
-    if(impLog) {
+
+    if(impLog)
+    {
         w_log(LL_SCANNING,
-        "Using importlogfile -> scanning only listed areas that match the mask");
-    }  else {
-        unsigned i;
-
-        w_log(LL_SCANNING,
-        "Scanning all areas that match the mask");
-
-        for (i=0; i < config->netMailAreaCount; i++)
-            ApplyFilter(&(config->netMailAreas[i]));
-
-        for (i=0; i < config->echoAreaCount; i++)
-            ApplyFilter(&(config->echoAreas[i]));
-
-        for (i=0; i < config->localAreaCount; i++)
-            ApplyFilter(&(config->localAreas[i]));
-
+              "Using importlogfile -> scanning only listed areas that match the mask");
     }
+    else
+    {
+        unsigned i;
+        w_log(LL_SCANNING, "Scanning all areas that match the mask");
+
+        for(i = 0; i < config->netMailAreaCount; i++)
+        {
+            ApplyFilter(&(config->netMailAreas[i]));
+        }
+
+        for(i = 0; i < config->echoAreaCount; i++)
+        {
+            ApplyFilter(&(config->echoAreas[i]));
+        }
+
+        for(i = 0; i < config->localAreaCount; i++)
+        {
+            ApplyFilter(&(config->localAreas[i]));
+        }
+    }
+
     return tree_count(&FilteredAreas);
-}
+} /* ApplyFilters */
 
-
-int ScanArea(char *carea)
+int ScanArea(char * carea)
 {
-   char* areaName;
-   HAREA oldArea;
-   dword highMsg, numMsg,nMN;
-   word areaType;
-   ps_area area = (ps_area)carea;
+    char * areaName;
+    HAREA oldArea;
+    dword highMsg, numMsg, nMN;
+    word areaType;
+    ps_area area = (ps_area)carea;
 
-   if(!area) return 1;
+    if(!area)
+    {
+        return 1;
+    }
 
-   w_log(LL_SCANNING, "Scan area: %s", area -> areaName);
+    w_log(LL_SCANNING, "Scan area: %s", area->areaName);
+    areaType = (word)area->msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
+    currArea = area;
+    areaName = area->fileName;
+    oldArea  = MsgOpenArea((byte *)areaName, MSGAREA_NORMAL, areaType);
 
-   areaType = (word)area->msgbType & (MSGTYPE_JAM | MSGTYPE_SQUISH | MSGTYPE_SDM);
+    if(oldArea != NULL)
+    {
+        tree_init(&UUEFileTree, 1);
+        highMsg = MsgGetHighMsg(oldArea);
 
-   currArea = area;
-   areaName = area -> fileName;
-   
-   oldArea = MsgOpenArea((byte *) areaName, MSGAREA_NORMAL, areaType);
-   
-   if (oldArea != NULL) {
-       
-       tree_init(&UUEFileTree,1);
-       
-       highMsg = MsgGetHighMsg(oldArea);
+        if(highMsg && (nDelMsg || nCutMsg))
+        {
+            toBeDeleted = (DelCutStruct *)smalloc(highMsg * sizeof(DelCutStruct));
+        }
+        else
+        {
+            toBeDeleted = NULL;
+        }
 
-       if(highMsg && (nDelMsg || nCutMsg))
-          toBeDeleted = (DelCutStruct*)smalloc(highMsg * sizeof(DelCutStruct));
-       else
-          toBeDeleted = NULL;
-       
-       for (nMN = 1; nMN <= highMsg; nMN++) {
-           processMsg(oldArea,nMN,0,0,0);
-       };
-      
-       if(nDelMsg && nMaxDeleted)
-       {
-           w_log(LL_INFO, "Deleting decoded messages...");
-           numMsg = 0;
-           for (nMN = 0; nMN < nMaxDeleted; nMN++) {
-               if(MsgKillMsg(oldArea, MsgUidToMsgn(oldArea,toBeDeleted[nMN].nDelMsg, UID_EXACT)) == 0)
-                   numMsg++;
-           }
-           w_log(LL_INFO, "Deleted:%u of decoded messages:%u",numMsg,nMaxDeleted);
-           nMaxDeleted=0;
-       }
-       if(nCutMsg && nMaxDeleted)
-       {
-           w_log(LL_INFO, "Cuting UUE code from  messages...");
-           numMsg = 0;
-           for (nMN = 0; nMN < nMaxDeleted; nMN++) {
-               processMsg(oldArea,MsgUidToMsgn(oldArea,toBeDeleted[nMN].nDelMsg, UID_EXACT),1,toBeDeleted[nMN].nBegCut,toBeDeleted[nMN].nEndCut);
-           }
-           nMaxDeleted=0;
-       }
+        for(nMN = 1; nMN <= highMsg; nMN++)
+        {
+            processMsg(oldArea, nMN, 0, 0, 0);
+        }
 
-       nfree(toBeDeleted);
-       MsgCloseArea(oldArea);
-       tree_mung(&UUEFileTree, FreeUUEFile);
-   }
-   else {
-       if (oldArea) MsgCloseArea(oldArea);
-       w_log(LL_ERROR, "Could not open %s ", areaName);
-   }
-   return 1;
-}
-   
-int main(int argc, char **argv) {
-    
+        if(nDelMsg && nMaxDeleted)
+        {
+            w_log(LL_INFO, "Deleting decoded messages...");
+            numMsg = 0;
+
+            for(nMN = 0; nMN < nMaxDeleted; nMN++)
+            {
+                if(MsgKillMsg(oldArea,
+                              MsgUidToMsgn(oldArea, toBeDeleted[nMN].nDelMsg, UID_EXACT)) == 0)
+                {
+                    numMsg++;
+                }
+            }
+            w_log(LL_INFO, "Deleted:%u of decoded messages:%u", numMsg, nMaxDeleted);
+            nMaxDeleted = 0;
+        }
+
+        if(nCutMsg && nMaxDeleted)
+        {
+            w_log(LL_INFO, "Cuting UUE code from  messages...");
+            numMsg = 0;
+
+            for(nMN = 0; nMN < nMaxDeleted; nMN++)
+            {
+                processMsg(oldArea,
+                           MsgUidToMsgn(oldArea, toBeDeleted[nMN].nDelMsg, UID_EXACT),
+                           1,
+                           toBeDeleted[nMN].nBegCut,
+                           toBeDeleted[nMN].nEndCut);
+            }
+            nMaxDeleted = 0;
+        }
+
+        nfree(toBeDeleted);
+        MsgCloseArea(oldArea);
+        tree_mung(&UUEFileTree, FreeUUEFile);
+    }
+    else
+    {
+        if(oldArea)
+        {
+            MsgCloseArea(oldArea);
+        }
+
+        w_log(LL_ERROR, "Could not open %s ", areaName);
+    }
+
+    return 1;
+} /* ScanArea */
+
+int main(int argc, char ** argv)
+{
     struct _minf m;
-    char* buff=NULL;
+    char * buff = NULL;
 
-#if defined ( __NT__ )
+#if defined (__NT__)
     SetUnhandledExceptionFilter(&UExceptionFilter);
 #endif
 
 
     xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
     setvar("version", buff);
-    
-    versionStr = GenVersionStr( "hpucode", VER_MAJOR, VER_MINOR, VER_PATCH,
-                               VER_BRANCH, cvs_date );
-    nDelMsg = nCutMsg = nAllAreas = 0;
+    versionStr = GenVersionStr("hpucode", VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date);
+    nDelMsg    = nCutMsg = nAllAreas = 0;
 
-    if (processCommandLine(argc, argv) == 0) 
+    if(processCommandLine(argc, argv) == 0)
+    {
         return 0;
+    }
 
 #ifdef __NT__
     SetFileApisToOEM();
 #endif
 
     setvar("module", "hpucode");
-    config = readConfig( configfile );
+    config = readConfig(configfile);
 
-    if (!config) {
+    if(!config)
+    {
         printf("Could not read fido config\n");
         return 1;
     }
 
-    if (config->lockfile) {
+    if(config->lockfile)
+    {
         lock_fd = lockFile(config->lockfile, config->advisoryLock);
-        if( lock_fd < 0 )
+
+        if(lock_fd < 0)
         {
             disposeConfig(config);
             exit(EX_CANTCREAT);
         }
     }
+
     /*  load recoding tables */
     initCharsets();
-    getctabs(config->intab,config->outtab);
+    getctabs(config->intab, config->outtab);
 
-    if (config->logFileDir) {
+    if(config->logFileDir)
+    {
         nfree(buff);
         xstrscat(&buff, config->logFileDir, "hpucode.log", NULL);
-        initLog(config->logFileDir, config->logEchoToScreen, config->loglevels, config->screenloglevels);
+        initLog(config->logFileDir,
+                config->logEchoToScreen,
+                config->loglevels,
+                config->screenloglevels);
         openLog(buff, versionStr);
         nfree(buff);
-    } 
+    }
+
     if(config->protInbound)
+    {
         _createDirectoryTree(config->protInbound);
+    }
     else
     {
         printf("\n\tProtInbound not defined\n");
-        if (config->lockfile) {
-            FreelockFile(config->lockfile ,lock_fd);
+
+        if(config->lockfile)
+        {
+            FreelockFile(config->lockfile, lock_fd);
         }
+
         return 1;
     }
+
     w_log(LL_START, "Start");
 
     if(ApplyFilters())
     {
-        currArea = NULL;
-        toBeDeleted = NULL;
-        nMaxDeleted = 0;
+        currArea      = NULL;
+        toBeDeleted   = NULL;
+        nMaxDeleted   = 0;
         m.req_version = 2;
-        m.def_zone = (word)config->addr[0].zone;
-        if (MsgOpenApi(&m)!= 0) {
+        m.def_zone    = (word)config->addr[0].zone;
+
+        if(MsgOpenApi(&m) != 0)
+        {
             printf("MsgOpenApi Error.\n");
-            if (config->lockfile) {
-                FreelockFile(config->lockfile ,lock_fd);
+
+            if(config->lockfile)
+            {
+                FreelockFile(config->lockfile, lock_fd);
             }
+
             exit(1);
         }
-        tree_trav( &FilteredAreas, &ScanArea);
+
+        tree_trav(&FilteredAreas, &ScanArea);
         writeToDupeFile();
         MsgCloseApi();
-    }  else {
+    }
+    else
+    {
         w_log(LL_STOP, "Nothing to scan");
     }
+
     w_log(LL_STOP, "End");
     closeLog();
     doneCharsets();
-    if (config->lockfile) {
-        FreelockFile(config->lockfile ,lock_fd);
+
+    if(config->lockfile)
+    {
+        FreelockFile(config->lockfile, lock_fd);
     }
+
     disposeConfig(config);
     return 0;
-}
+} /* main */

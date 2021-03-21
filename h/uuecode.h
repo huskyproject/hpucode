@@ -16,7 +16,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with HPT; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -37,54 +37,49 @@
 #include <huskylib/log.h>
 #include <huskylib/tree.h>
 
-#define MAX              64
-#define MAX_SECTIONS     10000
+#define MAX 64
+#define MAX_SECTIONS 10000
 
 #define DECODE_BYTE(b) ((b == 0x60) ? 0 : b - 0x20)
 
 typedef struct _DelCut
 {
-    dword       nDelMsg;
-    UINT        nBegCut;
-    UINT        nEndCut;
-} DelCutStruct ;
+    dword nDelMsg;
+    UINT  nBegCut;
+    UINT  nEndCut;
+} DelCutStruct;
 
 typedef struct _UUEFile
 {
-    char*           ID;
-    char*           m_fname;
-    int             m_nSections;
-    int             m_nAdded;
-    int             m_nPerm;
-    char**          UUEparts;
-    DelCutStruct*   toBeDeleted;
-    char*           description;
-    hs_addr         origin;
-} UUEFile ;
+    char *         ID;
+    char *         m_fname;
+    int            m_nSections;
+    int            m_nAdded;
+    int            m_nPerm;
+    char **        UUEparts;
+    DelCutStruct * toBeDeleted;
+    char *         description;
+    hs_addr        origin;
+} UUEFile;
 
-extern tree *UUEFileTree;
-
+extern tree * UUEFileTree;
 
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEndCut);
+UUEFile * MakeUUEFile(int nsec, char * name, char * ID);
+int FreeUUEFile(char *);
+int CompareUUEFile(char *, char *);
+void AddPart(UUEFile * uuc, char * msgBody, char * uuepart, int section, int slen);
 
-UUEFile* MakeUUEFile(int nsec, char *name, char* ID);
-
-int      FreeUUEFile(char*);
-int      CompareUUEFile(char*, char*);
-
-void AddPart(UUEFile* uuc, char* msgBody, char* uuepart, int section, int slen);
-
-extern int          nDelMsg;
-extern int          nCutMsg;
+extern int nDelMsg;
+extern int nCutMsg;
 extern DelCutStruct * toBeDeleted;
-extern dword        nMaxDeleted;
-extern s_area       * currArea;
+extern dword nMaxDeleted;
+extern s_area * currArea;
 extern s_fidoconfig * config;
-extern XMSG         xmsg;
-extern dword        currMsgUid;
-extern char         * versionStr;
-extern int          lock_fd;
+extern XMSG xmsg;
+extern dword currMsgUid;
+extern char * versionStr;
+extern int lock_fd;
 
 
-
-#endif
+#endif // ifndef _HDECODER_H_

@@ -16,7 +16,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with HPT; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -29,27 +29,22 @@
 #include <fidoconf/fidoconf.h>
 #include <huskylib/typesize.h>
 #include <huskylib/tree.h>
-
 /* This header file contains the structures of the dupe file */
-
-struct textDupeEntry {
-  char *filename, *from, *areaname;
-  time_t timeCreated;
+struct textDupeEntry
+{
+    char * filename, * from, * areaname;
+    time_t timeCreated;
 };
 
-typedef struct textDupeEntry s_textDupeEntry;
-
-
+typedef struct textDupeEntry  s_textDupeEntry;
 typedef struct hashMDupeEntry s_hashMDupeEntry;
-
-struct dupeMemory {
-  tree *avlTree;
+struct dupeMemory
+{
+    tree * avlTree;
 };
 
 typedef struct dupeMemory s_dupeMemory;
-
-
 int writeToDupeFile();
-int dupeDetection(s_textDupeEntry *msg);
+int dupeDetection(s_textDupeEntry * msg);
 
 #endif /* DUPE_H */
