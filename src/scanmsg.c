@@ -38,7 +38,7 @@ void _addPart(char * text,
     char * begin = NULL, * end = NULL;
     char * endstr  = NULL;
     void * tmp     = NULL;
-    int partlen    = 0;
+    size_t partlen    = 0;
     UUEFile * node = NULL;
     UUEFile nfnd;
 
@@ -150,7 +150,7 @@ void _addPart(char * text,
         }
     }
 
-    AddPart(node, msgBody, begin, section, partlen);
+    AddPart(node, msgBody, begin, section, (int)partlen);
 } /* _addPart */
 
 int scan4UUE(char * text, const char * ctl)
@@ -402,7 +402,7 @@ int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEnd
             char * szBeg = text + nBegCut;
             char * szEnd = text + nBegCut + nEndCut;
             memmove(szBeg, szEnd, strlen(szEnd) + 1);
-            textLen = strlen(text) + 1;
+            textLen = (dword)strlen(text) + 1;
 
             if(hArea->type == MSGTYPE_SQUISH)
             {
