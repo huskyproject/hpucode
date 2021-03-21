@@ -62,7 +62,7 @@ typedef struct _UUEFile
     hs_addr         origin;
 } UUEFile ;
 
-tree *UUEFileTree;
+extern tree *UUEFileTree;
 
 
 int processMsg(HAREA hArea, dword msgNumb, int scan_cut, UINT nBegCut, UINT nEndCut);
@@ -74,16 +74,16 @@ int      CompareUUEFile(char*, char*);
 
 void AddPart(UUEFile* uuc, char* msgBody, char* uuepart, int section, int slen);
 
-int      nDelMsg;
-int      nCutMsg;
-DelCutStruct*   toBeDeleted;
-dword    nMaxDeleted;
-s_area   *currArea;
-s_fidoconfig *config;
-XMSG     xmsg;
-dword    currMsgUid;
-char*    versionStr;
-int      lock_fd;
+extern int          nDelMsg;
+extern int          nCutMsg;
+extern DelCutStruct * toBeDeleted;
+extern dword        nMaxDeleted;
+extern s_area       * currArea;
+extern s_fidoconfig * config;
+extern XMSG         xmsg;
+extern dword        currMsgUid;
+extern char         * versionStr;
+extern int          lock_fd;
 
 
 

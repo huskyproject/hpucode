@@ -52,8 +52,16 @@
 #include <share.h>
 #endif
 
-char *versionStr;
-int  nDelMsg, nCutMsg, nAllAreas;
+tree *UUEFileTree;
+int      nDelMsg, nCutMsg, nAllAreas;
+DelCutStruct*   toBeDeleted;
+dword    nMaxDeleted;
+s_area   *currArea;
+s_fidoconfig *config;
+XMSG     xmsg;
+dword    currMsgUid;
+char*    versionStr;
+int      lock_fd;
 
 typedef struct {
     int   Negative;
