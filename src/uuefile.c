@@ -382,7 +382,7 @@ void MakeTicFile(UUEFile* uuc)
 
 
    if (config->outtab != NULL)
-       recodeToTransportCharset((CHAR*)uuc->description);
+       recodeToTransportCharset((char *)uuc->description);
 
    fprintf(tichandle, "Created by %s, written by Max Chernogor\r\n",versionStr);
    fprintf(tichandle, "File %s\r\n", uuc->m_fname);
