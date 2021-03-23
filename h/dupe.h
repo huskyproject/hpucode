@@ -44,7 +44,7 @@ struct dupeMemory
 };
 
 typedef struct dupeMemory s_dupeMemory;
-int writeToDupeFile();
+int writeToDupeFile(void);
 int dupeDetection(s_textDupeEntry * msg);
 
 #endif /* DUPE_H */
