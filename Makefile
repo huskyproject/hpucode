@@ -1,100 +1,122 @@
-# Generic Makefile for hpucode
+# hpucode/Makefile
+#
+# This file is part of hpucode, part of the Husky fidonet software project
+# Use with GNU make v.3.82 or later
+# Requires: husky enviroment
+#
 
-ifeq ($(DEBIAN), 1)
-# Every Debian-Source-Paket has one included.
-include /usr/share/husky/huskymak.cfg
+hpucode_LIBS := $(areafix_TARGET_BLD) $(fidoconf_TARGET_BLD) \
+              $(smapi_TARGET_BLD) $(huskylib_TARGET_BLD)
+
+hpucode_CDEFS := $(CDEFS) -I$(areafix_ROOTDIR) \
+                        -I$(fidoconf_ROOTDIR) \
+                        -I$(smapi_ROOTDIR) \
+                        -I$(huskylib_ROOTDIR) \
+                        -I$(hpucode_ROOTDIR)$(hpucode_H_DIR)
+
+hpucode_TARGET     = hpucode$(_EXE)
+hpucode_TARGET_BLD = $(hpucode_BUILDDIR)$(hpucode_TARGET)
+hpucode_TARGET_DST = $(BINDIR_DST)$(hpucode_TARGET)
+
+ifdef MAN1DIR
+    hpucode_MAN1PAGES := hpucode.1
+    hpucode_MAN1BLD := $(hpucode_BUILDDIR)$(hpucode_MAN1PAGES)$(_COMPR)
+    hpucode_MAN1DST := $(DESTDIR)$(MAN1DIR)$(DIRSEP)$(hpucode_MAN1PAGES)$(_COMPR)
+endif
+
+
+.PHONY: hpucode_build hpucode_install hpucode_uninstall hpucode_clean hpucode_distclean \
+        hpucode_depend hpucode_doc hpucode_doc_install hpucode_doc_uninstall \
+        hpucode_doc_clean hpucode_doc_distclean hpucode_rmdir_DEP hpucode_rm_DEPS \
+        hpucode_clean_OBJ hpucode_main_distclean
+
+hpucode_build: $(hpucode_TARGET_BLD) $(hpucode_MAN1BLD) hpucode_doc
+
+ifneq ($(MAKECMDGOALS), depend)
+    include $(hpucode_DOCDIR)Makefile
+    ifneq ($(MAKECMDGOALS), distclean)
+        ifneq ($(MAKECMDGOALS), uninstall)
+            include $(hpucode_DEPS)
+        endif
+    endif
+endif
+
+
+# Build application
+$(hpucode_TARGET_BLD): $(hpucode_ALL_OBJS) $(hpucode_LIBS) | do_not_run_make_as_root
+	$(CC) $(LFLAGS) $(EXENAMEFLAG) $@ $^ $(hpucode_LIBZ)
+
+# Compile .c files
+$(hpucode_ALL_OBJS): $(hpucode_OBJDIR)%$(_OBJ): $(hpucode_SRCDIR)%.c | $(hpucode_OBJDIR)
+	$(CC) $(hpucode_CFLAGS) $(hpucode_CDEFS) -o $(hpucode_OBJDIR)$*$(_OBJ) $(hpucode_SRCDIR)$*.c
+
+$(hpucode_OBJDIR): | $(hpucode_BUILDDIR) do_not_run_make_as_root
+	[ -d $@ ] || $(MKDIR) $(MKDIROPT) $@
+
+
+# Build man pages
+ifdef MAN1DIR
+    $(hpucode_MAN1BLD): $(hpucode_MANDIR)$(hpucode_MAN1PAGES)
+	@[ $$($(ID) $(IDOPT)) -eq 0 ] && echo "DO NOT run \`make\` from root" && exit 1 || true
+    ifdef COMPRESS
+		$(COMPRESS) -c $< > $@
+    else
+		$(CP) $(CPOPT) $< $@
+    endif
+
 else
-include ../huskymak.cfg
+    $(hpucode_MAN1BLD): ;
 endif
 
 
-ifeq ($(DEBUG), 1)
-  CFLAGS = -I$(INCDIR) -I.$(DIRSEP)h $(DEBCFLAGS) $(WARNFLAGS)
-  LFLAGS = $(DEBLFLAGS)
+# Install
+ifneq ($(MAKECMDGOALS), install)
+    hpucode_install: ;
 else
-  CFLAGS = -I$(INCDIR) -I.$(DIRSEP)h $(OPTCFLAGS) $(WARNFLAGS)
-  LFLAGS = $(OPTLFLAGS)
+    hpucode_install: $(hpucode_TARGET_DST) hpucode_install_man hpucode_doc_install ;
 endif
 
-ifeq ($(SHORTNAME), 1)
-  LIBS=-L$(LIBDIR) -lfidoconf -lsmapi -lhusky
+$(hpucode_TARGET_DST): $(hpucode_TARGET_BLD) | $(DESTDIR)$(BINDIR)
+	$(INSTALL) $(IBOPT) $< $(DESTDIR)$(BINDIR); \
+	$(TOUCH) "$@"
+
+ifndef MAN1DIR
+    hpucode_install_man: ;
 else
-  LIBS=-L$(LIBDIR) -lfidoconfig -lsmapi -lhusky
+    hpucode_install_man: $(hpucode_MAN1DST)
+
+    $(hpucode_MAN1DST): $(hpucode_MAN1BLD) | $(DESTDIR)$(MAN1DIR)
+	$(INSTALL) $(IMOPT) $< $(DESTDIR)$(MAN1DIR); $(TOUCH) "$@"
 endif
 
-CDEFS = -D$(OSTYPE) $(ADDCDEFS)
 
-CFLAGS += -Wall -pedantic -Wno-char-subscripts
+# Clean
+hpucode_clean: hpucode_clean_OBJ hpucode_doc_clean
+	-[ -d "$(hpucode_OBJDIR)" ] && $(RMDIR) $(hpucode_OBJDIR) || true
 
-OBJS = uuecode.o uuefile.o scanmsg.o dupe.o
+hpucode_clean_OBJ:
+	-$(RM) $(RMOPT) $(hpucode_OBJDIR)*
 
-SRC_DIR = .$(DIRSEP)src$(DIRSEP)
+# Distclean
+hpucode_distclean: hpucode_doc_distclean hpucode_main_distclean hpucode_rmdir_DEP
+	-[ -d "$(hpucode_BUILDDIR)" ] && $(RMDIR) $(hpucode_BUILDDIR) || true
 
+hpucode_rmdir_DEP: hpucode_rm_DEPS
+	-[ -d "$(hpucode_DEPDIR)" ] && $(RMDIR) $(hpucode_DEPDIR) || true
 
-hpucode: $(OBJS)
-		gcc $(OBJS) $(LFLAGS) $(LIBS) -o hpucode$(_EXE)
+hpucode_rm_DEPS:
+	-$(RM) $(RMOPT) $(hpucode_DEPDIR)*
 
-%.o: $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) $(CDEFS) -c $<
-        
-hpucode.1.gz: man/hpucode.1
-	gzip -9c man/hpucode.1 > hpucode.1.gz
-
-clean:
-	-$(RM) $(RMOPT) *$(_OBJ)
-	-$(RM) $(RMOPT) *~
-
-distclean: clean
-	-$(RM) $(RMOPT) hpucode$(_EXE)
-	-$(RM) $(RMOPT) hpucode.info
-	-$(RM) $(RMOPT) hpucode.html
-	-$(RM) $(RMOPT) hpucode.1.gz
-
-info:
-	makeinfo --no-split hpucode.texi
-
-html:
-	makeinfo --html --no-split hpucode.texi
-
-docs: info html
-
-ifdef INFODIR
-  all: hpucode info hpucode.1.gz
-ifdef HTMLDIR
-  all: hpucode docs hpucode.1.gz
-endif
-else
-ifdef HTMLDIR
-  all: hpucode html hpucode.1.gz
-else
-  all: hpucode hpucode.1.gz
-endif
-endif
-        
-install: all
-	$(INSTALL) $(IBOPT) hpucode$(_EXE) $(DESTDIR)$(BINDIR)
-ifdef INFODIR
-	-$(MKDIR) $(MKDIROPT) $(DESTDIR)$(INFODIR)
-	$(INSTALL) $(IMOPT) hpucode.info $(DESTDIR)$(INFODIR)
-	-install-info --info-dir=$(INFODIR)  $(DESTDIR)$(INFODIR)$(DIRSEP)hpucode.info
-endif
-ifdef HTMLDIR
-	-$(MKDIR) $(MKDIROPT) $(DESTDIR)$(HTMLDIR)
-	$(INSTALL) $(IMOPT) hpucode.html $(DESTDIR)$(HTMLDIR)
-endif
-ifdef MANDIR
-	-$(MKDIR) $(MKDIROPT) $(DESTDIR)$(MANDIR)$(DIRSEP)man1
-	$(INSTALL) $(IMOPT) hpucode.1.gz $(DESTDIR)$(MANDIR)$(DIRSEP)man1
+hpucode_main_distclean: hpucode_clean
+	-$(RM) $(RMOPT) $(hpucode_TARGET_BLD)
+ifdef MAN1DIR
+	-$(RM) $(RMOPT) $(hpucode_MAN1BLD)
 endif
 
-uninstall:
-	$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hpucode$(_EXE)
-ifdef INFODIR
-	$(RM) $(RMOPT) $(INFODIR)$(DIRSEP)hpucode.info
-endif
-ifdef HTMLDIR
-	$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)hpucode.html
-endif
-ifdef MANDIR
-	$(RM) $(RMOPT) $(MANDIR)$(DIRSEP)man1$(DIRSEP)hpucode.1.gz
+
+# Uninstall
+hpucode_uninstall: hpucode_doc_uninstall
+	-$(RM) $(RMOPT) $(hpucode_TARGET_DST)
+ifdef MAN1DIR
+	-$(RM) $(RMOPT) $(hpucode_MAN1DST)
 endif
