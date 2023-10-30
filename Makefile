@@ -5,11 +5,9 @@
 # Requires: husky enviroment
 #
 
-hpucode_LIBS := $(areafix_TARGET_BLD) $(fidoconf_TARGET_BLD) \
-              $(smapi_TARGET_BLD) $(huskylib_TARGET_BLD)
+hpucode_LIBS := $(fidoconf_TARGET_BLD) $(smapi_TARGET_BLD) $(huskylib_TARGET_BLD)
 
-hpucode_CDEFS := $(CDEFS) -I$(areafix_ROOTDIR) \
-                        -I$(fidoconf_ROOTDIR) \
+hpucode_CDEFS := $(CDEFS) -I$(fidoconf_ROOTDIR) \
                         -I$(smapi_ROOTDIR) \
                         -I$(huskylib_ROOTDIR) \
                         -I$(hpucode_ROOTDIR)$(hpucode_H_DIR)
