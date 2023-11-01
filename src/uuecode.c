@@ -367,9 +367,9 @@ int main(int argc, char ** argv)
 #endif
 
 
-    xscatprintf(&buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
+    xscatprintf(&buff, "%u.%u.%u", hpucode_VER_MAJOR, hpucode_VER_MINOR, hpucode_VER_PATCH);
     setvar("version", buff);
-    versionStr = GenVersionStr("hpucode", VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date);
+    versionStr = GenVersionStr("hpucode", hpucode_VER_MAJOR, hpucode_VER_MINOR, hpucode_VER_PATCH, hpucode_VER_BRANCH, cvs_date);
     nDelMsg    = nCutMsg = nAllAreas = 0;
 
     if(processCommandLine(argc, argv) == 0)
